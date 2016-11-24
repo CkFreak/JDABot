@@ -116,7 +116,7 @@ public class CommandHandler implements Observer
 
             switch (messageContent[0].substring(1))
             {
-            case "hallo":
+            case "hello":
                 _commander.replyToHello(event);
                 break;
 
