@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import fachwerte.AbstractPoll;
-import fachwerte.PublicPoll;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
@@ -14,6 +12,8 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import services.CommandService;
 import services.IJustLostTheGameService;
 import services.TournamentService;
+import values.AbstractPoll;
+import values.PublicPoll;
 
 /**
  * This class takes all user input and processes it. It holds all commands but no knowledge about them.

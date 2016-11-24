@@ -3,13 +3,13 @@ package services;
 import java.util.ArrayList;
 import java.util.List;
 
-import fachwerte.AbstractPoll;
-import fachwerte.AnonymousPoll;
-import fachwerte.PublicPoll;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import values.AbstractPoll;
+import values.AnonymousPoll;
+import values.PublicPoll;
 
 /**
  * This class works with all PollFachwerten and manages those

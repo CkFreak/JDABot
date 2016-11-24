@@ -2,9 +2,9 @@ package services;
 
 import java.util.ArrayList;
 
-import fachwerte.AbstractTournament;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
+import values.AbstractTournament;
 
 /**
  * a class that starts and manages them as well

@@ -68,9 +68,9 @@ public class AudioHandlerReplacement
     }
 
     /**
-     * Registriert einen neuen Track. Egal von welcher Quelle   
-     * @param src Die URL oder der Link, zum gewünschten Track
-     * @param event Das MessageReceivedEvent, das zur Nachricht gehört
+     * Registers a track from many sources including youtube, soundcloud and vimeo  
+     * @param src The URL to the track that should be played
+     * @param event The MessageReceivedEvent that belongs to the message
      */
     public void registerNewTrack(String src, MessageReceivedEvent event)
     {
