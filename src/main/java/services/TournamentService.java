@@ -2,6 +2,7 @@ package services;
 
 import java.util.ArrayList;
 
+import enums.TournamentMode;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import values.AbstractTournament;
