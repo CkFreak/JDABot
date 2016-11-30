@@ -1,0 +1,15 @@
+Following commands with a '#' before them at the start of the message are possible (<> are just to enclose parameters and are not to be entered:
+hello: Greets the player
+help: Shows all bot commands
+admin: Shows all server Admins (Associated with a role called Admin with highes priviliges)
+mod: Shows all moderators of the server (Associated with a role called Moderator with second highest permission level)
+delete <amount>: Deletes the requested amount. Not more than 100 though
+userInfo <User>: Displays Information about the user
+deleteAll: deletes the channel this is posted in
+changeGame <Game>: Changes the game the bot is playing
+sugar: Posts a sugar emoji
+salt: post a salt emoji
+justright: post a justright emoji
+fuckoff: post a fuck off emoji
+like: posts a thumb
+please: post a bitch please emoji
