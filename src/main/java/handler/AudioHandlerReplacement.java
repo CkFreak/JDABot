@@ -35,6 +35,7 @@ public class AudioHandlerReplacement
     private AudioPlayer _player;
     private AudioEventTrackListener _musicEventListener;
     private AudioTrack _currentlyPlayingTrack;
+    private Thread _musicThread;
 
     /**
      * Initialisiert einen AudioHandler, mit einem Neuen AudioManager und seinen RessourceManagern und Playern
@@ -119,6 +120,13 @@ public class AudioHandlerReplacement
      */
     public void startPlaying()
     {
+        _musicThread = new Thread("MUSIC THREAD")
+                {
+                    public void run()
+                    {
+                        
+                    }
+                }
         _player.playTrack(_musicEventListener.getFirstTrack());
         _currentlyPlayingTrack = _musicEventListener.getFirstTrack();
     }

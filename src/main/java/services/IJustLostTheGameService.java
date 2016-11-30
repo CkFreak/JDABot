@@ -24,7 +24,7 @@ public class IJustLostTheGameService extends Observable
     private Date _nextGameLoss;
     private Random _random;
     private Thread _timeRefresher;
-    private TimeRefresher _currentTime;
+    private TimeRefresher _currentTimeRunnable;
     private Thread _gameThread;
 
     /**
@@ -32,14 +32,14 @@ public class IJustLostTheGameService extends Observable
      */
     public IJustLostTheGameService()
     {
-        _currentTime = new TimeRefresher();
-        _timeRefresher = new Thread(_currentTime);
+        _currentTimeRunnable = new TimeRefresher();
+        _timeRefresher = new Thread(_currentTimeRunnable);
         _timeRefresher.setDaemon(true);
         _timeRefresher.setName("TIME REFRESHER");
         _timeRefresher.start();
-        _now = _currentTime.getCalenderInstace();
+        _now = _currentTimeRunnable.getCalenderInstace();
         _random = new Random();
-        _now.setTime(_currentTime.getDateInstance());
+        _now.setTime(_currentTimeRunnable.getDateInstance());
         _now.add(Calendar.HOUR_OF_DAY, RANDOM_TIMES[_random.nextInt(4)]);
         _nextGameLoss = _now.getTime();
     }
@@ -72,8 +72,8 @@ public class IJustLostTheGameService extends Observable
                 try
                 {
                     _gameThread.sleep(1000);
-                    _now = _currentTime.getCalenderInstace();
-                    _now.setTime(_currentTime.getDateInstance());
+                    _now = _currentTimeRunnable.getCalenderInstace();
+                    _now.setTime(_currentTimeRunnable.getDateInstance());
                     while (!_now.getTime()
                         .after(_nextGameLoss))
                     {
@@ -104,11 +104,11 @@ public class IJustLostTheGameService extends Observable
     private void restartGame()
     {
         _timeRefresher.interrupt();
-        _now = _currentTime.getCalenderInstace();
-        _now.setTime(_currentTime.getDateInstance());
+        _now = _currentTimeRunnable.getCalenderInstace();
+        _now.setTime(_currentTimeRunnable.getDateInstance());
         _now.add(Calendar.HOUR_OF_DAY, RANDOM_TIMES[_random.nextInt(4)]);
         _nextGameLoss = _now.getTime();
-        _timeRefresher = new Thread(_currentTime);
+        _timeRefresher = new Thread(_currentTimeRunnable);
         _timeRefresher.setDaemon(true);
         _timeRefresher.setName("TIME REFRESHER");
         _timeRefresher.start();
@@ -125,7 +125,7 @@ public class IJustLostTheGameService extends Observable
 
     public Date getNow()
     {
-        _now = _currentTime.getCalenderInstace();
+        _now = _currentTimeRunnable.getCalenderInstace();
         return _now.getTime();
     }
 }
