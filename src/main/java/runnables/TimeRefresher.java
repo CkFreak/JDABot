@@ -34,7 +34,7 @@ public class TimeRefresher implements Runnable
         }
         catch (InterruptedException e)
         {
-            System.out.println("The Thread to refresh the Time was interrupted");
+            System.out.println(Thread.currentThread().getName() + " was interrupted");
         }
         
     }

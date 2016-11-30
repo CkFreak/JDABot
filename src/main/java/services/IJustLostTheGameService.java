@@ -35,6 +35,7 @@ public class IJustLostTheGameService extends Observable
         _currentTime = new TimeRefresher();
         _timeRefresher = new Thread(_currentTime);
         _timeRefresher.setDaemon(true);
+        _timeRefresher.setName("TIME REFRESHER");
         _timeRefresher.start();
         _now = _currentTime.getCalenderInstace();
         _random = new Random();
@@ -86,12 +87,13 @@ public class IJustLostTheGameService extends Observable
                 }
                 catch (InterruptedException e)
                 {
-                    System.out.println("The Game thread has been interrupted");
+                    System.out.println(Thread.currentThread().getName() +  " has been interrupted");
                     e.printStackTrace();
                 }
             }
         };
         _gameThread.setDaemon(true);
+        _gameThread.setName("GAME THREAD");
         _gameThread.start();
 
     }
@@ -108,6 +110,7 @@ public class IJustLostTheGameService extends Observable
         _nextGameLoss = _now.getTime();
         _timeRefresher = new Thread(_currentTime);
         _timeRefresher.setDaemon(true);
+        _timeRefresher.setName("TIME REFRESHER");
         _timeRefresher.start();
 
         this.setChanged();
