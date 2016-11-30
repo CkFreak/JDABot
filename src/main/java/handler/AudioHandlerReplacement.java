@@ -121,14 +121,15 @@ public class AudioHandlerReplacement
     public void startPlaying()
     {
         _musicThread = new Thread("MUSIC THREAD")
-                {
-                    public void run()
-                    {
-                        
-                    }
-                }
-        _player.playTrack(_musicEventListener.getFirstTrack());
-        _currentlyPlayingTrack = _musicEventListener.getFirstTrack();
+        {
+            @Override
+            public void run()
+            {
+                _player.playTrack(_musicEventListener.getFirstTrack());
+                _currentlyPlayingTrack = _musicEventListener.getFirstTrack();
+            }
+        };
+        _musicThread.setDaemon(true);
     }
 
     /**
@@ -242,14 +243,15 @@ public class AudioHandlerReplacement
      */
     public void playNextSong()
     {
-        _player.playTrack(_musicEventListener.getNextTrack(_currentlyPlayingTrack));
+        _player.playTrack(
+                _musicEventListener.getNextTrack(_currentlyPlayingTrack));
     }
-    
+
     public void restartSong()
     {
         _player.playTrack(_currentlyPlayingTrack);
     }
-    
+
     public void resetPlayer()
     {
         _musicEventListener = new AudioEventTrackListener(this);

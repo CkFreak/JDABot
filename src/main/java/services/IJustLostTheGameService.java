@@ -63,7 +63,7 @@ public class IJustLostTheGameService extends Observable
      */
     private void letTheGameBeLost(TextChannel channel)
     {
-        _gameThread = new Thread()
+        _gameThread = new Thread("GAME THREAD")
         {
             @SuppressWarnings("static-access")
             @Override
@@ -93,7 +93,6 @@ public class IJustLostTheGameService extends Observable
             }
         };
         _gameThread.setDaemon(true);
-        _gameThread.setName("GAME THREAD");
         _gameThread.start();
 
     }
