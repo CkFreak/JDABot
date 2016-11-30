@@ -130,6 +130,7 @@ public class AudioHandlerReplacement
             }
         };
         _musicThread.setDaemon(true);
+        _musicThread.start();
     }
 
     /**
