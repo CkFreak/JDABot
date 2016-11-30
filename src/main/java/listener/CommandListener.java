@@ -20,7 +20,7 @@ public class CommandListener extends ListenerAdapter
      */
     public CommandListener(JDA jda)
     {
-         _handler = new CommandHandler(jda);
+         _handler = CommandHandler.getInstance(jda);
     }
 
     @Override

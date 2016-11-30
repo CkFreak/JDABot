@@ -75,11 +75,16 @@ public class CommandHandler implements Observer
      * A Tournament Service that starts Tournaments
      */
     private TournamentService _tournamentService;
+    
+    /**
+     * The only Instance of this CLass in the JVM
+     */
+    private static CommandHandler _instance;
 
     /**
      * Initializes a CommandHandler and all its services
      */
-    public CommandHandler(JDA jda)
+    private CommandHandler(JDA jda)
     {
         _event = null;
         _jda = jda;
@@ -505,6 +510,20 @@ public class CommandHandler implements Observer
         }
         return options;
     }
+    
+    /**
+     * Gives back the only instance of this class in the JVM
+     * @return the only instance of this class in the JVM
+     */
+    public static CommandHandler getInstance(JDA jda)
+    {
+        if (_instance == null)
+        {
+            _instance = new CommandHandler(jda);
+        }
+        return _instance;
+    }
+    
 
     @Override
     public void update(Observable o, Object arg)
