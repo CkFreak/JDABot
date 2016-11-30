@@ -162,7 +162,7 @@ public class CommandHandler implements Observer
                 _commander.sendEmoji(event, JUST_RIGHT_MEME);
                 break;
 
-            case "zucker":
+            case "sugar":
                 _commander.sendEmoji(event, SUGAR_EMOJI);
                 ;
                 break;

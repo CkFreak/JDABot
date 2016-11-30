@@ -2,10 +2,6 @@ package values;
 
 import java.util.ArrayList;
 
-import javax.management.modelmbean.RequiredModelMBean;
-
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
-
 import enums.TournamentMode;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
@@ -50,13 +46,15 @@ public abstract class AbstractTournament
     public Message initializeTournament(ArrayList<String> participants)
     {
         MessageBuilder builder = new MessageBuilder();
+        builder.appendString("Participants of this Tournament are: \n");
         
         for (String string : participants)
         {
             _participants.add(string);
+            builder.appendString(string + "\n");
         }
         
-        return null;
+        return builder.build();
     }
     
     
