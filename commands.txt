@@ -1,16 +1,12 @@
-Folgenden Commands mit einem '#' davor sind möglich(die <> sind platzhalter undd
- bei der Eingabe
-der Varibalen nicht mit einzugeben:
-hello: Begrü�~_t den anfragenden Spieler
+Folgenden Commands mit einem '#' davor sind möglich(die <> sind platzhalter und bei der Eingabe der Varibalen nicht mit einzugeben:
+hello: Begrüßt den anfragenden Spieler
 help: Zeigt alle Commands des Bots an
 admin: Zeigt die oder den Admin des Servers an
 mods: Zeigt die Moderatoren des Servers an
-delete <Menge>: Löscht die Menge an Nachrichten die angegeben wurde. Allerdingss
- nicht mehr als 100 auf einmal
+delete <Menge>: Löscht die Menge an Nachrichten die angegeben wurde. Allerdings nicht mehr als 100 auf einmal
 userInfo <User>: Gibt alle Berechtigungen des Nutzers zurück
-(momentan unter maintenance)deleteAll: Löscht alle Nachrichten aus diesem Channn
-el (Admins, Mods)
-changeGame <Game>: �~Dndert das Spiel, das der Bot spielt
+(momentan unter maintenance)deleteAll: Löscht alle Nachrichten aus diesem Channnel (Admins, Mods)
+changeGame <Game>: ändert das Spiel, das der Bot spielt
 zucker: Sendet ein Zucker Bild in den Chat (Probs an Tyga)
 salt: Sendet ein Salt Bild in den Chat (Probs an Tyga)
 justright: Sendet ein JustRight Meme (Probs an Procrastinator)
@@ -19,31 +15,24 @@ like: Like was gesagt wird und so
 please
 join <ChannelName>: Lässt den Bot in einen Channel joinen
 leave: Lässt den Bot den Channel, zu dem er verbunden ist verlassen
-add <URL zum Songs>: Fügt ein Lied zur Playlist hinzu. Es werden diverse Servicc
-es untersützt
+add <URL zum Songs>: Fügt ein Lied zur Playlist hinzu. Es werden diverse Services untersützt
 play: Beginnt beim ersten Lied der Playlist, es sei denn Shuffe ist true
 pause: Pausiert die Musik-Wiedergabe
 resume: Setzt die Musik-Wiedergabe fort
-stop: Stoppt die Musik-Wiedergabe und führt dazu, dass der Player mit play wiedd
-er gestartet werden muss
-
-skip: �~\berpringt das spielende Lied
+stop: Stoppt die Musik-Wiedergabe und führt dazu, dass der Player mit play wieder gestartet werden muss
+skip: Überpringt das spielende Lied
 nowplaying: Gibt das Lied aus, das grade spielt
 playlist: Zeigt die Playlist an, die grade spielt
 shuffle <1 oder 0>: Shuffelt die Playlist oder schaltet es wieder aus. 0 aus, 1 an
-volume<Zahl>: �~Dndert die Lautstäre des Bots
+volume<Zahl>: ändert die Lautstäre des Bots
 repeat: Wiederholt das aktuelle Lied direkt nach Eingabe des Commands
 reset: Setzt den Player zurück, löscht alle Playlists (Admins)
 startPVote <Name der Poll>_ <Option 1>_ [Beliebige Anzahl weiterer Optionen]_ : Startet eine Poll, mit dem Name und den gewählten Optionen getrennt durch "_"
-startAVote <Name der Poll>_ <Option 1>_ [Beliebige Anzahl weiterer Optionen]_ : Startet eine Anonyme Poll mit dem Gewählten Namen und Optionen getrennt durch ""
-_"
-vote <Name der Poll>_ <Gewählte Option>_ : Lässt den Spieler für die gewähltt
-e Poll abstimmen (Nur einmal möglich)
+startAVote <Name der Poll>_ <Option 1>_ [Beliebige Anzahl weiterer Optionen]_ : Startet eine Anonyme Poll mit dem Gewählten Namen und Optionen getrennt durch "_"
+vote <Name der Poll>_ <Gewählte Option>_ : Lässt den Spieler für die gewählte Poll abstimmen (Nur einmal möglich)
 endVote <Name der Poll>_ : Beendet die Poll, wenn der Anfragende sie gestartet hat
 getStatus <Name der Poll>_ : Zeigt den Status den gefragten Poll an, wenn sie Public ist
 startGame : Startet ein neues Game mit zufälliger Endzeit
 shutdown: Schaltet den Bot aus (Admins)
 
-EOF
-~
 
