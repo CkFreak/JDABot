@@ -257,6 +257,11 @@ public class AudioHandlerReplacement
     {
         _musicEventListener = new AudioEventTrackListener(this);
     }
+    
+    public boolean isPaused()
+    {
+        return _player.isPaused();
+    }
 
     //TODO Join und Leave commands bauen sobald JDA 3.x Audio wieder unterstützt!!
 
