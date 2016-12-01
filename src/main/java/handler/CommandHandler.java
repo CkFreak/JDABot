@@ -1,19 +1,15 @@
 package handler;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import services.CommandService;
 import services.IJustLostTheGameService;
+import services.PollService;
 import services.TournamentService;
-import values.AbstractPoll;
-import values.PublicPoll;
 
 /**
  * This class takes all user input and processes it. It holds all commands but no knowledge about them.
@@ -62,9 +58,9 @@ public class CommandHandler implements Observer
     private IJustLostTheGameService _loseGameService;
 
     /**
-     * A list with all active polls
+     * The PollService of this CommandHandler
      */
-    private List<AbstractPoll> _polls;
+    private PollService _pollService;
 
     /**
      * A MessageReceivedEvent
@@ -75,7 +71,7 @@ public class CommandHandler implements Observer
      * A Tournament Service that starts Tournaments
      */
     private TournamentService _tournamentService;
-    
+
     /**
      * The only Instance of this CLass in the JVM
      */
@@ -88,8 +84,8 @@ public class CommandHandler implements Observer
     {
         _event = null;
         _jda = jda;
-        _polls = new ArrayList<>();
         _commander = new CommandService(_event, jda);
+        _pollService = new PollService();
         _loseGameService = new IJustLostTheGameService();
         _loseGameService.addObserver(this);
         _player = new AudioHandlerReplacement();
@@ -225,7 +221,8 @@ public class CommandHandler implements Observer
                 break;
 
             case "skip":
-                _player.playNextSong();;
+                _player.playNextSong();
+                ;
                 break;
 
             case "playlist":
@@ -268,11 +265,11 @@ public class CommandHandler implements Observer
                 break;
 
             case "join":
-//                _player.joinChannel(messageContent[1], event);
+                //                _player.joinChannel(messageContent[1], event);
                 break;
 
             case "leave":
-//                _player.leaveChannel(event);
+                //                _player.leaveChannel(event);
                 break;
 
             case "shutdown":
@@ -300,46 +297,42 @@ public class CommandHandler implements Observer
                 break;
 
             case "startPVote":
-                _commander.startPVote(getPollName(messageContent),
-                        event.getAuthor(), event, _polls,
-                        getOptions(messageContent));
+                _pollService.startPPoll(getPollName(messageContent),
+                        event.getAuthor(), _event, getOptions(messageContent));
                 break;
 
             case "startAVote":
-                _commander.startAVote(getPollName(messageContent),
-                        event.getAuthor(), event, _polls,
-                        getOptions(messageContent));
+                _pollService.startAPoll(getPollName(messageContent),
+                        event.getAuthor(), event, getOptions(messageContent));
                 break;
 
             case "getStatus":
                 event.getChannel()
-                    .sendMessage(getStatus(getPollName(messageContent)))
+                    .sendMessage(
+                            _pollService.getStatus(getPollName(messageContent)))
                     .queue();
                 ;
                 break;
 
             case "endVote":
                 event.getChannel()
-                    .sendMessage(_commander.endVote(getPollName(messageContent),
-                            event.getAuthor(), _polls))
+                    .sendMessage(_pollService.endPoll(
+                            getPollName(messageContent), event.getAuthor()))
                     .queue();
-                ;
-                removePoll(getPollName(messageContent));
                 break;
 
             case "vote":
-                ArrayList<String> option = new ArrayList<>();
-                option = getOptions(messageContent);
                 event.getChannel()
-                    .sendMessage(_commander.vote(getPollName(messageContent),
-                            option.get(0), event.getAuthor(), _polls, event))
+                    .sendMessage(_pollService.vote(getPollName(messageContent),
+                            getOptions(messageContent), event.getAuthor(),
+                            event))
                     .queue();
                 ;
                 break;
 
             case "listVotes":
                 event.getChannel()
-                    .sendMessage(getCurrentVotes())
+                    .sendMessage(_pollService.getCurrentVotes())
                     .queue();
                 ;
                 break;
@@ -381,64 +374,6 @@ public class CommandHandler implements Observer
 
             }
         }
-    }
-
-    /**
-     * Removes a poll from the poll list
-     * @param pollName The poll that is to be removed from the list
-     */
-    private void removePoll(String pollName)
-    {
-        for (AbstractPoll abstractPoll : _polls)
-        {
-            if (abstractPoll.getName()
-                .equals(pollName))
-            {
-                _polls.remove(abstractPoll);
-            }
-        }
-
-    }
-
-    /**
-     * Returns all active polls
-     * @return A Message that contains all polls
-     */
-    private Message getCurrentVotes()
-    {
-        MessageBuilder builder = new MessageBuilder();
-
-        for (AbstractPoll abstractPoll : _polls)
-        {
-            builder.appendString(abstractPoll.getName() + "\n");
-        }
-        return builder.build();
-    }
-
-    /**
-     * Returns the requested poll's status
-     * @param pollName The requested poll's name
-     * @return The state or an error 
-     */
-    private Message getStatus(String pollName)
-    {
-        MessageBuilder builder = new MessageBuilder();
-
-        for (AbstractPoll abstractPoll : _polls)
-        {
-            if (abstractPoll.getName()
-                .equals(pollName))
-            {
-                if (abstractPoll instanceof PublicPoll)
-                {
-                    return ((PublicPoll) abstractPoll)
-                        .getStatus((PublicPoll) abstractPoll);
-                }
-            }
-        }
-        return builder.appendString(
-                "The specified poll has not been found or is anonymous!")
-            .build();
     }
 
     /**
@@ -510,7 +445,7 @@ public class CommandHandler implements Observer
         }
         return options;
     }
-    
+
     /**
      * Gives back the only instance of this class in the JVM
      * @return the only instance of this class in the JVM
@@ -523,7 +458,6 @@ public class CommandHandler implements Observer
         }
         return _instance;
     }
-    
 
     @Override
     public void update(Observable o, Object arg)
