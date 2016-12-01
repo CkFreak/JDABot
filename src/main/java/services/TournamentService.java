@@ -11,6 +11,9 @@ import java.util.ArrayList;
  */
 public class TournamentService
 {
+    /**
+     * All Participants of the tournament
+     */
     private ArrayList<String> _participants;
     private AbstractTournament _tournamentType;
     
