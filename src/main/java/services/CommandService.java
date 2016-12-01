@@ -261,26 +261,6 @@ public class CommandService
                 event.getChannel().sendMessage(builder.build());
                 builder = new MessageBuilder();
             }
-
-            //            int index = 0;
-            //            int command = 0;
-            //
-            //            for (int i = 0; i < allCommands.size() - 1; ++i)
-            //            {
-            //                builder.appendString("```");
-            //                
-            //                while (index <= 10)
-            //                {
-            //                    builder.appendString(allCommands.get(command) + "\n");
-            //                    command++;
-            //                    index++;
-            //                }
-            //                event.getChannel()
-            //                    .sendMessage(builder.appendString("```")
-            //                        .build());
-            //                builder = new MessageBuilder();
-            //                index = 0;
-            //            }
         }
         catch (IOException e)
         {
