@@ -364,13 +364,13 @@ public class CommandHandler implements Observer
                 break;
 
             //TODO Command richtig implementieren
-            case "startTournament":
-                event.getChannel()
-                    .sendMessage(_tournamentService
-                        .initializeTournament(getOptions(messageContent)))
-                    .queue();
-                ;
-                break;
+//            case "startTournament":
+//                event.getChannel()
+//                    .sendMessage(_tournamentService
+//                        .initializeTournament(getOptions(messageContent)))
+//                    .queue();
+//                ;
+//                break;
 
             default:
                 event.getChannel()
