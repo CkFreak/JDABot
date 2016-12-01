@@ -86,13 +86,17 @@ public class CommandService
             }
             catch (IOException e)
             {
-                event.getChannel().sendMessage("There has been an error while sending the Image. Please contact a Dev. IO-Exception!");
+                event.getChannel()
+                    .sendMessage(
+                            "There has been an error while sending the Image. Please contact a Dev. IO-Exception!");
                 e.printStackTrace();
             }
         }
         catch (IllegalArgumentException e)
         {
-            event.getChannel().sendMessage("There has been an error. Please contact a Dev, IllegalArgumentException while sending a picture (CommandService)!");
+            event.getChannel()
+                .sendMessage(
+                        "There has been an error. Please contact a Dev, IllegalArgumentException while sending a picture (CommandService)!");
             e.printStackTrace();
         }
     }
@@ -182,8 +186,7 @@ public class CommandService
         else
         {
             event.getChannel()
-                .sendMessage(
-                        "You do not have sufficent permissions!");
+                .sendMessage("You do not have sufficent permissions!");
         }
     }
 
@@ -198,8 +201,9 @@ public class CommandService
         {
             List<Message> recentMessages = event.getChannel()
                 .getHistory()
-                .retrievePast(amount).block();
-            
+                .retrievePast(amount)
+                .block();
+
             for (Message message : recentMessages)
             {
                 message.deleteMessage();
@@ -207,24 +211,24 @@ public class CommandService
         }
         catch (RateLimitedException e)
         {
-            event.getChannel().sendMessage("There has been a RateLimitedExeption during deletion. Please contact a Dev so he can fix it.");
+            event.getChannel()
+                .sendMessage(
+                        "There has been a RateLimitedExeption during deletion. Please contact a Dev so he can fix it.");
             e.printStackTrace();
         }
-        
-               
 
-//        for (Message message : recentMessages)
-//        {
-//            message.deleteMessage();
-//            try
-//            {
-//                Thread.sleep(150);
-//            }
-//            catch (InterruptedException e)
-//            {
-//                e.printStackTrace();
-//            }
-//        }
+        //        for (Message message : recentMessages)
+        //        {
+        //            message.deleteMessage();
+        //            try
+        //            {
+        //                Thread.sleep(150);
+        //            }
+        //            catch (InterruptedException e)
+        //            {
+        //                e.printStackTrace();
+        //            }
+        //        }
 
     }
 
@@ -242,25 +246,41 @@ public class CommandService
         {
             List<String> allCommands = Files.readAllLines(Paths.get(path));
 
-            int index = 0;
             int command = 0;
+            int index;
 
-            for (int i = 0; i < allCommands.size() - 1; ++i)
+            for (index = 0; index < allCommands.size() - 1; ++index)
             {
                 builder.appendString("```");
-
-                while (index <= 10)
+                while (command <= allCommands.size() % 10)
                 {
-                    builder.appendString(allCommands.get(command) + "\n");
-                    command++;
-                    index++;
+                    builder.appendCodeBlock(allCommands.get(command), "python");
+                    ++command;
                 }
-                event.getChannel()
-                    .sendMessage(builder.appendString("```")
-                        .build());
+                builder.appendString("```");
+                event.getChannel().sendMessage(builder.build());
                 builder = new MessageBuilder();
-                index = 0;
             }
+
+            //            int index = 0;
+            //            int command = 0;
+            //
+            //            for (int i = 0; i < allCommands.size() - 1; ++i)
+            //            {
+            //                builder.appendString("```");
+            //                
+            //                while (index <= 10)
+            //                {
+            //                    builder.appendString(allCommands.get(command) + "\n");
+            //                    command++;
+            //                    index++;
+            //                }
+            //                event.getChannel()
+            //                    .sendMessage(builder.appendString("```")
+            //                        .build());
+            //                builder = new MessageBuilder();
+            //                index = 0;
+            //            }
         }
         catch (IOException e)
         {
@@ -352,19 +372,19 @@ public class CommandService
     {
         ((JDABuilder) jda).setGame(new Game()
         {
-            
+
             @Override
             public String getUrl()
             {
                 return "This is not a valid URL";
             }
-            
+
             @Override
             public GameType getType()
             {
                 return GameType.DEFAULT;
             }
-            
+
             @Override
             public String getName()
             {
@@ -521,8 +541,7 @@ public class CommandService
         else if (!users.contains(username))
         {
             event.getChannel()
-                .sendMessage(
-                        "The choosen user does not seem to exist!");
+                .sendMessage("The choosen user does not seem to exist!");
         }
         else
         {
@@ -531,7 +550,8 @@ public class CommandService
                 if (user.getAsMention()
                     .equals(username))
                 {
-                    GuildController controller = event.getGuild().getController();
+                    GuildController controller = event.getGuild()
+                        .getController();
                     int indexOfRole = _roles.indexOf(role);
                     controller.addRolesToMember(user, _roles.get(indexOfRole));
                 }
