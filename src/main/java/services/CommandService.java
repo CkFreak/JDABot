@@ -254,7 +254,7 @@ public class CommandService
                 builder.appendString("```");
                 while (command <= allCommands.size() % 10)
                 {
-                    builder.appendCodeBlock(allCommands.get(command), "python");
+                    builder.appendString(allCommands.get(command));
                     ++command;
                 }
                 builder.appendString("```");
