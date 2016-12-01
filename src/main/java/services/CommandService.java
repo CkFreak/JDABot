@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.MessageBuilder;
@@ -48,6 +50,11 @@ public class CommandService
      * A PollService that coordinates all polls
      */
     private PollService _pollService;
+    
+    /**
+     * A List with all the poles that are running at the moment
+     */
+    private ArrayList<AbstractPoll> _polls;
 
     /**
      * The Take my energy ASCII emoji
@@ -63,6 +70,7 @@ public class CommandService
     {
         _jda = jda;
         _pollService = new PollService();
+        _polls = new ArrayList<>();
     }
 
     /**

@@ -24,7 +24,8 @@ public abstract class AbstractTournament
      */
     public AbstractTournament(ArrayList<String> participants , TournamentMode mode)
     {
-        assert (participants instanceof ArrayList<?>);
+        assert participants instanceof ArrayList<?>;
+        
         _mode = mode;
         _participants = (ArrayList<String>) participants;
     }
@@ -37,25 +38,6 @@ public abstract class AbstractTournament
      */
     protected abstract ArrayList<String> matchOpponents(ArrayList<String> participants);
     
-    
-    /**
-     * Initializes a new tournament with the given participants
-     * @param participants The participants of the tournament
-     * @return a message that the bot sends to the channel with all the opponents in it
-     */
-    public Message initializeTournament(ArrayList<String> participants)
-    {
-        MessageBuilder builder = new MessageBuilder();
-        builder.appendString("Participants of this Tournament are: \n");
-        
-        for (String string : participants)
-        {
-            _participants.add(string);
-            builder.appendString(string + "\n");
-        }
-        
-        return builder.build();
-    }
     
     
     /**
