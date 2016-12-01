@@ -23,7 +23,7 @@ public class TournamentService
      */
     public TournamentService()
     {
-        
+
     }
 
     /**
@@ -42,6 +42,12 @@ public class TournamentService
         {
         case SINGE_ELIMINATION:
             tournament = new SingleEliminationTournament(participants, mode);
+            break;
+        case DOUBLE_ELIMINATION:
+            break;
+        case TRIPLE_ELIMINATION:
+            break;
+        case ROUND_ROBIN:
             break;
 
         default:
