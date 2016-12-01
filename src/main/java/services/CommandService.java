@@ -47,16 +47,6 @@ public class CommandService
     JDA _jda;
 
     /**
-     * A PollService that coordinates all polls
-     */
-    private PollService _pollService;
-    
-    /**
-     * A List with all the poles that are running at the moment
-     */
-    private ArrayList<AbstractPoll> _polls;
-
-    /**
      * The Take my energy ASCII emoji
      */
     private final static String TAKE_MY_ENERGY = "༼ つ ◕_◕ ༽つ";
@@ -69,8 +59,6 @@ public class CommandService
     public CommandService(MessageReceivedEvent event, JDA jda)
     {
         _jda = jda;
-        _pollService = new PollService();
-        _polls = new ArrayList<>();
     }
 
     /**
@@ -262,33 +250,14 @@ public class CommandService
                 builder.appendString("```");
                 while (command <= allCommands.size() % 10)
                 {
-                    builder.appendCodeBlock(allCommands.get(command), "python");
+                    builder.appendString(allCommands.get(command));
                     ++command;
                 }
                 builder.appendString("```");
-                event.getChannel().sendMessage(builder.build());
+                event.getChannel()
+                    .sendMessage(builder.build());
                 builder = new MessageBuilder();
             }
-
-            //            int index = 0;
-            //            int command = 0;
-            //
-            //            for (int i = 0; i < allCommands.size() - 1; ++i)
-            //            {
-            //                builder.appendString("```");
-            //                
-            //                while (index <= 10)
-            //                {
-            //                    builder.appendString(allCommands.get(command) + "\n");
-            //                    command++;
-            //                    index++;
-            //                }
-            //                event.getChannel()
-            //                    .sendMessage(builder.appendString("```")
-            //                        .build());
-            //                builder = new MessageBuilder();
-            //                index = 0;
-            //            }
         }
         catch (IOException e)
         {
@@ -449,75 +418,6 @@ public class CommandService
             return true;
         }
         return false;
-    }
-
-    /**
-     * Starts a new poll
-     * @param name The poll's name
-     * @param user the user that initiates the poll
-     * @param event The MessagereceivedEvent
-     * @param polls a list with all running polls
-     * @param arrayList the choosen options
-     */
-    public void startPVote(String name, User user, MessageReceivedEvent event,
-            List<AbstractPoll> polls, ArrayList<String> arrayList)
-    {
-        polls.add(_pollService.startPPoll(name, user, event, arrayList));
-    }
-
-    /**
-     * Starts an anonymous poll
-     * @param name the polls name
-     * @param user the initiating user
-     * @param event The MessagereceivedEvent
-     * @param polls a list with all running polls
-     * @param arrayList the choosen options
-     */
-    public void startAVote(String name, User user, MessageReceivedEvent event,
-            List<AbstractPoll> polls, ArrayList<String> arrayList)
-    {
-
-        polls.add(_pollService.startAPoll(name, user, event, arrayList));
-    }
-
-    /**
-     * Ends the poll
-     * @param name Name of the poll that is to be ended
-     * @param user The users name that ends the poll
-     */
-    public Message endVote(String name, User user, List<AbstractPoll> polls)
-    {
-        return _pollService.endPoll(polls, name, user);
-    }
-
-    /**
-     * Votes for one option
-     * @param name The polls name
-     * @param option the choosen option
-     * @param polls a list with all running polls
-     */
-    public Message vote(String name, String option, User user,
-            List<AbstractPoll> polls, MessageReceivedEvent event)
-    {
-        for (AbstractPoll pollFachwert : polls)
-        {
-            if (pollFachwert.getName()
-                .equals(name))
-            {
-                if (pollFachwert instanceof PublicPoll)
-                {
-                    return ((PublicPoll) pollFachwert).vote(name, option, user);
-                }
-                else if (pollFachwert instanceof AnonymousPoll)
-                {
-                    return ((AnonymousPoll) pollFachwert).votePrivately(name,
-                            option, user, event);
-                }
-            }
-        }
-        return new MessageBuilder()
-            .appendString("Something went wrong. Please try again!")
-            .build();
     }
 
     /**
