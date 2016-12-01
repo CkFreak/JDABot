@@ -10,13 +10,13 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackState;
 import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
 
-import handler.AudioHandlerReplacement;
+import handler.AudioHandler;
 import listener.AudioEventTrackListener;
 
 public class AudioHandlerReplacementTest
 {
     
-    private AudioHandlerReplacement _audioHandler;
+    private AudioHandler _audioHandler;
     
     private AudioEventTrackListener _audioEventListener;
     
@@ -26,7 +26,7 @@ public class AudioHandlerReplacementTest
     
     public AudioHandlerReplacementTest()
     {
-        _audioHandler = new AudioHandlerReplacement();
+        _audioHandler = new AudioHandler();
         _audioHandler.registerNewTrack("https://www.youtube.com/watch?v=EiO9_PJ0h8Q", null);
         
         _audioEventListener = new AudioEventTrackListener(_audioHandler);

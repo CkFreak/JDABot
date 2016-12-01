@@ -10,7 +10,7 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventListener;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
-import handler.AudioHandlerReplacement;
+import handler.AudioHandler;
 
 /**
  * A class that handles the audio playback and keeps track of the songs in the selection. It needs to be controlled 
@@ -23,10 +23,10 @@ public class AudioEventTrackListener extends AudioEventAdapter
 {
 
     private ArrayList<AudioTrack> _tracks;
-    private AudioHandlerReplacement _audioHandler;
+    private AudioHandler _audioHandler;
     private boolean _shuffle;
 
-    public AudioEventTrackListener(AudioHandlerReplacement audioHandler)
+    public AudioEventTrackListener(AudioHandler audioHandler)
     {
         _tracks = new ArrayList<>();
         _audioHandler = audioHandler;

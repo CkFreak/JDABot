@@ -50,7 +50,7 @@ public class CommandHandler implements Observer
     /**
      * The LAVA Player for music
      */
-    private AudioHandlerReplacement _player;
+    private AudioHandler _player;
 
     /**
      * The IJustLostTheGameService that makes sure the game is lost in random intervals (Dammit I just lost the Game)
@@ -88,7 +88,7 @@ public class CommandHandler implements Observer
         _pollService = new PollService();
         _loseGameService = new IJustLostTheGameService();
         _loseGameService.addObserver(this);
-        _player = new AudioHandlerReplacement();
+        _player = new AudioHandler();
     }
 
     /**
