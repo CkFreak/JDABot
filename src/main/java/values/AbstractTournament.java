@@ -57,5 +57,13 @@ public abstract class AbstractTournament
         return _mode;
     }
     
+    /**
+     * Adds the named user to the tournament
+     * @param participant the user that takes part in the tournament
+     */
+    public void addParticipant(String participant)
+    {
+        _participants.add(participant);
+    }
     
 }

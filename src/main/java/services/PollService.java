@@ -13,7 +13,7 @@ import values.PublicPoll;
 /**
  * This class works with all PollFachwerten and manages those
  * @author Timbo 
- * @version 2016
+ * @version 1.12.2016
  *
  */
 public class PollService

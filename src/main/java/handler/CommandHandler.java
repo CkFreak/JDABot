@@ -14,7 +14,7 @@ import services.TournamentService;
 /**
  * This class takes all user input and processes it. It holds all commands but no knowledge about them.
  * @author CkFreak
- * @version 2016
+ * @version 1.12.2016
  */
 public class CommandHandler implements Observer
 {

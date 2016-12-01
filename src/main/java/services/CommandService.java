@@ -31,7 +31,7 @@ import values.PublicPoll;
 /**
  * A class that executes commands passed to it by the CommandHandler
  * @author Timbo
- * @version 2016
+ * @version 1.12.2016
  */
 public class CommandService
 {

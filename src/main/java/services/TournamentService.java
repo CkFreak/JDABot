@@ -2,9 +2,11 @@ package services;
 
 import java.util.ArrayList;
 
+import enums.TournamentMode;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import values.AbstractTournament;
+import values.SingleEliminationTournament;
 
 /**
  * a class that starts and manages them as well
@@ -13,46 +15,50 @@ import values.AbstractTournament;
  */
 public class TournamentService
 {
-    /**
-     * All Participants of the tournament
-     */
-    private ArrayList<String> _participants;
-    
+
     /**
      * starts a new tournament with the given mode
      * @param participants the participants of the tournament
      * @param tournament Die Art des Turniers
-     * @require participants instanceof ArrayList<String>
      */
-    public TournamentService(ArrayList<String> participants, AbstractTournament tournament)
+    public TournamentService()
     {
-        assert (participants instanceof ArrayList<?>);
         
-        _participants = participants;
     }
-    
+
     /**
      * Initializes a new tournament with the given participants
      * @param participants The participants of the tournament
+     * @param mode the mode the tournament is being played in
      * @return a message that the bot sends to the channel with all the opponents in it
      */
-    public Message initializeTournament(ArrayList<String> participants)
+    public Message initializeTournament(ArrayList<String> participants,
+            TournamentMode mode)
     {
+        AbstractTournament tournament = null;
         MessageBuilder builder = new MessageBuilder();
+
+        switch (mode)
+        {
+        case SINGE_ELIMINATION:
+            tournament = new SingleEliminationTournament(participants, mode);
+            break;
+
+        default:
+            return builder.appendString(
+                    "There was no tournament made! Contact a Dev please")
+                .build();
+        }
+
         builder.appendString("Participants of this Tournament are: \n");
-        
+
         for (String string : participants)
         {
-            _participants.add(string);
+            tournament.addParticipant(string);
             builder.appendString(string + "\n");
         }
-        
+
         return builder.build();
     }
-    
-    
-    
-    
-    
-    
+
 }
