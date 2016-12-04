@@ -67,6 +67,42 @@ public class SingleEliminationTournament extends AbstractTournament
                 + " now has " + theLoser.getLosses() + " losses.")
             .build();
     }
+    
+    /**
+     * This Method will add one draw to each players result table
+     * @param playerOne The first player of the match
+     * @param playerTwo the second player of the match
+     * @return A message with the new results or an error if the player did not play in the tournament
+     */
+    public Message registerDraw(String playerOne, String playerTwo)
+    {
+        MessageBuilder builder = new MessageBuilder();
+        
+        if (!_participants.contains(new TournamentParticipant(playerOne)))
+        {
+            return builder.appendString(
+                    "The first player you have entered is not registerd for this tournament")
+                .build();
+        }
+        else if (!_participants.contains(new TournamentParticipant(playerTwo)))
+        {
+            return builder.appendString(
+                    "The second player you have entered is not registered for this tournament")
+                .build();
+        }
+        
+        for (TournamentParticipant tournamentParticipant : _participants)
+        {
+            if (tournamentParticipant.getName().equals(playerOne))
+            {
+                tournamentParticipant.incrementDraws();
+            }
+            else if (tournamentParticipant.getName().equals(playerTwo)) {
+                tournamentParticipant.incrementDraws();
+            }
+        }
+        return builder.appendString("A draw has been added to " + playerOne + " and " + playerTwo).build(); 
+    }
 
     @Override
     protected ArrayList<String> matchOpponents(ArrayList<String> participants)
