@@ -7,9 +7,10 @@ import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import values.AbstractTournament;
 import values.SingleEliminationTournament;
+import values.TournamentParticipant;
 
 /**
- * a class that starts and manages them as well
+ * a class that starts tournaments and manages them as well
  * @author Timbo
  * @version 18.11.2016
  */
@@ -37,11 +38,12 @@ public class TournamentService
     {
         AbstractTournament tournament = null;
         MessageBuilder builder = new MessageBuilder();
+        ArrayList<TournamentParticipant> tournamentParticipants = getParticipants(participants);
 
         switch (mode)
         {
         case SINGE_ELIMINATION:
-            tournament = new SingleEliminationTournament(participants, mode);
+            tournament = new SingleEliminationTournament(tournamentParticipants, mode);
             break;
         case DOUBLE_ELIMINATION:
             break;
@@ -58,13 +60,30 @@ public class TournamentService
 
         builder.appendString("Participants of this Tournament are: \n");
 
-        for (String string : participants)
+        for (TournamentParticipant parti : tournamentParticipants)
         {
-            tournament.addParticipant(string);
-            builder.appendString(string + "\n");
+            tournament.addParticipant(parti);
+            builder.appendString(parti.getName() + "\n");
         }
 
         return builder.build();
+    }
+
+    /**
+     * Creates new particpants from an ArrayList of Strings
+     * @param participants the participants as Strings
+     * @return A new list with TournamentParticipants
+     */
+    private ArrayList<TournamentParticipant> getParticipants(
+            ArrayList<String> participants)
+    {
+        ArrayList<TournamentParticipant> participants2 = new ArrayList<>();
+        
+        for (String string : participants)
+        {
+            participants2.add(new TournamentParticipant(string));
+        }
+        return participants2;
     }
 
 }

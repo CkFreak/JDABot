@@ -12,7 +12,7 @@ import enums.TournamentMode;
 public abstract class AbstractTournament
 {
     protected TournamentMode _mode;
-    protected ArrayList<String> _participants;
+    protected ArrayList<TournamentParticipant> _participants;
     
     /**
      * Instatiates a new Abstract Tournament
@@ -20,12 +20,12 @@ public abstract class AbstractTournament
      * @param mode the tournament mode
      * @require participants instanceof ArrayList<String>
      */
-    public AbstractTournament(ArrayList<String> participants , TournamentMode mode)
+    public AbstractTournament(ArrayList<TournamentParticipant> participants , TournamentMode mode)
     {
         assert participants instanceof ArrayList<?>;
         
         _mode = mode;
-        _participants = (ArrayList<String>) participants;
+        _participants = (ArrayList<TournamentParticipant>) participants;
     }
     
     
@@ -42,7 +42,7 @@ public abstract class AbstractTournament
      * Gives all participants of the Tournament
      * @return a list with all participants of the tournament
      */
-    protected ArrayList<String> getParticipants()
+    protected ArrayList<TournamentParticipant> getParticipants()
     {
         return _participants;
     }
@@ -61,7 +61,7 @@ public abstract class AbstractTournament
      * Adds the named user to the tournament
      * @param participant the user that takes part in the tournament
      */
-    public void addParticipant(String participant)
+    public void addParticipant(TournamentParticipant participant)
     {
         _participants.add(participant);
     }
