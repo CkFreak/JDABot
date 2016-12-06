@@ -1,8 +1,10 @@
-package values;
+package materials;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import enums.TournamentMode;
+import values.TournamentParticipant;
 
 /**
  * An abstract class that describes a tournament in general
@@ -34,7 +36,7 @@ public abstract class AbstractTournament
      * @param participants a list of participants
      * @return an arrayList with the opponents
      */
-    protected abstract ArrayList<String> matchOpponents(ArrayList<String> participants);
+    protected abstract ArrayList<LinkedList<TournamentParticipant>> matchOpponents(ArrayList<String> participants);
     
     
     

@@ -1,10 +1,12 @@
-package values;
+package materials;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import enums.TournamentMode;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
+import values.TournamentParticipant;
 
 /**
  * A Tournament that represents the SingleElimination Mode of an AbstractTournament
@@ -105,8 +107,9 @@ public class SingleEliminationTournament extends AbstractTournament
     }
 
     @Override
-    protected ArrayList<String> matchOpponents(ArrayList<String> participants)
+    protected ArrayList<LinkedList<TournamentParticipant>> matchOpponents(ArrayList<String> participants)
     {
+        
         return null;
     }
 

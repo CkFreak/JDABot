@@ -1,4 +1,4 @@
-package values;
+package materials;
 
 import java.util.ArrayList;
 
@@ -8,30 +8,28 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 /**
- * This class represents a Poll Object. This poll is anonymous which means, that all votes castet to the poll cannot
- * be counted before the end of the poll
+ * This class represents a Poll Object. This Poll is public which means it's state can always be checked
  * @author Timbo
  * @version 2016
  */
-public class AnonymousPoll extends AbstractPoll
+public class PublicPoll extends AbstractPoll
 {
 
     /**
-     * Initializes an AnonymousPoll instance
-     * @param name The Poll's name 
-     * @param user the user that initiated the poll
-     * @param arrayList a list with all possible answers in it
+     * Initializes a new PublicPoll
+     * @param name the poll's name
+     * @param user the user that has initiated the poll
+     * @param arrayList a list with all possible answers
      */
-    public AnonymousPoll(String name, User user, ArrayList<String> arrayList)
+    public PublicPoll(String name, User user, ArrayList<String> arrayList)
     {
         super(name, user, arrayList);
     }
 
     @Override
-    public Message votePrivately(String name, String option, User user, MessageReceivedEvent event)
+    public Message vote(String name, String option, User user)
     {
-        event.getMessage().deleteMessage();
-        
+
         MessageBuilder builder = new MessageBuilder();
 
         for (int i = 0; i <= _options.size() - 2; ++i)
@@ -54,8 +52,19 @@ public class AnonymousPoll extends AbstractPoll
 
     }
 
+    /**
+     * This method returns the polls status
+     * @param poll The poll whoms status is to be checked
+     * @return the statu of the poll
+     */
+    public Message getStatus(PublicPoll poll)
+    {
+        return calculateResults();
+    }
+
     @Override
-    public Message vote(String name, String option, User user)
+    public Message votePrivately(String name, String option, User user,
+            MessageReceivedEvent event)
     {
         return null;
     }
