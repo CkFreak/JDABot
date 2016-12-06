@@ -2,6 +2,7 @@ package materials;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 import enums.TournamentMode;
 import net.dv8tion.jda.core.MessageBuilder;
@@ -107,10 +108,34 @@ public class SingleEliminationTournament extends AbstractTournament
     }
 
     @Override
-    protected ArrayList<LinkedList<TournamentParticipant>> matchOpponents(ArrayList<String> participants)
+    protected ArrayList<LinkedList<TournamentParticipant>> matchOpponents(ArrayList<TournamentParticipant> participants)
     {
+        Random random = new Random();
+        ArrayList<LinkedList<TournamentParticipant>> matchedOpponents = new ArrayList<>();
         
-        return null;
+        //This shall be done, if there is an even amount of participants. Otherwise we have to choose one, that will
+        //advance one round for free
+        if (participants.size() % 2 == 0)
+        {
+            for (int i = 0; i < participants.size() - 1; ++i)
+            {
+                LinkedList<TournamentParticipant> opponents = new LinkedList<>();
+                int player = random.nextInt(participants.size() - 1);
+                
+                //Get a random player out of the list and match it against another random player
+                opponents.add(participants.get(player));
+                matchedOpponents.add(opponents);
+                //remove the players that we have just added
+                participants.remove(player);
+                
+                //Do it here again, so that the player we have already added is definetly gone from the list
+                player = random.nextInt(participants.size() - 1);
+                opponents.add(participants.get(player));
+                participants.remove(player);
+                
+            }
+        }
+        return matchedOpponents;
     }
 
 }

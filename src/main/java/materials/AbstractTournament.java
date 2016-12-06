@@ -36,7 +36,7 @@ public abstract class AbstractTournament
      * @param participants a list of participants
      * @return an arrayList with the opponents
      */
-    protected abstract ArrayList<LinkedList<TournamentParticipant>> matchOpponents(ArrayList<String> participants);
+    protected abstract ArrayList<LinkedList<TournamentParticipant>> matchOpponents(ArrayList<TournamentParticipant> participants);
     
     
     
