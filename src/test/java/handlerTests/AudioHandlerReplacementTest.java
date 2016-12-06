@@ -1,9 +1,5 @@
 package handlerTests;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
