@@ -13,7 +13,14 @@ import values.TournamentParticipant;
  */
 public abstract class AbstractTournament
 {
+	/**
+	 * The mode this Tournament is being played in
+	 */
     protected TournamentMode _mode;
+    
+    /**
+     * A list with all participants of this Tournament
+     */
     protected ArrayList<TournamentParticipant> _participants;
     
     /**
