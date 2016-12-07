@@ -20,7 +20,7 @@ public class StartUp
 {
     private final static String MCI_SERVER_TOKEN = provideToken(0);
     private final static String MOGE_SERVER_TOKEN = provideToken(1);
-    private final static String PATH_TO_TOKEN = "/src/main/res/tokens.txt";
+    private final static String PATH_TO_TOKEN = "src/main/res/tokens.txt";
     private final static String PYTHON_COMMAND = "python ./youtube-dl -U";
     
     public static void main(String[] args)
@@ -54,7 +54,8 @@ public class StartUp
             JDA mogeJda;
             try
             {
-                mogeJda = new JDABuilder(AccountType.BOT).setToken(MOGE_SERVER_TOKEN).buildBlocking();
+                mogeJda = new JDABuilder(AccountType.BOT).setToken(
+                        MOGE_SERVER_TOKEN).buildBlocking();
                 mogeJda.addEventListener(new ReadyListener());
                 mogeJda.addEventListener(new CommandListener(mogeJda));
                 mogeJda.addEventListener(new UserPromotedListener());
