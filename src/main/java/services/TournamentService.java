@@ -34,7 +34,7 @@ public class TournamentService
     public Message initializeTournament(
             TournamentMode mode, ArrayList<String> participants)
     {
-        AbstractTournament tournament = null;
+        AbstractTournament tournament;
         MessageBuilder builder = new MessageBuilder();
         ArrayList<TournamentParticipant> tournamentParticipants = getParticipants(participants);
 
