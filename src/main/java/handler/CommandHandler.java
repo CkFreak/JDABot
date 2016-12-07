@@ -203,9 +203,12 @@ public class CommandHandler implements Observer
             }
                 break;
 
-            //case "volume":
-              //  _player.setVolume(Integer.parseInt(messageContent[1]));
-                //break;
+            case "volume":
+            {
+                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                guildMusicManager.getScheduler().setVolume(Integer.parseInt(messageContent[1]));
+            }
+                break;
 
             case "stop":
             {
@@ -263,46 +266,51 @@ public class CommandHandler implements Observer
                 }
                 break;
 
-            case "shuffle":
-                boolean enable = false;
-                if (messageContent[1].equals("1"))
+                case "shuffle":
+                    boolean enable = false;
+                    if (messageContent[1].equals("1"))
+                    {
+                        enable = true;
+                    }
+                    else if (messageContent[1].equals("0"))
+                    {
+                        enable = false;
+                    }
+
                 {
-                    enable = true;
+                    GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                    guildMusicManager.getScheduler().setShuffle(enable);
                 }
-                else if (messageContent[1].equals("0"))
+                break;
+
+                case "join":
                 {
-                    enable = false;
+                    if (messageContent.length == 2)
+                    {
+                        _musicControlManager.connectToVoiceChannel(messageContent[1], event.getGuild());
+                    }
                 }
+                    break;
 
-            {
-                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
-                guildMusicManager.getScheduler().setShuffle(enable);
-            }
-                break;
+                case "leave":
+                    _musicControlManager.leaveVoiceChannel(event.getGuild());
+                    break;
 
-            case "join":
-                //                _player.joinChannel(messageContent[1], event);
-                break;
+                case "shutdown":
+                    event.getChannel().sendMessage("Going down for maintenance").queue();
+                    _commander.reagiereAufShutdown(event);
+                    break;
 
-            case "leave":
-                //                _player.leaveChannel(event);
-                break;
+                case "mods":
+                    event.getChannel()
+                            .sendMessage(_commander.getMods(event))
+                            .queue();
+                    break;
 
-            case "shutdown":
-                event.getChannel().sendMessage("Going down for maintenance").queue();
-                _commander.reagiereAufShutdown(event);
-                break;
-
-            case "mods":
-                event.getChannel()
-                    .sendMessage(_commander.getMods(event))
-                    .queue();
-                break;
-
-            case "changeGame":
-                event.getMessage()
-                    .deleteMessage()
-                    .queue();
+                case "changeGame":
+                    event.getMessage()
+                            .deleteMessage()
+                            .queue();
 
                 _commander.changeGame(_jda, getGameName(messageContent));
                 break;

@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import handler.AudioPlayerSendHandler;
 import handler.TrackScheduler;
+import net.dv8tion.jda.core.entities.Guild;
 
 /**
  * Holder for both the _player and a track _scheduler for one guild.
@@ -22,7 +23,8 @@ public class GuildMusicManager {
    * Creates a _player and a track _scheduler.
    * @param manager Audio _player manager to use for creating the _player.
    */
-  public GuildMusicManager(AudioPlayerManager manager) {
+  public GuildMusicManager(AudioPlayerManager manager)
+  {
     _player = manager.createPlayer();
     _scheduler = new TrackScheduler(_player);
     _player.addListener(_scheduler);
@@ -42,4 +44,5 @@ public class GuildMusicManager {
   {
       return _scheduler;
   }
+
 }

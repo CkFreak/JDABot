@@ -280,7 +280,7 @@ public class TrackScheduler extends AudioEventAdapter
     }
 
     /**
-     * Sets the Volume of the player
+     * Sets the Volume of the player (Interval from 0 to 150)
      * @param volume The desired Volume
      */
     public void setVolume(int volume)
