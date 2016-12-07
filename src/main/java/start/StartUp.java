@@ -44,28 +44,7 @@ public class StartUp
                 mciJda.addEventListener(new ReadyListener());
                 mciJda.addEventListener(new CommandListener(mciJda));
                 mciJda.addEventListener(new UserPromotedListener());
-                ((JDABuilder) mciJda).setGame(new Game()
-                {
-                    
-                    @Override
-                    public String getUrl()
-                    {
-                        return "This is not a valid URL";
-                    }
-                    
-                    @Override
-                    public GameType getType()
-                    {
-                        return GameType.DEFAULT;
-                    }
-                    
-                    @Override
-                    public String getName()
-                    {
-                        return "Hello Kitty Online";
-                    }
-                });
-                
+               mciJda.getPresence().setGame(Game.of("Hello Kitty Online"));
             }
             catch (RateLimitedException e)
             {
@@ -79,28 +58,8 @@ public class StartUp
                 mogeJda.addEventListener(new ReadyListener());
                 mogeJda.addEventListener(new CommandListener(mogeJda));
                 mogeJda.addEventListener(new UserPromotedListener());
-                
-                ((JDABuilder) mogeJda).setGame(new Game()
-                {
-                    
-                    @Override
-                    public String getUrl()
-                    {
-                        return "This is not a valid URL";
-                    }
-                    
-                    @Override
-                    public GameType getType()
-                    {
-                        return GameType.DEFAULT;
-                    }
-                    
-                    @Override
-                    public String getName()
-                    {
-                        return "DOTA 2";
-                    }
-                });
+                mogeJda.getPresence().setGame(Game.of("DOTA 2"));
+
                 
             }
             catch (RateLimitedException e)

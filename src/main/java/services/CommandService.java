@@ -342,27 +342,7 @@ public class CommandService
      */
     public void changeGame(JDA jda, String game)
     {
-        ((JDABuilder) jda).setGame(new Game()
-        {
-
-            @Override
-            public String getUrl()
-            {
-                return "This is not a valid URL";
-            }
-
-            @Override
-            public GameType getType()
-            {
-                return GameType.DEFAULT;
-            }
-
-            @Override
-            public String getName()
-            {
-                return game;
-            }
-        });
+        jda.getPresence().setGame(Game.of(game));
     }
 
     /**
