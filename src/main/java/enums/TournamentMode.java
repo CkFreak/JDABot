@@ -15,7 +15,7 @@ public enum TournamentMode
      */
     TRIPLE_ELIMINATION,
     /**
-     * Each player or team plays each other at least once
+     * Each _player or team plays each other at least once
      */
     ROUND_ROBIN,
     /**

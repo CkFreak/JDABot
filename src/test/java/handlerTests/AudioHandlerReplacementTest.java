@@ -110,7 +110,7 @@ public class AudioHandlerReplacementTest
 
 
     /**
-     * Test, wheater or not the player really starts playing a track, when a track is present
+     * Test, wheater or not the _player really starts playing a track, when a track is present
      */
     @Test
     public void testPlaying()

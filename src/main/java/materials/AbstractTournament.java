@@ -39,7 +39,7 @@ public abstract class AbstractTournament
     
     
     /**
-     * matches each player against an opponent
+     * matches each _player against an opponent
      * @param participants a list of participants
      * @return an arrayList with the opponents
      */

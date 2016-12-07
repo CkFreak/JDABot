@@ -39,7 +39,7 @@ public class TournamentParticipant
     
     /**
      * Gets a players losses
-     * @return the amount of losses a player has
+     * @return the amount of losses a _player has
      */
     public int getLosses()
     {
@@ -48,7 +48,7 @@ public class TournamentParticipant
     
     /**
      * Gets a players wins
-     * @return the amount of wins a player has
+     * @return the amount of wins a _player has
      */
     public int getWins()
     {
@@ -56,8 +56,8 @@ public class TournamentParticipant
     }
     
     /**
-     * Gets the draws a player has
-     * @return the amount of draws a player has
+     * Gets the draws a _player has
+     * @return the amount of draws a _player has
      */
     public int getDraws()
     {
@@ -65,7 +65,7 @@ public class TournamentParticipant
     }
     
     /**
-     * Gets the name of the player
+     * Gets the name of the _player
      * @return the players name
      */
     public String getName()

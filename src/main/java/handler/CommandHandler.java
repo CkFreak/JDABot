@@ -5,6 +5,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import enums.TournamentMode;
+import managers.GuildMusicManager;
+import managers.MusicControlManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import services.CommandService;
@@ -49,9 +51,9 @@ public class CommandHandler implements Observer
     private JDA _jda;
 
     /**
-     * The LAVA Player for music
+     * The MusicControlManager to get GuildMusicManagers
      */
-    private AudioHandler _player;
+    private MusicControlManager _musicControlManager;
 
     /**
      * The IJustLostTheGameService that makes sure the game is lost in random intervals (Dammit I just lost the Game)
@@ -89,7 +91,7 @@ public class CommandHandler implements Observer
         _pollService = new PollService();
         _loseGameService = new IJustLostTheGameService();
         _loseGameService.addObserver(this);
-        _player = new AudioHandler();
+        _musicControlManager = new MusicControlManager();
     }
 
     /**
@@ -179,61 +181,78 @@ public class CommandHandler implements Observer
             //            case "deleteAll":
             //                _commander.deleteAllMessages(event);
             //                break;
-
-            case "add":
-                event.getChannel()
-                    .sendMessage(
-                            "Nicht ungeduldig werden, das kann ein wenig dauern. Es wird begonnen, die URL zu verarbeiten!")
-                    .queue();
-
-                _player.registerNewTrack(messageContent[1], event);
-                break;
-
             case "play":
-
-                if (_player.getPlaylist() == null)
+                if (messageContent.length < 2)
                 {
-                    event.getChannel()
-                        .sendMessage(
-                                "Currently the playlist is empty. Please use #add to add Songs to the playlist")
-                        .queue();
+                    event.getChannel().sendMessage("You have to enter a URL with that command");
                 }
-                _player.startPlaying();
+                else
+                {
+                    GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                    guildMusicManager.getScheduler().registerNewTrack(messageContent[1], _musicControlManager.getPlayerManager(), event);
+                }
                 break;
 
             case "pause":
-                _player.pausePlayer();
+            {
+                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                guildMusicManager.getScheduler().pausePlayer();
                 event.getChannel()
-                    .sendMessage("Playback has been paused")
-                    .queue();
+                        .sendMessage("Playback has been paused")
+                        .queue();
+            }
                 break;
 
-            case "volume":
-                _player.setVolume(Integer.parseInt(messageContent[1]));
-                break;
+            //case "volume":
+              //  _player.setVolume(Integer.parseInt(messageContent[1]));
+                //break;
 
             case "stop":
-                _player.stopPlayer();
+            {
+                GuildMusicManager gMM = getGuildMusicManager(event);
+                gMM.getScheduler().stopPlayer();
+                event.getChannel().sendMessage("Playback has been stopped").queue();
+            }
+                break;
+
+            case "resume":
+            {
+                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                guildMusicManager.getScheduler().resumePlayer();
+            }
                 break;
 
             case "skip":
-                _player.playNextSong();
+            {
+                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                guildMusicManager.getScheduler().skip();
+            }
+            event.getChannel().sendMessage("The playing track has been skipped");
                 break;
 
             case "playlist":
+            {
+                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                 event.getChannel()
-                    .sendMessage(_player.getPlaylist())
-                    .queue();
+                        .sendMessage(guildMusicManager.getScheduler().getPlaylist())
+                        .queue();
+            }
                 break;
 
             case "restart":
-                _player.restartSong();
+            {
+                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                guildMusicManager.getScheduler().restartSong();
+                event.getChannel().sendMessage("The Song has been restarted").queue();
+            }
                 break;
 
             case "reset":
                 if (_commander.isAdmin(event.getAuthor(), event))
                 {
-                    _player.resetPlayer();
+                    GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                    guildMusicManager.getScheduler().resetPlayer();
+                    event.getChannel().sendMessage("The Player has been reset");
                 }
                 else
                 {
@@ -255,7 +274,10 @@ public class CommandHandler implements Observer
                     enable = false;
                 }
 
-                _player.isShuffle(enable);
+            {
+                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                guildMusicManager.getScheduler().setShuffle(enable);
+            }
                 break;
 
             case "join":
@@ -269,10 +291,6 @@ public class CommandHandler implements Observer
             case "shutdown":
                 event.getChannel().sendMessage("Going down for maintenance").queue();
                 _commander.reagiereAufShutdown(event);
-                break;
-
-            case "resume":
-                _player.resumePlayer();
                 break;
 
             case "mods":
@@ -325,7 +343,6 @@ public class CommandHandler implements Observer
                 event.getChannel()
                     .sendMessage(_pollService.getCurrentVotes())
                     .queue();
-                ;
                 break;
 
             case "startGame":
@@ -381,6 +398,15 @@ public class CommandHandler implements Observer
 
             }
         }
+    }
+
+    /**
+     * @param event A MessageReceivedEvent
+     * @return A GuildMusicManager for a specific Guild
+     */
+    private GuildMusicManager getGuildMusicManager(MessageReceivedEvent event)
+    {
+        return _musicControlManager.getGuildMusicManager(event.getGuild(), event);
     }
 
 

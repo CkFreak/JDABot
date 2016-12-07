@@ -73,9 +73,9 @@ public class SingleEliminationTournament extends AbstractTournament
     
     /**
      * This Method will add one draw to each players result table
-     * @param playerOne The first player of the match
-     * @param playerTwo the second player of the match
-     * @return A message with the new results or an error if the player did not play in the tournament
+     * @param playerOne The first _player of the match
+     * @param playerTwo the second _player of the match
+     * @return A message with the new results or an error if the _player did not play in the tournament
      */
     public Message registerDraw(String playerOne, String playerTwo)
     {
@@ -84,13 +84,13 @@ public class SingleEliminationTournament extends AbstractTournament
         if (!_participants.contains(new TournamentParticipant(playerOne)))
         {
             return builder.appendString(
-                    "The first player you have entered is not registerd for this tournament")
+                    "The first _player you have entered is not registerd for this tournament")
                 .build();
         }
         else if (!_participants.contains(new TournamentParticipant(playerTwo)))
         {
             return builder.appendString(
-                    "The second player you have entered is not registered for this tournament")
+                    "The second _player you have entered is not registered for this tournament")
                 .build();
         }
         
@@ -122,13 +122,13 @@ public class SingleEliminationTournament extends AbstractTournament
                 LinkedList<TournamentParticipant> opponents = new LinkedList<>();
                 int player = random.nextInt(participants.size() - 1);
                 
-                //Get a random player out of the list and match it against another random player
+                //Get a random _player out of the list and match it against another random _player
                 opponents.add(participants.get(player));
                 matchedOpponents.add(opponents);
                 //remove the players that we have just added
                 participants.remove(player);
                 
-                //Do it here again, so that the player we have already added is definetly gone from the list
+                //Do it here again, so that the _player we have already added is definetly gone from the list
                 player = random.nextInt(participants.size() - 1);
                 opponents.add(participants.get(player));
                 participants.remove(player);
