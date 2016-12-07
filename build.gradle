@@ -13,7 +13,8 @@ repositories {
     
     maven {
     url 'http://maven.sedmelluq.com'
-  }
+        }
+    maven { url 'https://jitpack.io' }
 }
 
 // Add your dependencies here
@@ -22,6 +23,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.13'
     compile 'net.dv8tion:jda-player:0.2.3_25'
     compile 'com.sedmelluq:lavaplayer:1.1.22'
+    compile 'com.github.DV8FromTheWorld:JDA:audio-SNAPSHOT'
     
 }
 
