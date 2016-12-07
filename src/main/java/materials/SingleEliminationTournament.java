@@ -135,6 +135,14 @@ public class SingleEliminationTournament extends AbstractTournament
                 
             }
         }
+        else
+        {
+            LinkedList<TournamentParticipant> opponents = new LinkedList<>();
+            opponents.add(0, participants.get(0));
+            participants.remove(0);
+            matchedOpponents.add(opponents);
+            matchOpponents(participants);
+        }
         return matchedOpponents;
     }
 

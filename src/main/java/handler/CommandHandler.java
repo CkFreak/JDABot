@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import enums.TournamentMode;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import services.CommandService;
@@ -138,7 +139,6 @@ public class CommandHandler implements Observer
                     .sendMessage(
                             "Es wurden " + amount + " Nachrichten gelöscht.")
                     .queue();
-                ;
                 break;
 
             case "userInfo":
@@ -147,7 +147,6 @@ public class CommandHandler implements Observer
                 event.getChannel()
                     .sendMessage(messageForUser)
                     .queue();
-                ;
                 break;
 
             case "salt":
@@ -160,7 +159,6 @@ public class CommandHandler implements Observer
 
             case "sugar":
                 _commander.sendEmoji(event, SUGAR_EMOJI);
-                ;
                 break;
 
             case "fuckoff":
@@ -175,7 +173,6 @@ public class CommandHandler implements Observer
                 event.getChannel()
                     .sendTyping()
                     .queue();
-                ;
                 _commander.sendEmoji(event, BITCH_PLEASE);
                 break;
 
@@ -184,14 +181,15 @@ public class CommandHandler implements Observer
             //                break;
 
             case "add":
-                _player.registerNewTrack(messageContent[1], event);
-                break;
-
-            case "play":
                 event.getChannel()
                     .sendMessage(
                             "Nicht ungeduldig werden, das kann ein wenig dauern. Es wird begonnen, die URL zu verarbeiten!")
                     .queue();
+
+                _player.registerNewTrack(messageContent[1], event);
+                break;
+
+            case "play":
 
                 if (_player.getPlaylist() == null)
                 {
@@ -208,7 +206,6 @@ public class CommandHandler implements Observer
                 event.getChannel()
                     .sendMessage("Playback has been paused")
                     .queue();
-                ;
                 break;
 
             case "volume":
@@ -217,19 +214,16 @@ public class CommandHandler implements Observer
 
             case "stop":
                 _player.stopPlayer();
-                ;
                 break;
 
             case "skip":
                 _player.playNextSong();
-                ;
                 break;
 
             case "playlist":
                 event.getChannel()
                     .sendMessage(_player.getPlaylist())
                     .queue();
-                ;
                 break;
 
             case "restart":
@@ -273,6 +267,7 @@ public class CommandHandler implements Observer
                 break;
 
             case "shutdown":
+                event.getChannel().sendMessage("Going down for maintenance").queue();
                 _commander.reagiereAufShutdown(event);
                 break;
 
@@ -284,14 +279,12 @@ public class CommandHandler implements Observer
                 event.getChannel()
                     .sendMessage(_commander.getMods(event))
                     .queue();
-                ;
                 break;
 
             case "changeGame":
                 event.getMessage()
                     .deleteMessage()
                     .queue();
-                ;
 
                 _commander.changeGame(_jda, getGameName(messageContent));
                 break;
@@ -311,7 +304,6 @@ public class CommandHandler implements Observer
                     .sendMessage(
                             _pollService.getStatus(getPollName(messageContent)))
                     .queue();
-                ;
                 break;
 
             case "endVote":
@@ -327,7 +319,6 @@ public class CommandHandler implements Observer
                             getOptions(messageContent), event.getAuthor(),
                             event))
                     .queue();
-                ;
                 break;
 
             case "listVotes":
@@ -342,7 +333,6 @@ public class CommandHandler implements Observer
                 event.getChannel()
                     .sendMessage(THE_GAME_INITIALIZATION)
                     .queue();
-                ;
                 break;
 
             case "gameData":
@@ -353,28 +343,46 @@ public class CommandHandler implements Observer
                             + "\n Now: \n" + _loseGameService.getNow()
                                 .toString())
                     .queue();
-                ;
                 break;
 
             //TODO Command richtig implementieren
-//            case "startTournament":
-//                event.getChannel()
-//                    .sendMessage(_tournamentService
-//                        .initializeTournament(getOptions(messageContent)))
-//                    .queue();
-//                ;
-//                break;
+            case "startTournament":
+                TournamentMode mode = null;
+                switch (getPollName(messageContent).toLowerCase())
+                {
+                    case "single elimination":
+                        mode = TournamentMode.SINGE_ELIMINATION;
+                        break;
+                    case "double elimination":
+                        mode = TournamentMode.DOUBLE_ELIMINATION;
+                        break;
+                    case "tripple elimination":
+                        mode = TournamentMode.TRIPLE_ELIMINATION;
+                        break;
+                    case "round robin":
+                        mode = TournamentMode.ROUND_ROBIN;
+                        break;
+                        default:
+                            event.getChannel().sendMessage("The Tournament type does not match any known modes").queue();
+                            break;
+
+                }
+
+                event.getChannel()
+                    .sendMessage(_tournamentService
+                        .initializeTournament(mode , getOptions(messageContent)))
+                    .queue();
 
             default:
                 event.getChannel()
                     .sendMessage("Sorry but this command is not defined!")
                     .queue();
-                ;
                 break;
 
             }
         }
     }
+
 
     /**
      * Returns the Game the Bot wants to play next

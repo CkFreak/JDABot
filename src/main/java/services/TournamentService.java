@@ -18,9 +18,7 @@ public class TournamentService
 {
 
     /**
-     * starts a new tournament with the given mode
-     * @param participants the participants of the tournament
-     * @param tournament Die Art des Turniers
+     * Instantiates a new Tournament Service
      */
     public TournamentService()
     {
@@ -33,8 +31,8 @@ public class TournamentService
      * @param mode the mode the tournament is being played in
      * @return a message that the bot sends to the channel with all the opponents in it
      */
-    public Message initializeTournament(ArrayList<String> participants,
-            TournamentMode mode)
+    public Message initializeTournament(
+            TournamentMode mode, ArrayList<String> participants)
     {
         AbstractTournament tournament = null;
         MessageBuilder builder = new MessageBuilder();
@@ -45,17 +43,27 @@ public class TournamentService
         case SINGE_ELIMINATION:
             tournament = new SingleEliminationTournament(tournamentParticipants, mode);
             break;
-        case DOUBLE_ELIMINATION:
-            break;
-        case TRIPLE_ELIMINATION:
-            break;
-        case ROUND_ROBIN:
-            break;
+            case DOUBLE_ELIMINATION:
+                return builder.appendString(
+                        "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
+                                " match any of the existing")
+                        .build();
+            case TRIPLE_ELIMINATION:
+                return builder.appendString(
+                        "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
+                                " match any of the existing")
+                        .build();
+            case ROUND_ROBIN:
+                return builder.appendString(
+                        "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
+                                " match any of the existing")
+                        .build();
 
-        default:
-            return builder.appendString(
-                    "There was no tournament made! Contact a Dev please")
-                .build();
+            default:
+                return builder.appendString(
+                        "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
+                                " match any of the existing")
+                        .build();
         }
 
         builder.appendString("Participants of this Tournament are: \n");
