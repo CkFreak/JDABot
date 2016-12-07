@@ -262,7 +262,6 @@ public class CommandHandler implements Observer
                     event.getChannel()
                         .sendMessage(INSUFICENT_RIGHTS_MESSAGE)
                         .queue();
-                    ;
                 }
                 break;
 

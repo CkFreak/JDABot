@@ -56,11 +56,11 @@ public class MusicControlManager
      * @param guild The guild the VoiceChannel belongs to
      */
     public void connectToVoiceChannel(String channel, Guild guild)
-  {
-      List<VoiceChannel> voiceChannels = guild.getVoiceChannelsByName(channel, true);
+    {
+      List<VoiceChannel> voiceChannels = guild.getVoiceChannels();
       for (VoiceChannel voiceChannel : voiceChannels)
       {
-          if (voiceChannel.getName().equals(channel))
+          if (voiceChannel.getName().equalsIgnoreCase(channel))
           {
               AudioManager audioManager = new AudioManagerImpl(guild);
               audioManager.openAudioConnection(voiceChannel);
