@@ -41,46 +41,14 @@ public class MusicControlManager
 
         if (musicManager == null)
         {
-            musicManager = new GuildMusicManager(_playerManager);
             AudioManager audioManager = new AudioManagerImpl(event.getGuild());
-            audioManager.setSendingHandler(musicManager.getSendHandler());
+            musicManager = new GuildMusicManager(_playerManager, audioManager);
+            //audioManager.setSendingHandler(musicManager.getSendHandler());
             _musicManagers.put(guildId, musicManager);
         }
 
         return musicManager;
     }
-
-    /**
-     * Connects the Bot to a VoiceChannel
-     * @param channel The channel the bot want to connect to
-     * @param guild The guild the VoiceChannel belongs to
-     */
-    public void connectToVoiceChannel(String channel, Guild guild)
-    {
-      List<VoiceChannel> voiceChannels = guild.getVoiceChannels();
-      for (VoiceChannel voiceChannel : voiceChannels)
-      {
-          if (voiceChannel.getName().equalsIgnoreCase(channel))
-          {
-              AudioManager audioManager = new AudioManagerImpl(guild);
-              audioManager.openAudioConnection(voiceChannel);
-          }
-      }
-
-  }
-
-    /**
-     * Disconnects the bot from a VoiceChannel if it was connected. Otherwise nothing happens
-     * @param guild The Guild the VoiceChannel belongs to
-     */
-  public void leaveVoiceChannel(Guild guild)
-  {
-      AudioManager audioManager = new AudioManagerImpl(guild);
-      if (audioManager.isConnected())
-      {
-          audioManager.closeAudioConnection();
-      }
-  }
 
     public AudioPlayerManager getPlayerManager()
     {

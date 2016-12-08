@@ -36,6 +36,6 @@ mainClassName = 'start.StartUp'
 compileJava.options.encoding = 'UTF-8'
 
 task wrapper(type: Wrapper) { // This task is to specify the gradle version
-    gradleVersion = '2.14'
+    gradleVersion = '3.2.1'
 }
 

@@ -9,6 +9,7 @@ import managers.GuildMusicManager;
 import managers.MusicControlManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.managers.AudioManager;
 import services.CommandService;
 import services.IJustLostTheGameService;
 import services.PollService;
@@ -184,7 +185,7 @@ public class CommandHandler implements Observer
             case "play":
                 if (messageContent.length < 2)
                 {
-                    event.getChannel().sendMessage("You have to enter a URL with that command");
+                    event.getChannel().sendMessage("You have to enter a URL with that command").queue();
                 }
                 else
                 {
@@ -207,6 +208,7 @@ public class CommandHandler implements Observer
             {
                 GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                 guildMusicManager.getScheduler().setVolume(Integer.parseInt(messageContent[1]));
+                event.getChannel().sendMessage("Volume has been set to " + messageContent[1]).queue();
             }
                 break;
 
@@ -279,6 +281,14 @@ public class CommandHandler implements Observer
                 {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                     guildMusicManager.getScheduler().setShuffle(enable);
+                    if (enable)
+                    {
+                        event.getChannel().sendMessage("The Player will shuffle").queue();
+                    }
+                    else
+                    {
+                        event.getChannel().sendMessage("The player will not shuffle").queue();
+                    }
                 }
                 break;
 
@@ -286,13 +296,13 @@ public class CommandHandler implements Observer
                 {
                     if (messageContent.length == 2)
                     {
-                        _musicControlManager.connectToVoiceChannel(messageContent[1], event.getGuild());
+                        _musicControlManager.getGuildMusicManager(event.getGuild(), event).connectToAudioChannel(messageContent[1], event.getGuild());
                     }
                 }
                     break;
 
                 case "leave":
-                    _musicControlManager.leaveVoiceChannel(event.getGuild());
+                    _musicControlManager.getGuildMusicManager(event.getGuild(), event).leaveVoiceChannel();
                     break;
 
                 case "shutdown":

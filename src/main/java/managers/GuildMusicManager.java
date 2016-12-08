@@ -5,11 +5,17 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import handler.AudioPlayerSendHandler;
 import handler.TrackScheduler;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.core.managers.AudioManager;
+import net.dv8tion.jda.core.managers.impl.AudioManagerImpl;
+
+import java.util.List;
 
 /**
  * Holder for both the _player and a track _scheduler for one guild.
  */
-public class GuildMusicManager {
+public class GuildMusicManager
+{
   /**
    * Audio _player for the guild.
    */
@@ -18,16 +24,22 @@ public class GuildMusicManager {
    * Track _scheduler for the _player.
    */
   private final TrackScheduler _scheduler;
+    /**
+     * The AudioManager of this instance
+     */
+    private final AudioManager _audioManager;
 
   /**
    * Creates a _player and a track _scheduler.
    * @param manager Audio _player manager to use for creating the _player.
    */
-  public GuildMusicManager(AudioPlayerManager manager)
+  public GuildMusicManager(AudioPlayerManager manager, AudioManager audioManager)
   {
     _player = manager.createPlayer();
     _scheduler = new TrackScheduler(_player);
     _player.addListener(_scheduler);
+    _audioManager = audioManager;
+    _audioManager.setSendingHandler(getSendHandler());
   }
 
   /**
@@ -43,6 +55,29 @@ public class GuildMusicManager {
   public TrackScheduler getScheduler()
   {
       return _scheduler;
+  }
+
+
+    /**
+     * Connects the bot to an AudioChannel
+     * @param channel The channel the bots needs to connect to
+     * @param guild The guild the @channel belongs to
+     */
+  public void connectToAudioChannel(String channel, Guild guild)
+  {
+      List<VoiceChannel> voiceChannels = guild.getVoiceChannels();
+      for (VoiceChannel voiceChannel : voiceChannels)
+      {
+          if (voiceChannel.getName().equalsIgnoreCase(channel))
+          {
+              _audioManager.openAudioConnection(voiceChannel);
+          }
+      }
+  }
+
+  public void leaveVoiceChannel()
+  {
+      _audioManager.closeAudioConnection();
   }
 
 }

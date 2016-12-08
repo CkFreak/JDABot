@@ -43,15 +43,16 @@ public class TrackScheduler extends AudioEventAdapter
      */
     public void queue(AudioTrack track)
     {
-        // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
-        // something is playing, it returns false and does nothing. In that case the _player was already playing so this
-        // track goes to the _tracks instead.
-        if (!_player.startTrack(track, true))
+        if (_player.getPlayingTrack() == null)
         {
-            _player.playTrack(getFirstTrack());
-            _currentlyPlayingTrack = _player.getPlayingTrack();
+            _player.playTrack(track);
+            add(track);
+            _currentlyPlayingTrack = track;
         }
-        add(track);
+        else
+        {
+            add(track);
+        }
     }
 
     /**
@@ -174,14 +175,14 @@ public class TrackScheduler extends AudioEventAdapter
         if (getTrackList()
                 .isEmpty())
         {
-            return null;
+            return builder.append("Currently the playlist is empty").build();
         } else
         {
 
             for (AudioTrack audioTrack : trackList)
             {
-                builder.appendString(
-                        "```" + counter + "```` " + audioTrack.getIdentifier());
+                builder.append(
+                        "```" + counter + " " + audioTrack.getInfo().title + "```");
             }
 
             return builder.build();
@@ -257,8 +258,7 @@ public class TrackScheduler extends AudioEventAdapter
             _player.setPaused(false);
         } else
         {
-            _player.playTrack(
-                    getNextTrack(_currentlyPlayingTrack));
+            _player.playTrack(_currentlyPlayingTrack);
         }
     }
 
@@ -295,13 +295,18 @@ public class TrackScheduler extends AudioEventAdapter
      */
      public void registerNewTrack(String src, AudioPlayerManager manager, MessageReceivedEvent event)
      {
-        event.getChannel().sendMessage("Starting to process URL please wait.");
+        event.getChannel().sendMessage("Starting to process URL please wait.").queue();
         manager.loadItem(src,new AudioLoadResultHandler()
          {
 
              @Override
              public void trackLoaded (AudioTrack track)
              {
+                 event.getChannel().sendMessage("Track was loaded").queue();
+                 if (!_player.isPaused())
+                 {
+                     event.getChannel().sendMessage("And the player has started to play").queue();
+                 }
                  queue(track);
              }
 
