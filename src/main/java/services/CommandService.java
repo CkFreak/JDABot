@@ -433,7 +433,7 @@ public class CommandService
                     GuildController controller = event.getGuild()
                         .getController();
                     int indexOfRole = getIndexOfRole(role);
-                    controller.addRolesToMember(user, _roles.get(indexOfRole));
+                    controller.addRolesToMember(user, _roles.get(indexOfRole)).queue();
                     return true;
                 }
             }

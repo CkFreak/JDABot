@@ -141,7 +141,11 @@ public class CommandHandler implements Observer
                         event.getChannel().sendMessage("You have to specify a user and a role").queue();
                         break;
                     }
-                    _commander.promoteUser(event, messageContent[1], messageContent[2]);
+                    if(_commander.promoteUser(event, messageContent[1], messageContent[2]))
+                    {
+                        event.getChannel().sendMessage("User " + messageContent[1] + " has been promoted to "
+                                + messageContent[2]).queue();
+                    }
                     break;
 
                 case "delete":
