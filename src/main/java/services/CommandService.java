@@ -94,33 +94,21 @@ public class CommandService
 
     /**
      * Collects all Roles incoporated by a user
-     * @param event The event holding the command message
-     * @param messageContent a string array with all message content associated with the command
+     * @param user The User whoms roles are being requested
      * @return A formated string with all user roles
      */
-    public String getUserInfo(MessageReceivedEvent event,
-            String[] messageContent)
+    public String getUserInfo(String user, Guild guild)
     {
-
-        if (messageContent.length < 2)
-        {
-            return "A User has to be specified";
-        }
-
-        String username = messageContent[1];
-
-        List<Member> users = event.getGuild()
+        List<Member> users = guild
             .getMembers();
         String roles = "This users roles are:\n";
 
-        for (Member user : users)
+        for (Member member : users)
         {
-            if (user.getUser()
-                .getAsMention()
-                .equals(username))
+            if (member.getUser().getName().equalsIgnoreCase(user))
             {
-                List<Role> rolesForUser = event.getGuild()
-                    .getRoles();
+                List<Role> rolesForUser = member.getRoles();
+
                 for (Role role : rolesForUser)
                 {
                     roles += role.getAsMention() + "\n";

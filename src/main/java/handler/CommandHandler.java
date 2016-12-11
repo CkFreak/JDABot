@@ -113,7 +113,7 @@ public class CommandHandler implements Observer
             //splits the message at spaces
             String[] messageContent = message.split("\\s+");
             event.getMessage()
-                .deleteMessage();
+                .deleteMessage().queue();
             event.getChannel()
                 .sendTyping()
                 .queue();
@@ -145,8 +145,13 @@ public class CommandHandler implements Observer
                 break;
 
             case "userInfo":
-                String messageForUser = _commander.getUserInfo(event,
-                        messageContent);
+
+                if (messageContent.length < 2)
+                {
+                    event.getChannel().sendMessage("A User has to be specified").queue();
+                    break;
+                }
+                String messageForUser = _commander.getUserInfo(messageContent[1], event.getGuild());
                 event.getChannel()
                     .sendMessage(messageForUser)
                     .queue();
