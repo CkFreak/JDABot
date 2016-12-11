@@ -41,7 +41,7 @@ public class MusicControlManager
 
         if (musicManager == null)
         {
-            AudioManager audioManager = new AudioManagerImpl(event.getGuild());
+            AudioManager audioManager = event.getGuild().getAudioManager();
             musicManager = new GuildMusicManager(_playerManager, audioManager);
             //audioManager.setSendingHandler(musicManager.getSendHandler());
             _musicManagers.put(guildId, musicManager);

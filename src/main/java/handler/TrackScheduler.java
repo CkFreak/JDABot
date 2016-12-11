@@ -183,6 +183,7 @@ public class TrackScheduler extends AudioEventAdapter
             {
                 builder.append(
                         "```" + counter + " " + audioTrack.getInfo().title + "```");
+                ++counter;
             }
 
             return builder.build();
