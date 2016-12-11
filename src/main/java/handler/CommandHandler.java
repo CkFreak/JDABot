@@ -132,7 +132,7 @@ public class CommandHandler implements Observer
             case "admin":
                 event.getChannel()
                     .sendMessage(_commander.getAdmin(event)
-                        .toString());
+                        .toString()).queue();
                 break;
 
             case "delete":
@@ -260,11 +260,11 @@ public class CommandHandler implements Observer
                 break;
 
             case "reset":
-                if (_commander.isAdmin(event.getAuthor(), event))
+                if (_commander.isAdmin(event.getMember(), event.getGuild()))
                 {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                     guildMusicManager.getScheduler().resetPlayer();
-                    event.getChannel().sendMessage("The Player has been reset");
+                    event.getChannel().sendMessage("The Player has been reset").queue();
                 }
                 else
                 {
@@ -482,7 +482,7 @@ public class CommandHandler implements Observer
         String option = "";
         int such = 1;
 
-        //searching for the first "_" so it's definetly not in the options list.
+        //searching for the first "_" so it's definitely not in the options list.
         do
         {
             ++such;

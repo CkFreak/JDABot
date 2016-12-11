@@ -143,9 +143,9 @@ public class CommandService
     public void deleteAllMessages(MessageReceivedEvent event)
     {
 
-        if (isAdmin(event.getAuthor(), event)
-                || isModerator(event.getAuthor(), event)
-                || isOwnerOfServer(event.getAuthor(), event))
+        if (isAdmin(event.getMember(), event.getGuild())
+                || isModerator(event.getMember(), event)
+                || isOwnerOfServer(event.getAuthor(), event.getGuild()))
         {
             TextChannel channel = event.getTextChannel();
             ChannelManager manager = channel.getManager();
@@ -197,7 +197,7 @@ public class CommandService
 
             for (Message message : recentMessages)
             {
-                message.deleteMessage();
+                message.deleteMessage().queue();
             }
         }
         catch (RateLimitedException e)
@@ -273,7 +273,7 @@ public class CommandService
         String user = event.getAuthor()
             .getName();
         event.getChannel()
-            .sendMessage("Hello " + user);
+            .sendMessage("Hello " + user).queue();
     }
 
     /**
@@ -288,15 +288,11 @@ public class CommandService
         Role admin = _roles.get(0);
 
         List<Member> admins = event.getGuild()
-            .getMembers();
+            .getMembersWithRoles(admin);
 
         for (Member user : admins)
         {
-            if (user.getRoles()
-                .contains(admin))
-            {
-                userWithAdminPrivileges += user.getUser() + "\n";
-            }
+                userWithAdminPrivileges += user.getUser().getName() + "\n";
         }
 
         return userWithAdminPrivileges + "```";
@@ -318,7 +314,7 @@ public class CommandService
 
         for (Member user : mods)
         {
-            userWithModPriviliges += user.getUser() + "\n";
+            userWithModPriviliges += user.getUser().getName() + "\n";
         }
         return userWithModPriviliges + "```";
     }
@@ -329,9 +325,7 @@ public class CommandService
      */
     public void reagiereAufShutdown(MessageReceivedEvent event)
     {
-        event.getMessage();
-        if (isAdmin(event.getAuthor(), event)
-                || isOwnerOfServer(event.getAuthor(), event))
+        if(event.getMember().getRoles().contains(_roles.get(0)) || event.getMember().isOwner())
         {
             _jda.shutdown();
         }
@@ -348,17 +342,26 @@ public class CommandService
     /**
      * Checks the user for admin priviliges
      * @param user the user to be checked
-     * @param event The MessagereceivedEvent
+     * @param guild The Guild from which the message came
      * @return true, if the user is admin false otherwise
      */
-    public boolean isAdmin(User user, MessageReceivedEvent event)
+    public boolean isAdmin(Member user, Guild guild)
     {
-        Role admin = _roles.get(0);
+        Role admin = null;
 
-        List<Member> admins = event.getGuild()
+        for (Role role : _roles)
+        {
+            if (role.getName().equals("Admin"))
+            {
+                admin = role;
+                break;
+            }
+        }
+
+        List<Member> admins = guild
             .getMembersWithRoles(admin);
 
-        return admins.contains(event.getAuthor());
+        return admins.contains(user);
     }
 
     /**
@@ -367,10 +370,19 @@ public class CommandService
      * @param event The MessagereceivedEvent
      * @return true if the user is moderator, false otherwise
      */
-    public boolean isModerator(User user, MessageReceivedEvent event)
+    public boolean isModerator(Member user, MessageReceivedEvent event)
     {
 
-        Role moderator = _roles.get(2);
+        Role moderator = null;
+
+        for (Role role : _roles)
+        {
+            if (role.getName().equals("Moderator"))
+            {
+                moderator = role;
+                break;
+            }
+        }
 
         List<Member> moderators = event.getGuild()
             .getMembersWithRoles(moderator);
@@ -381,18 +393,14 @@ public class CommandService
     /**
      * Checks, wheater or not the user is owner of the server
      * @param user the user that is to be checked
-     * @param event The MessagereceivedEvent
+     * @param guild The Guild the user is from
      * @return true if the user is the owner, false otherwise
      */
-    public boolean isOwnerOfServer(User user, MessageReceivedEvent event)
+    public boolean isOwnerOfServer(User user, Guild guild)
     {
-        if (event.getAuthor()
-            .equals(event.getGuild()
-                .getOwner()))
-        {
-            return true;
-        }
-        return false;
+        return (user
+            .equals(guild
+                .getOwner()));
     }
 
     /**
@@ -407,7 +415,7 @@ public class CommandService
 
     /**
      * Promotes a user if the asking person is admin or moderator
-     * @param The MessagereceivedEvent
+     * @param event The MessagereceivedEvent
      * @param username The name of the user that is being promoted
      * @param role The new role the user should have
      */
@@ -419,12 +427,12 @@ public class CommandService
         if (!_roles.contains(role))
         {
             event.getChannel()
-                .sendMessage("The choosen role does not exist");
+                .sendMessage("The choosen role does not exist").queue();
         }
         else if (!users.contains(username))
         {
             event.getChannel()
-                .sendMessage("The choosen user does not seem to exist!");
+                .sendMessage("The choosen user does not seem to exist!").queue();
         }
         else
         {
