@@ -16,7 +16,6 @@ like: Like was gesagt wird und so
 please: Sendet ein Bitch Please Emoji
 join <ChannelName>: Lässt den Bot in einen Channel joinen
 leave: Lässt den Bot den Channel, zu dem er verbunden ist verlassen
-add <URL zum Songs>: Fügt ein Lied zur Playlist hinzu. Es werden diverse Services untersützt
 play <URL des Songs>: Fügt das Lied in die Playlist hinzu. Sollte der Player nichts spielen, wird die wiedergabe gestartet
 pause: Pausiert die Musik-Wiedergabe
 resume: Setzt die Musik-Wiedergabe fort
