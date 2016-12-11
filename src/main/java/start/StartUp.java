@@ -21,22 +21,11 @@ public class StartUp
     private final static String MCI_SERVER_TOKEN = provideToken(0);
     private final static String MOGE_SERVER_TOKEN = provideToken(1);
     private final static String PATH_TO_TOKEN = "src/main/res/tokens.txt";
-    private final static String PYTHON_COMMAND = "python ./youtube-dl -U";
     
     public static void main(String[] args)
     {
         try
         {
-            try
-            {
-                Runtime.getRuntime().exec(PYTHON_COMMAND);
-                System.out.println("Looking good(YT-DL)");
-            }
-            catch (IOException e)
-            {
-                System.out.println("Unfortunatley there has been an IOException for the update of the YT-DL!");
-                e.printStackTrace();
-            }
             JDA mciJda;
             try
             {
