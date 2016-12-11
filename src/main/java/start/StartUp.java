@@ -20,6 +20,7 @@ public class StartUp
 {
     private final static String MCI_SERVER_TOKEN = provideToken(0);
     private final static String MOGE_SERVER_TOKEN = provideToken(1);
+    private final static String AQUILA_SERVER = provideToken(2);
     private final static String PATH_TO_TOKEN = "src/main/res/tokens.txt";
     
     public static void main(String[] args)
@@ -51,6 +52,20 @@ public class StartUp
                 mogeJda.getPresence().setGame(Game.of("DOTA 2"));
 
                 
+            }
+            catch (RateLimitedException e)
+            {
+                e.printStackTrace();
+            }
+
+            JDA aquilaJda;
+            try
+            {
+                aquilaJda = new JDABuilder(AccountType.BOT).setToken(AQUILA_SERVER).buildBlocking();
+                aquilaJda.addEventListener(new ReadyListener());
+                aquilaJda.addEventListener(new CommandListener(aquilaJda));
+                aquilaJda.addEventListener(new UserPromotedListener());
+                aquilaJda.getPresence().setGame(Game.of("League of Legends"));
             }
             catch (RateLimitedException e)
             {
