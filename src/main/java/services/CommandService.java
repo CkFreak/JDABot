@@ -407,36 +407,86 @@ public class CommandService
      * @param username The name of the user that is being promoted
      * @param role The new role the user should have
      */
-    public void promoteUser(MessageReceivedEvent event, String username,
+    public boolean promoteUser(MessageReceivedEvent event, String username,
             String role)
     {
         List<Member> users = event.getGuild()
             .getMembers();
-        if (!_roles.contains(role))
+        if (!isRoleInList(_roles, role))
         {
             event.getChannel()
                 .sendMessage("The choosen role does not exist").queue();
+            return false;
         }
-        else if (!users.contains(username))
+        else if (!isUserInList(users, username))
         {
             event.getChannel()
                 .sendMessage("The choosen user does not seem to exist!").queue();
+            return false;
         }
         else
         {
             for (Member user : users)
             {
-                if (user.getAsMention()
-                    .equals(username))
+                if (user.getUser().getName().equalsIgnoreCase(username))
                 {
                     GuildController controller = event.getGuild()
                         .getController();
-                    int indexOfRole = _roles.indexOf(role);
+                    int indexOfRole = getIndexOfRole(role);
                     controller.addRolesToMember(user, _roles.get(indexOfRole));
+                    return true;
                 }
             }
         }
+        return false;
+    }
 
+    private int getIndexOfRole(String role)
+    {
+        for (Role role1 : _roles)
+        {
+            if (role1.getName().equalsIgnoreCase(role))
+            {
+                return _roles.indexOf(role1);
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Determines weather or not a user is part of a List of Members
+     * @param members The List of members the user is supposed to be in
+     * @param username The User in question
+     * @return true, if the user is part of the list, false otherwise
+     */
+    private boolean isUserInList(List<Member> members, String username)
+    {
+        for (Member member : members)
+        {
+            if (member.getUser().getName().equalsIgnoreCase(username))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Determines weather or not a role is included in a given list
+     * @param roles The list that the role is supposed to be in
+     * @param role The role in question
+     * @return true, if the role is contained, false otherwise
+     */
+    private boolean isRoleInList(List<Role> roles, String role)
+    {
+        for (Role role1 : roles)
+        {
+            if (role1.getName().equalsIgnoreCase(role))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

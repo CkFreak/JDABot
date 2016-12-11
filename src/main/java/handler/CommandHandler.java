@@ -135,7 +135,16 @@ public class CommandHandler implements Observer
                         .toString()).queue();
                 break;
 
-            case "delete":
+                case "promote":
+                    if (messageContent.length < 3)
+                    {
+                        event.getChannel().sendMessage("You have to specify a user and a role").queue();
+                        break;
+                    }
+                    _commander.promoteUser(event, messageContent[1], messageContent[2]);
+                    break;
+
+                case "delete":
                 int amount = Integer.valueOf(messageContent[1]);
                 _commander.deleteChannelMessages(event, amount);
                 event.getChannel()
@@ -248,12 +257,18 @@ public class CommandHandler implements Observer
                         .queue();
             }
                 break;
+                case "songInfo":
+                {
+                    GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                    event.getChannel().sendMessage(guildMusicManager.getScheduler().songInfo()).queue();
+                }
 
                 case "jump":
             {
                 GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                 guildMusicManager.getScheduler().startSpecificTrack(Integer.valueOf(messageContent[1]));
                 event.getChannel().sendMessage("Track " + messageContent[1] + " is now playing").queue();
+                break;
             }
 
             case "restart":

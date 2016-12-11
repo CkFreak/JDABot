@@ -189,16 +189,9 @@ public class TrackScheduler extends AudioEventAdapter
         _shuffle = enabled;
     }
 
-    /**
-     * Sets the playing track on the AudioHandler instance
-     */
-    private void setPlayingTrack(AudioPlayer player)
-    {
-        setCurrentTrack(player.getPlayingTrack());
-    }
-
     public void restartSong()
     {
+        replaceTrack(_player.getPlayingTrack());
         _player.startTrack(_currentlyPlayingTrack, false);
     }
 
@@ -285,6 +278,18 @@ public class TrackScheduler extends AudioEventAdapter
         }
     }
 
+    public Message songInfo()
+    {
+        MessageBuilder builder = new MessageBuilder();
+        int position = _tracks.indexOf(_currentlyPlayingTrack);
+
+        builder.append("Position: " + position + "*** " + _currentlyPlayingTrack.getInfo().title + "***"
+                + "˜\n" +_currentlyPlayingTrack.getPosition()
+                + " / " + _currentlyPlayingTrack.getDuration() + " minutes" +  "\n");
+
+        return builder.build();
+    }
+
      /**
      * Registers a track from many sources including youtube, soundcloud and vimeo
      * @param src The URL to the track that should be played
@@ -348,8 +353,8 @@ public class TrackScheduler extends AudioEventAdapter
      */
     private void replaceTrack(AudioTrack track)
     {
-
-        _tracks.set(_tracks.indexOf(track), track.makeClone());
-        _currentlyPlayingTrack = track;
+        int i = _tracks.indexOf(track);
+        _tracks.set(i, track.makeClone());
+        _currentlyPlayingTrack = _tracks.get(i);
     }
 }
