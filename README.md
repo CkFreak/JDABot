@@ -11,3 +11,6 @@ The bot is still under development
 The project needs to be opened as a Gradle project in you IDE.
 
 FYI: The bot currently runs on a RaspberryPi Model B first generation for my Server. This will probably not work for a server with 100+ people but I think i'll just do fine for 30+ people.
+
+
+You can always find the latest running build here: https://www.dropbox.com/s/dv3ko4fj4opvg1t/DiscordBotJDA-all.jar?dl=0
