@@ -244,6 +244,13 @@ public class CommandHandler implements Observer
             }
                 break;
 
+                case "jump":
+            {
+                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                guildMusicManager.getScheduler().startSpecificTrack(Integer.valueOf(messageContent[1]));
+                event.getChannel().sendMessage("Track " + messageContent[1] + " is now playing").queue();
+            }
+
             case "restart":
             {
                 GuildMusicManager guildMusicManager = getGuildMusicManager(event);

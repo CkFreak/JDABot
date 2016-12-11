@@ -13,7 +13,9 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * This class schedules tracks for the Audioplayer. It contains the list of tracks.
@@ -43,26 +45,18 @@ public class TrackScheduler extends AudioEventAdapter
      */
     public void queue(AudioTrack track)
     {
-        if (_player.getPlayingTrack() == null)
-        {
+        // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
+        // something is playing, it returns false and does nothing. In that case the player was already playing so this
+        // track goes to the queue instead.
+        if (_player.getPlayingTrack() == null) {
             _player.playTrack(track);
-            add(track);
+            _tracks.add(track);
             _currentlyPlayingTrack = track;
         }
         else
         {
-            add(track);
+            _tracks.add(track);
         }
-    }
-
-    /**
-     * Adds a track to the local playlist
-     *
-     * @param track The track that is to be added to the playlist
-     */
-    private void add(AudioTrack track)
-    {
-        _tracks.add(track);
     }
 
     /**
@@ -77,17 +71,11 @@ public class TrackScheduler extends AudioEventAdapter
         if (_shuffle)
         {
             Random random = new Random();
-            return _tracks.get(random.nextInt(_tracks.size()));
-        } else
+            return _tracks.get(random.nextInt(_tracks.size() - 1 ));
+        }
+        else
         {
-            int currentTrackIndex = _tracks.indexOf(currentTrack);
-
-            if (currentTrackIndex == _tracks.size())
-            {
-                return _tracks.get(0);
-            }
-
-            return _tracks.get(currentTrackIndex++);
+            return _tracks.get(_tracks.indexOf(_currentlyPlayingTrack) + 1 );
         }
     }
 
@@ -97,7 +85,8 @@ public class TrackScheduler extends AudioEventAdapter
         // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext)
         {
-            _player.playTrack(getNextTrack(track));
+            _player.startTrack(getNextTrack(track), false);
+            _currentlyPlayingTrack = _player.getPlayingTrack();
         }
     }
 
@@ -152,7 +141,7 @@ public class TrackScheduler extends AudioEventAdapter
     private AudioTrack getSpecificTrack(int trackNumber)
             throws IllegalArgumentException
     {
-        if (trackNumber < _tracks.size() - 1)
+        if (trackNumber <= _tracks.size() - 1)
         {
             return _tracks.get(trackNumber);
         } else
@@ -210,7 +199,7 @@ public class TrackScheduler extends AudioEventAdapter
 
     public void restartSong()
     {
-        _player.playTrack(_currentlyPlayingTrack);
+        _player.startTrack(_currentlyPlayingTrack, false);
     }
 
     public void resetPlayer()
@@ -247,6 +236,7 @@ public class TrackScheduler extends AudioEventAdapter
     public void stopPlayer()
     {
         _player.stopTrack();
+        _currentlyPlayingTrack = null;
     }
 
     /**
@@ -257,7 +247,8 @@ public class TrackScheduler extends AudioEventAdapter
         if (_player.isPaused())
         {
             _player.setPaused(false);
-        } else
+        }
+        else
         {
             _player.playTrack(_currentlyPlayingTrack);
         }
@@ -265,7 +256,8 @@ public class TrackScheduler extends AudioEventAdapter
 
     public void skip()
     {
-        _player.playTrack(getNextTrack(_currentlyPlayingTrack));
+        _player.startTrack(getNextTrack(_currentlyPlayingTrack), false);
+        replaceTrack(_currentlyPlayingTrack);
         _currentlyPlayingTrack = _player.getPlayingTrack();
     }
 
@@ -276,8 +268,9 @@ public class TrackScheduler extends AudioEventAdapter
      */
     public void startSpecificTrack(int trackNumber)
     {
-        _player.playTrack(getSpecificTrack(trackNumber));
-        _currentlyPlayingTrack = getSpecificTrack(trackNumber);
+        _player.startTrack(getSpecificTrack(trackNumber), false);
+        replaceTrack(_currentlyPlayingTrack);
+        _currentlyPlayingTrack = _player.getPlayingTrack();
     }
 
     /**
@@ -286,7 +279,10 @@ public class TrackScheduler extends AudioEventAdapter
      */
     public void setVolume(int volume)
     {
-        _player.setVolume(volume);
+        if (volume > 0 && volume <= 150)
+        {
+            _player.setVolume(volume);
+        }
     }
 
      /**
@@ -296,48 +292,64 @@ public class TrackScheduler extends AudioEventAdapter
      */
      public void registerNewTrack(String src, AudioPlayerManager manager, MessageReceivedEvent event)
      {
-        event.getChannel().sendMessage("Starting to process URL please wait.").queue();
-        manager.loadItem(src,new AudioLoadResultHandler()
-         {
+        event.getChannel().
 
-             @Override
-             public void trackLoaded (AudioTrack track)
-             {
-                 event.getChannel().sendMessage("Track was loaded").queue();
-                 if (!_player.isPaused())
-                 {
-                     event.getChannel().sendMessage("And the player has started to play").queue();
-                 }
-                 queue(track);
-             }
+             sendMessage("Starting to process the URL please wait.").
 
-             @Override
-             public void playlistLoaded (AudioPlaylist playlist)
+             queue();
+        manager.loadItem(src,new
+
+             AudioLoadResultHandler()
              {
-                 for (AudioTrack track : playlist.getTracks())
+
+                 @Override
+                 public void trackLoaded (AudioTrack track)
                  {
+                     event.getChannel().sendMessage("Track was loaded").queue();
+                     if (_player.isPaused())
+                     {
+                         event.getChannel().sendMessage("And the player has started to play").queue();
+                     }
                      queue(track);
                  }
-             }
 
-             @Override
-             public void noMatches ()
-             {
-                 event.getChannel()
-                         .sendMessage("I am sorry but I could not find anything.")
-                         .queue();
-             }
+                 @Override
+                 public void playlistLoaded (AudioPlaylist playlist)
+                 {
+                     for (AudioTrack track : playlist.getTracks())
+                     {
+                         queue(track);
+                     }
+                 }
 
-             @Override
-             public void loadFailed (FriendlyException exception)
-             {
-                 event.getChannel()
-                         .sendMessage(
-                                 "Everything just blew up! Go find a bunker! NOW!")
-                         .queue();
+                 @Override
+                 public void noMatches ()
+                 {
+                     event.getChannel()
+                             .sendMessage("I am sorry but I could not find anything.")
+                             .queue();
+                 }
 
-             }
-         });
+                 @Override
+                 public void loadFailed (FriendlyException exception)
+                 {
+                     event.getChannel()
+                             .sendMessage(
+                                     "Everything just blew up! Go find a bunker! NOW!")
+                             .queue();
 
-         }
+                 }
+             });
+     }
+
+    /**
+     * Replaces the playing cloneTrack with a copy of it, so that it can be played again to a later point in time
+     * @param track The track that needs to be replaced
+     */
+    private void replaceTrack(AudioTrack track)
+    {
+
+        _tracks.set(_tracks.indexOf(track), track.makeClone());
+        _currentlyPlayingTrack = track;
+    }
 }
