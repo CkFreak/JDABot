@@ -1,3 +1,4 @@
+Alle < und > sind Platzhalter und werden nicht mit eingegeben!
 startPVote <Name der Poll>_ <Option 1>_ [Beliebige Anzahl weiterer Optionen]_ : Startet eine Poll, mit dem Name und den gewählten Optionen getrennt durch "_"
 startAVote <Name der Poll>_ <Option 1>_ [Beliebige Anzahl weiterer Optionen]_ : Startet eine Anonyme Poll mit dem Gewählten Namen und Optionen getrennt durch "_"
 vote <Name der Poll>_ <Gewählte Option>_ : Lässt den Spieler für die gewählte Poll abstimmen (Nur einmal möglich)

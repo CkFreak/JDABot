@@ -1,3 +1,4 @@
+Alle < und > sind Platzhalter und werden nicht mit eingegeben!
 hello: Begrüßt den anfragenden Spieler
 help: Zeigt alle Commands des Bots an
 admin: Zeigt die oder den Admin des Servers an
