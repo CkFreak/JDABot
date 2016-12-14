@@ -260,7 +260,7 @@ public class CommandService
 
     public void getMusicCommands(MessageReceivedEvent event, String path)
     {
-        
+
     }
 
     /**

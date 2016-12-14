@@ -36,5 +36,3 @@ endVote <Name der Poll>_ : Beendet die Poll, wenn der Anfragende sie gestartet h
 getStatus <Name der Poll>_ : Zeigt den Status den gefragten Poll an, wenn sie Public ist
 startGame : Startet ein neues Game mit zufälliger Endzeit
 shutdown: Schaltet den Bot aus (Admins)
-
-
