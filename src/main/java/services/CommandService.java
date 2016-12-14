@@ -73,13 +73,13 @@ public class CommandService
             try
             {
                 event.getChannel()
-                    .sendFile(file, builder.build());
+                    .sendFile(file, builder.build()).queue();
             }
             catch (IOException e)
             {
                 event.getChannel()
                     .sendMessage(
-                            "There has been an error while sending the Image. Please contact a Dev. IO-Exception!");
+                            "There has been an error while sending the Image. Please contact a Dev. IO-Exception!").queue();
                 e.printStackTrace();
             }
         }
@@ -87,7 +87,7 @@ public class CommandService
         {
             event.getChannel()
                 .sendMessage(
-                        "There has been an error. Please contact a Dev, IllegalArgumentException while sending a picture (CommandService)!");
+                        "There has been an error. Please contact a Dev, IllegalArgumentException while sending a picture (CommandService)!").queue();
             e.printStackTrace();
         }
     }
