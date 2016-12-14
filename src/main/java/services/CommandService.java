@@ -69,7 +69,7 @@ public class CommandService
             File file = new File(path);
             MessageBuilder builder = new MessageBuilder();
             builder
-                .appendString(event.getAuthor() + " sends: " + TAKE_MY_ENERGY);
+                .append(event.getAuthor() + " sends: " + TAKE_MY_ENERGY);
             try
             {
                 event.getChannel()
@@ -226,20 +226,22 @@ public class CommandService
             List<String> allCommands = Files.readAllLines(Paths.get(path));
 
             int command = 0;
-            int index;
+            int index = 0;
 
-            for (index = 0; index < allCommands.size() - 1; ++index)
+            for (int i = 0; index < allCommands.size() - 1; ++i)
             {
-                builder.appendString("```");
-                while (command <= allCommands.size() % 10)
+                builder.append("```");
+                while (index <= allCommands.size() / 10)
                 {
-                    builder.appendString(allCommands.get(command));
+                    builder.append(allCommands.get(command) + "\n");
                     ++command;
+                    ++index;
                 }
-                builder.appendString("```");
+                builder.append("```");
                 event.getChannel()
-                    .sendMessage(builder.build());
+                        .sendMessage(builder.build()).queue();
                 builder = new MessageBuilder();
+                index = 0;
             }
         }
         catch (IOException e)
@@ -249,7 +251,16 @@ public class CommandService
                         "**commands.txt** not found. Please contact a Dev!");
             e.printStackTrace();
         }
+        catch (IndexOutOfBoundsException e)
+        {
+            System.out.println("Nothing severe happened. Index was at exactly the length but contained a null character");
+        }
 
+    }
+
+    public void getMusicCommands(MessageReceivedEvent event, String path)
+    {
+        
     }
 
     /**
