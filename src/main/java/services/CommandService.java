@@ -270,13 +270,11 @@ public class CommandService
         {
             List<String> musicCommands = Files.readAllLines(Paths.get(path));
 
-            builder.append("```");
 
             for (String command : musicCommands)
             {
                 builder.append(command + "\n");
             }
-            builder.append("```");
             return builder.build();
         }
         catch (IOException e)

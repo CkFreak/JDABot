@@ -1,4 +1,4 @@
-helpMusic
-helpGeneral
-helpPoll
-helpEmoji
+**helpMusic**
+**helpGeneral**
+**helpPoll**
+**helpEmoji**
