@@ -69,7 +69,7 @@ public class CommandService
             File file = new File(path);
             MessageBuilder builder = new MessageBuilder();
             builder
-                .append(event.getAuthor() + " sends: " + TAKE_MY_ENERGY);
+                .append(event.getAuthor().getAsMention() + " sends: " + TAKE_MY_ENERGY);
             try
             {
                 event.getChannel()
