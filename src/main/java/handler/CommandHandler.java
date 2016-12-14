@@ -9,7 +9,6 @@ import managers.GuildMusicManager;
 import managers.MusicControlManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.managers.AudioManager;
 import services.CommandService;
 import services.IJustLostTheGameService;
 import services.PollService;
@@ -105,7 +104,7 @@ public class CommandHandler implements Observer
 
     /**
      * A Method that catches every Message and checks for the command escape charackter
-     * 
+     *
      * @param event The MessageReceivedEvent with the message inside
      */
     public void handleIncomingMessages(MessageReceivedEvent event)
@@ -114,34 +113,50 @@ public class CommandHandler implements Observer
         _commander.initializeRoles(event);
 
         String message = event.getMessage()
-            .getContent();
+                .getContent();
 
         if (message.startsWith("#"))
         {
             //splits the message at spaces
             String[] messageContent = message.split("\\s+");
             event.getMessage()
-                .deleteMessage().queue();
+                    .deleteMessage().queue();
             event.getChannel()
-                .sendTyping()
-                .queue();
+                    .sendTyping()
+                    .queue();
             ;
 
             switch (messageContent[0].substring(1))
             {
-            case "hello":
-                _commander.replyToHello(event);
-                break;
+                case "hello":
+                    _commander.replyToHello(event);
+                    break;
 
-            case "helpMusic":
-                _commander.getHelpCommands(event, MUSIC_HELP_COMMAND_FILE);
-                break;
+                case "help":
+                    event.getChannel().sendMessage(_commander.getCommands(COMMANDS_HELP_COMMAND_FILE)).queue();
+                    break;
 
-            case "admin":
-                event.getChannel()
-                    .sendMessage(_commander.getAdmin(event)
-                        .toString()).queue();
-                break;
+                case "helpMusic":
+                    event.getChannel().sendMessage(_commander.getCommands(MUSIC_HELP_COMMAND_FILE)).queue();
+                    break;
+
+                case "helpGeneral":
+                    event.getChannel().sendMessage(_commander.getCommands(GENERAL_HELP_COMMAND_FILE)).queue();
+                    break;
+
+                case "helpPoll":
+                    event.getChannel().sendMessage(_commander.getCommands(POLL_HELP_COMMAND_FILE)).queue();
+                    break;
+
+                case "helpEmoji":
+                    event.getChannel().sendMessage(_commander.getCommands(EMOJI_HELP_COMMAND_FILE)).queue();
+                    break;
+
+                case "admin":
+                    event.getChannel()
+                            .sendMessage(_commander.getAdmin(event)
+                                    .toString()).queue();
+                    break;
 
                 case "promote":
                     if (messageContent.length < 3)
@@ -164,117 +179,117 @@ public class CommandHandler implements Observer
                     break;
 
                 case "delete":
-                int amount = Integer.valueOf(messageContent[1]);
-                _commander.deleteChannelMessages(event, amount);
-                event.getChannel()
-                    .sendMessage(
-                            "Es wurden " + amount + " Nachrichten gelöscht.")
-                    .queue();
-                break;
-
-            case "userInfo":
-
-                if (messageContent.length < 2)
-                {
-                    event.getChannel().sendMessage("A User has to be specified").queue();
+                    int amount = Integer.valueOf(messageContent[1]);
+                    _commander.deleteChannelMessages(event, amount);
+                    event.getChannel()
+                            .sendMessage(
+                                    "Es wurden " + amount + " Nachrichten gelöscht.")
+                            .queue();
                     break;
-                }
-                String messageForUser = _commander.getUserInfo(messageContent[1], event.getGuild());
-                event.getChannel()
-                    .sendMessage(messageForUser)
-                    .queue();
-                break;
 
-            case "salt":
-                _commander.sendEmoji(event, SALT_EMOJI);
-                break;
+                case "userInfo":
 
-            case "justright":
-                _commander.sendEmoji(event, JUST_RIGHT_MEME);
-                break;
+                    if (messageContent.length < 2)
+                    {
+                        event.getChannel().sendMessage("A User has to be specified").queue();
+                        break;
+                    }
+                    String messageForUser = _commander.getUserInfo(messageContent[1], event.getGuild());
+                    event.getChannel()
+                            .sendMessage(messageForUser)
+                            .queue();
+                    break;
 
-            case "sugar":
-                _commander.sendEmoji(event, SUGAR_EMOJI);
-                break;
+                case "salt":
+                    _commander.sendEmoji(event, SALT_EMOJI);
+                    break;
 
-            case "fuckoff":
-                _commander.sendEmoji(event, FUCK_OFF);
-                break;
+                case "justright":
+                    _commander.sendEmoji(event, JUST_RIGHT_MEME);
+                    break;
 
-            case "like":
-                _commander.sendEmoji(event, LIKE);
-                break;
+                case "sugar":
+                    _commander.sendEmoji(event, SUGAR_EMOJI);
+                    break;
 
-            case "please":
-                event.getChannel()
-                    .sendTyping()
-                    .queue();
-                _commander.sendEmoji(event, BITCH_PLEASE);
-                break;
+                case "fuckoff":
+                    _commander.sendEmoji(event, FUCK_OFF);
+                    break;
 
-            //            case "deleteAll":
-            //                _commander.deleteAllMessages(event);
-            //                break;
-            case "play":
-                if (messageContent.length < 2)
-                {
-                    event.getChannel().sendMessage("You have to enter a URL with that command").queue();
-                }
-                else
+                case "like":
+                    _commander.sendEmoji(event, LIKE);
+                    break;
+
+                case "please":
+                    event.getChannel()
+                            .sendTyping()
+                            .queue();
+                    _commander.sendEmoji(event, BITCH_PLEASE);
+                    break;
+
+                //            case "deleteAll":
+                //                _commander.deleteAllMessages(event);
+                //                break;
+                case "play":
+                    if (messageContent.length < 2)
+                    {
+                        event.getChannel().sendMessage("You have to enter a URL with that command").queue();
+                    }
+                    else
+                    {
+                        GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                        guildMusicManager.getScheduler().registerNewTrack(messageContent[1], _musicControlManager.getPlayerManager(), event);
+                    }
+                    break;
+
+                case "pause":
                 {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
-                    guildMusicManager.getScheduler().registerNewTrack(messageContent[1], _musicControlManager.getPlayerManager(), event);
+                    guildMusicManager.getScheduler().pausePlayer();
+                    event.getChannel()
+                            .sendMessage("Playback has been paused")
+                            .queue();
                 }
                 break;
 
-            case "pause":
-            {
-                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
-                guildMusicManager.getScheduler().pausePlayer();
-                event.getChannel()
-                        .sendMessage("Playback has been paused")
-                        .queue();
-            }
+                case "volume":
+                {
+                    GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                    guildMusicManager.getScheduler().setVolume(Integer.parseInt(messageContent[1]));
+                    event.getChannel().sendMessage("Volume has been set to " + messageContent[1]).queue();
+                }
                 break;
 
-            case "volume":
-            {
-                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
-                guildMusicManager.getScheduler().setVolume(Integer.parseInt(messageContent[1]));
-                event.getChannel().sendMessage("Volume has been set to " + messageContent[1]).queue();
-            }
+                case "stop":
+                {
+                    GuildMusicManager gMM = getGuildMusicManager(event);
+                    gMM.getScheduler().stopPlayer();
+                    event.getChannel().sendMessage("Playback has been stopped").queue();
+                }
                 break;
 
-            case "stop":
-            {
-                GuildMusicManager gMM = getGuildMusicManager(event);
-                gMM.getScheduler().stopPlayer();
-                event.getChannel().sendMessage("Playback has been stopped").queue();
-            }
+                case "resume":
+                {
+                    GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                    guildMusicManager.getScheduler().resumePlayer();
+                }
                 break;
 
-            case "resume":
-            {
-                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
-                guildMusicManager.getScheduler().resumePlayer();
-            }
+                case "skip":
+                {
+                    GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                    guildMusicManager.getScheduler().skip();
+                }
+                event.getChannel().sendMessage("The playing track has been skipped");
                 break;
 
-            case "skip":
-            {
-                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
-                guildMusicManager.getScheduler().skip();
-            }
-            event.getChannel().sendMessage("The playing track has been skipped");
-                break;
-
-            case "playlist":
-            {
-                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
-                event.getChannel()
-                        .sendMessage(guildMusicManager.getScheduler().getPlaylist())
-                        .queue();
-            }
+                case "playlist":
+                {
+                    GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                    event.getChannel()
+                            .sendMessage(guildMusicManager.getScheduler().getPlaylist())
+                            .queue();
+                }
                 break;
                 case "songInfo":
                 {
@@ -283,35 +298,35 @@ public class CommandHandler implements Observer
                 }
 
                 case "jump":
-            {
-                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
-                guildMusicManager.getScheduler().startSpecificTrack(Integer.valueOf(messageContent[1]));
-                event.getChannel().sendMessage("Track " + messageContent[1] + " is now playing").queue();
-                break;
-            }
-
-            case "restart":
-            {
-                GuildMusicManager guildMusicManager = getGuildMusicManager(event);
-                guildMusicManager.getScheduler().restartSong();
-                event.getChannel().sendMessage("The Song has been restarted").queue();
-            }
-                break;
-
-            case "reset":
-                if (_commander.isAdmin(event.getMember(), event.getGuild()))
                 {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
-                    guildMusicManager.getScheduler().resetPlayer();
-                    event.getChannel().sendMessage("The Player has been reset").queue();
+                    guildMusicManager.getScheduler().startSpecificTrack(Integer.valueOf(messageContent[1]));
+                    event.getChannel().sendMessage("Track " + messageContent[1] + " is now playing").queue();
+                    break;
                 }
-                else
+
+                case "restart":
                 {
-                    event.getChannel()
-                        .sendMessage(INSUFICENT_RIGHTS_MESSAGE)
-                        .queue();
+                    GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                    guildMusicManager.getScheduler().restartSong();
+                    event.getChannel().sendMessage("The Song has been restarted").queue();
                 }
                 break;
+
+                case "reset":
+                    if (_commander.isAdmin(event.getMember(), event.getGuild()))
+                    {
+                        GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                        guildMusicManager.getScheduler().resetPlayer();
+                        event.getChannel().sendMessage("The Player has been reset").queue();
+                    }
+                    else
+                    {
+                        event.getChannel()
+                                .sendMessage(INSUFICENT_RIGHTS_MESSAGE)
+                                .queue();
+                    }
+                    break;
 
                 case "shuffle":
                     boolean enable = false;
@@ -345,7 +360,7 @@ public class CommandHandler implements Observer
                         _musicControlManager.getGuildMusicManager(event.getGuild(), event).connectToAudioChannel(messageContent[1], event.getGuild());
                     }
                 }
-                    break;
+                break;
 
                 case "leave":
                     _musicControlManager.getGuildMusicManager(event.getGuild(), event).leaveVoiceChannel();
@@ -367,97 +382,97 @@ public class CommandHandler implements Observer
                             .deleteMessage()
                             .queue();
 
-                _commander.changeGame(_jda, getGameName(messageContent));
-                break;
+                    _commander.changeGame(_jda, getGameName(messageContent));
+                    break;
 
-            case "startPVote":
-                _pollService.startPPoll(getPollName(messageContent),
-                        event.getAuthor(), _event, getOptions(messageContent));
-                break;
+                case "startPVote":
+                    _pollService.startPPoll(getPollName(messageContent),
+                            event.getAuthor(), _event, getOptions(messageContent));
+                    break;
 
-            case "startAVote":
-                _pollService.startAPoll(getPollName(messageContent),
-                        event.getAuthor(), event, getOptions(messageContent));
-                break;
+                case "startAVote":
+                    _pollService.startAPoll(getPollName(messageContent),
+                            event.getAuthor(), event, getOptions(messageContent));
+                    break;
 
-            case "getStatus":
-                event.getChannel()
-                    .sendMessage(
-                            _pollService.getStatus(getPollName(messageContent)))
-                    .queue();
-                break;
+                case "getStatus":
+                    event.getChannel()
+                            .sendMessage(
+                                    _pollService.getStatus(getPollName(messageContent)))
+                            .queue();
+                    break;
 
-            case "endVote":
-                event.getChannel()
-                    .sendMessage(_pollService.endPoll(
-                            getPollName(messageContent), event.getAuthor()))
-                    .queue();
-                break;
+                case "endVote":
+                    event.getChannel()
+                            .sendMessage(_pollService.endPoll(
+                                    getPollName(messageContent), event.getAuthor()))
+                            .queue();
+                    break;
 
-            case "vote":
-                event.getChannel()
-                    .sendMessage(_pollService.vote(getPollName(messageContent),
-                            getOptions(messageContent), event.getAuthor(),
-                            event))
-                    .queue();
-                break;
+                case "vote":
+                    event.getChannel()
+                            .sendMessage(_pollService.vote(getPollName(messageContent),
+                                    getOptions(messageContent), event.getAuthor(),
+                                    event))
+                            .queue();
+                    break;
 
-            case "listVotes":
-                event.getChannel()
-                    .sendMessage(_pollService.getCurrentVotes())
-                    .queue();
-                break;
+                case "listVotes":
+                    event.getChannel()
+                            .sendMessage(_pollService.getCurrentVotes())
+                            .queue();
+                    break;
 
-            case "startGame":
-                _loseGameService.executeGameLoss(event);
-                event.getChannel()
-                    .sendMessage(THE_GAME_INITIALIZATION)
-                    .queue();
-                break;
+                case "startGame":
+                    _loseGameService.executeGameLoss(event);
+                    event.getChannel()
+                            .sendMessage(THE_GAME_INITIALIZATION)
+                            .queue();
+                    break;
 
-            case "gameData":
-                event.getChannel()
-                    .sendMessage("Next Game Loss:" + "\n"
-                            + _loseGameService.getNextGameLoss()
-                                .toString()
-                            + "\n Now: \n" + _loseGameService.getNow()
-                                .toString())
-                    .queue();
-                break;
+                case "gameData":
+                    event.getChannel()
+                            .sendMessage("Next Game Loss:" + "\n"
+                                    + _loseGameService.getNextGameLoss()
+                                    .toString()
+                                    + "\n Now: \n" + _loseGameService.getNow()
+                                    .toString())
+                            .queue();
+                    break;
 
-            //TODO Command richtig implementieren
-            case "startTournament":
-                TournamentMode mode = null;
-                switch (getPollName(messageContent).toLowerCase())
-                {
-                    case "single elimination":
-                        mode = TournamentMode.SINGE_ELIMINATION;
-                        break;
-                    case "double elimination":
-                        mode = TournamentMode.DOUBLE_ELIMINATION;
-                        break;
-                    case "tripple elimination":
-                        mode = TournamentMode.TRIPLE_ELIMINATION;
-                        break;
-                    case "round robin":
-                        mode = TournamentMode.ROUND_ROBIN;
-                        break;
+                //TODO Command richtig implementieren
+                case "startTournament":
+                    TournamentMode mode = null;
+                    switch (getPollName(messageContent).toLowerCase())
+                    {
+                        case "single elimination":
+                            mode = TournamentMode.SINGE_ELIMINATION;
+                            break;
+                        case "double elimination":
+                            mode = TournamentMode.DOUBLE_ELIMINATION;
+                            break;
+                        case "tripple elimination":
+                            mode = TournamentMode.TRIPLE_ELIMINATION;
+                            break;
+                        case "round robin":
+                            mode = TournamentMode.ROUND_ROBIN;
+                            break;
                         default:
                             event.getChannel().sendMessage("The Tournament type does not match any known modes").queue();
                             break;
 
-                }
+                    }
 
-                event.getChannel()
-                    .sendMessage(_tournamentService
-                        .initializeTournament(mode , getOptions(messageContent)))
-                    .queue();
+                    event.getChannel()
+                            .sendMessage(_tournamentService
+                                    .initializeTournament(mode , getOptions(messageContent)))
+                            .queue();
 
-            default:
-                event.getChannel()
-                    .sendMessage("Sorry but this command is not defined!")
-                    .queue();
-                break;
+                default:
+                    event.getChannel()
+                            .sendMessage("Sorry but this command is not defined!")
+                            .queue();
+                    break;
 
             }
         }

@@ -257,7 +257,12 @@ public class CommandService
 
     }
 
-    public void getMusicCommands(MessageReceivedEvent event, String path)
+    /**
+     * Builds a message that contains the commands for the specified file
+     * @param path The Path to the commands file
+     * @return a message that contains all commands for that file
+     */
+    public Message getCommands(String path)
     {
         MessageBuilder builder = new MessageBuilder();
 
@@ -272,16 +277,19 @@ public class CommandService
                 builder.append(command + "\n");
             }
             builder.append("```");
-            event.getChannel().sendMessage(builder.build()).queue();
+            return builder.build();
         }
         catch (IOException e)
         {
-            event.getChannel()
-                .sendMessage(
-                        "**musicCommands.txt** not found. Please contact a Dev!").queue();
+            builder = new MessageBuilder();
+                       return  builder.append("**The appropriate command file** was not found. Please contact a Dev!").build();
+        }
+        catch (IndexOutOfBoundsException e)
+        {
+            System.out.println("Nothing severe happened. Index was at exactly the length but contained a null character");
         }
 
-
+        return new MessageBuilder().append("Something went wrong contact a Dev please!").build();
     }
 
     /**
