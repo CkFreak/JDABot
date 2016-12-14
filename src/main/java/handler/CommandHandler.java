@@ -9,6 +9,7 @@ import managers.GuildMusicManager;
 import managers.MusicControlManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import services.CommandService;
 import services.IJustLostTheGameService;
 import services.PollService;
@@ -378,11 +379,20 @@ public class CommandHandler implements Observer
                     break;
 
                 case "changeGame":
-                    event.getMessage()
-                            .deleteMessage()
-                            .queue();
-
-                    _commander.changeGame(_jda, getGameName(messageContent));
+                    try
+                    {
+                        event.getMessage()
+                                .deleteMessage()
+                                .block();
+                    }
+                    catch (RateLimitedException e)
+                    {
+                        event.getChannel().sendMessage("A RateLimitedException occured. This should not have happened!").queue();
+                    }
+                    finally
+                    {
+                        _commander.changeGame(_jda, getGameName(messageContent));
+                    }
                     break;
 
                 case "startPVote":
