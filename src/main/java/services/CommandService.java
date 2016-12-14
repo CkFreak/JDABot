@@ -216,6 +216,7 @@ public class CommandService
      * @param event The event that holds the Channel the bot has to answer to 
      * @return A Message that is directly delivered to the channel
      */
+    @Deprecated
     public void getHelpCommands(MessageReceivedEvent event, String path)
     {
 
