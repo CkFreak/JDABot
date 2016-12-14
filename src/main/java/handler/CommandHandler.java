@@ -37,6 +37,8 @@ public class CommandHandler implements Observer
 
     private final static String HELP_COMMAND_FILE = "src/main/res/commands.txt";
 
+    private final static String MUSIC_HELP_COMMAND_FILE = "src/main/res/musicCommands.txt";
+
     private static final String THE_GAME_INITIALIZATION = "The Game has been initialized!";
 
     private static final String INSUFICENT_RIGHTS_MESSAGE = "You do not have sufficent permissions to do that";
@@ -125,8 +127,8 @@ public class CommandHandler implements Observer
                 _commander.replyToHello(event);
                 break;
 
-            case "help":
-                _commander.getHelpCommands(event, HELP_COMMAND_FILE);
+            case "helpMusic":
+                _commander.getHelpCommands(event, MUSIC_HELP_COMMAND_FILE);
                 break;
 
             case "admin":

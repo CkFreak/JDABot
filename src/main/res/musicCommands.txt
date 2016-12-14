@@ -1,0 +1,14 @@
+join <ChannelName>: Lässt den Bot in einen Channel joinen
+leave: Lässt den Bot den Channel, zu dem er verbunden ist verlassen
+play <URL des Songs>: Fügt das Lied in die Playlist hinzu. Sollte der Player nichts spielen, wird die wiedergabe gestartet
+pause: Pausiert die Musik-Wiedergabe
+resume: Setzt die Musik-Wiedergabe fort
+stop: Stoppt die Musik-Wiedergabe.
+skip: Überpringt das spielende Lied
+jump <Song index>: Springt zum angegebenen Lied in der Playlist
+songInfo: Gibt das Lied aus, das grade spielt
+playlist: Zeigt die Playlist an, die grade spielt
+shuffle <1 oder 0>: Shuffelt die Playlist oder schaltet es wieder aus. 0 aus, 1 an
+volume<Zahl>: ändert die Lautstäre des Bots
+restart: Wiederholt das aktuelle Lied direkt nach Eingabe des Commands
+reset: Setzt den Player zurück, löscht alle Playlists (Admins)

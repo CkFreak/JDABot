@@ -248,8 +248,7 @@ public class CommandService
         {
             event.getChannel()
                 .sendMessage(
-                        "**commands.txt** not found. Please contact a Dev!");
-            e.printStackTrace();
+                        "**commands.txt** not found. Please contact a Dev!").queue();
         }
         catch (IndexOutOfBoundsException e)
         {
@@ -260,6 +259,28 @@ public class CommandService
 
     public void getMusicCommands(MessageReceivedEvent event, String path)
     {
+        MessageBuilder builder = new MessageBuilder();
+
+        try
+        {
+            List<String> musicCommands = Files.readAllLines(Paths.get(path));
+
+            builder.append("```");
+
+            for (String command : musicCommands)
+            {
+                builder.append(command + "\n");
+            }
+            builder.append("```");
+            event.getChannel().sendMessage(builder.build()).queue();
+        }
+        catch (IOException e)
+        {
+            event.getChannel()
+                .sendMessage(
+                        "**musicCommands.txt** not found. Please contact a Dev!").queue();
+        }
+
 
     }
 
