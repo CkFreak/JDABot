@@ -35,7 +35,13 @@ public class CommandHandler implements Observer
 
     private final static String BITCH_PLEASE = "src/main/res/bitchplease.jpg";
 
-    private final static String HELP_COMMAND_FILE = "src/main/res/commands.txt";
+    private final static String COMMANDS_HELP_COMMAND_FILE = "src/main/res/commands.txt";
+
+    private final static String EMOJI_HELP_COMMAND_FILE = "src/main/res/emojiCommands.txt";
+
+    private final static String POLL_HELP_COMMAND_FILE = "src/main/res/pollCommands.txt";
+
+    private final static String GENERAL_HELP_COMMAND_FILE = "src/main/res/generalCommands.txt";
 
     private final static String MUSIC_HELP_COMMAND_FILE = "src/main/res/musicCommands.txt";
 

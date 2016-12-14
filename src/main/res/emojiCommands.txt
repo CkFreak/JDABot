@@ -1,0 +1,6 @@
+zucker: Sendet ein Zucker Bild in den Chat (Probs an Tyga)
+salt: Sendet ein Salt Bild in den Chat (Probs an Tyga)
+justright: Sendet ein JustRight Meme (Probs an Procrastinator)
+fuckoff: See for yourself (The Procrastinator has spoken)
+like: Like was gesagt wird und so
+please: Sendet ein Bitch Please Emoji

@@ -1,0 +1,11 @@
+hello: Begrüßt den anfragenden Spieler
+help: Zeigt alle Commands des Bots an
+admin: Zeigt die oder den Admin des Servers an
+mods: Zeigt die Moderatoren des Servers an
+promote <User> <Rolle>: Falls man mindestens Mod ist, kann man hiermit promoten
+delete <Menge>: Löscht die Menge an Nachrichten die angegeben wurde. Allerdings nicht mehr als 100 auf einmal
+userInfo <User>: Gibt alle Berechtigungen des Nutzers zurück
+(momentan unter maintenance)deleteAll: Löscht alle Nachrichten aus diesem Channnel (Admins, Mods)
+changeGame <Game>: ändert das Spiel, das der Bot spielt
+startGame : Startet ein neues Game mit zufälliger Endzeit
+shutdown: Schaltet den Bot aus (Admins)
