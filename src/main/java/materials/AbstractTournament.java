@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import enums.TournamentMode;
+import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.entities.Message;
 import values.TournamentParticipant;
 
 /**
@@ -17,26 +19,38 @@ public abstract class AbstractTournament
 	 * The mode this Tournament is being played in
 	 */
     protected TournamentMode _mode;
-    
+
+    /**
+     * The round the tournament is in
+     */
+    protected int _round;
+
+    /**
+     * The amount of players at round start
+     */
+    protected int _amountOfPlayersAtRoundStart;
+
     /**
      * A list with all participants of this Tournament
      */
     protected final ArrayList<TournamentParticipant> _participants;
 
+    /**
+     * A list with all participants now in matched order. This list is only filled, when matchOpponents has been called
+     */
     protected LinkedList<TournamentParticipant> _matchedOpponents;
     
     /**
      * Instatiates a new Abstract Tournament
      * @param participants a list of participants
      * @param mode the tournament mode
-     * @require participants instanceof ArrayList<String>
      */
     public AbstractTournament(ArrayList<TournamentParticipant> participants , TournamentMode mode)
     {
-        assert participants instanceof ArrayList<?>;
-        
         _mode = mode;
-        _participants = (ArrayList<TournamentParticipant>) participants;
+        _round = 0;
+        _amountOfPlayersAtRoundStart = 0;
+        _participants = participants;
         _matchedOpponents = new LinkedList<>();
     }
     
@@ -76,6 +90,17 @@ public abstract class AbstractTournament
     public void addParticipant(TournamentParticipant participant)
     {
         _participants.add(participant);
+    }
+
+    /**
+     * Announces the winner of a tournament
+     * @return A message with the winner in it
+     */
+    protected Message announceWinner()
+    {
+        MessageBuilder builder = new MessageBuilder();
+
+        return builder.append("The winner of this tournament is: " + _matchedOpponents.getFirst()).build();
     }
 
 
