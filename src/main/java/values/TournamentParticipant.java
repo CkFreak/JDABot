@@ -96,4 +96,17 @@ public class TournamentParticipant
     {
         ++_losses;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof TournamentParticipant)
+        {
+            if (this._name.equalsIgnoreCase(((TournamentParticipant) o)._name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

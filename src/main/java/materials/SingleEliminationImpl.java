@@ -18,6 +18,20 @@ public class SingleEliminationImpl extends AbstractTournament
         super(participants, mode);
     }
 
+    /**
+     * Removes the loser from the Tournament
+     */
+    public void registerLoss(String loser)
+    {
+        for (TournamentParticipant participant : _matchedOpponents)
+        {
+            if (participant.equals(new TournamentParticipant(loser)))
+            {
+                _matchedOpponents.remove(participant);
+            }
+        }
+    }
+
     @Override
     protected void matchOpponents(ArrayList<TournamentParticipant> participants)
     {

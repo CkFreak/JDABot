@@ -1,6 +1,7 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import enums.TournamentMode;
 import materials.AbstractTournament;
@@ -16,13 +17,14 @@ import values.TournamentParticipant;
  */
 public class TournamentService
 {
+    private List<AbstractTournament> _tournaments;
 
     /**
      * Instantiates a new Tournament Service
      */
     public TournamentService()
     {
-
+        _tournaments = new ArrayList<>();
     }
 
     /**
@@ -42,36 +44,37 @@ public class TournamentService
         {
         case SINGE_ELIMINATION:
             tournament = new SingleEliminationTournament(tournamentParticipants, mode);
+            _tournaments.add(tournament);
             break;
             case DOUBLE_ELIMINATION:
-                return builder.appendString(
+                return builder.append(
                         "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
                                 " match any of the existing")
                         .build();
             case TRIPLE_ELIMINATION:
-                return builder.appendString(
+                return builder.append(
                         "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
                                 " match any of the existing")
                         .build();
             case ROUND_ROBIN:
-                return builder.appendString(
+                return builder.append(
                         "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
                                 " match any of the existing")
                         .build();
 
             default:
-                return builder.appendString(
+                return builder.append(
                         "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
                                 " match any of the existing")
                         .build();
         }
 
-        builder.appendString("Participants of this Tournament are: \n");
+        builder.append("Participants of this Tournament are: \n");
 
         for (TournamentParticipant parti : tournamentParticipants)
         {
             tournament.addParticipant(parti);
-            builder.appendString(parti.getName() + "\n");
+            builder.append(parti.getName() + "\n");
         }
 
         return builder.build();
