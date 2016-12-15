@@ -39,13 +39,13 @@ public class SingleEliminationTournament extends AbstractTournament
 
         if (!_participants.contains(new TournamentParticipant(winner)))
         {
-            return builder.appendString(
+            return builder.append(
                     "The winner you have entered is not registerd for this tournament")
                 .build();
         }
         else if (!_participants.contains(new TournamentParticipant(loser)))
         {
-            return builder.appendString(
+            return builder.append(
                     "The loser you have entered is not registered for this tournament")
                 .build();
         }
@@ -65,7 +65,7 @@ public class SingleEliminationTournament extends AbstractTournament
                 tournamentParticipant.incrementLosses();
             }
         }
-        return builder.appendString(theWinner.getName() + " now has "
+        return builder.append(theWinner.getName() + " now has "
                 + theWinner.getWins() + " wins.\n" + theLoser.getName()
                 + " now has " + theLoser.getLosses() + " losses.")
             .build();
@@ -83,13 +83,13 @@ public class SingleEliminationTournament extends AbstractTournament
         
         if (!_participants.contains(new TournamentParticipant(playerOne)))
         {
-            return builder.appendString(
+            return builder.append(
                     "The first _player you have entered is not registerd for this tournament")
                 .build();
         }
         else if (!_participants.contains(new TournamentParticipant(playerTwo)))
         {
-            return builder.appendString(
+            return builder.append(
                     "The second _player you have entered is not registered for this tournament")
                 .build();
         }
@@ -104,7 +104,7 @@ public class SingleEliminationTournament extends AbstractTournament
                 tournamentParticipant.incrementDraws();
             }
         }
-        return builder.appendString("A draw has been added to " + playerOne + " and " + playerTwo).build(); 
+        return builder.append("A draw has been added to " + playerOne + " and " + playerTwo).build();
     }
 
     @Override

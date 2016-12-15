@@ -21,7 +21,9 @@ public abstract class AbstractTournament
     /**
      * A list with all participants of this Tournament
      */
-    protected ArrayList<TournamentParticipant> _participants;
+    protected final ArrayList<TournamentParticipant> _participants;
+
+    protected LinkedList<TournamentParticipant> _matchedOpponents;
     
     /**
      * Instatiates a new Abstract Tournament
@@ -35,6 +37,7 @@ public abstract class AbstractTournament
         
         _mode = mode;
         _participants = (ArrayList<TournamentParticipant>) participants;
+        _matchedOpponents = new LinkedList<>();
     }
     
     
@@ -43,7 +46,7 @@ public abstract class AbstractTournament
      * @param participants a list of participants
      * @return an arrayList with the opponents
      */
-    protected abstract ArrayList<LinkedList<TournamentParticipant>> matchOpponents(ArrayList<TournamentParticipant> participants);
+    protected abstract void matchOpponents(ArrayList<TournamentParticipant> participants);
     
     
     
