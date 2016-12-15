@@ -450,7 +450,6 @@ public class CommandHandler implements Observer
                             .queue();
                     break;
 
-                //TODO Command richtig implementieren
                 case "startTournament":
                     TournamentMode mode = null;
                     switch (getPollName(messageContent).toLowerCase())
