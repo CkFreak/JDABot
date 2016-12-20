@@ -14,20 +14,20 @@ import java.util.Random;
 public class SingleEliminationTournament extends AbstractTournament
 {
 
-    public SingleEliminationTournament(ArrayList<TournamentParticipant> participants, TournamentMode mode)
+    public SingleEliminationTournament(String name, ArrayList<TournamentParticipant> participants, TournamentMode mode)
     {
-        super(participants, mode);
+        super(name, participants, mode);
     }
 
     /**
      * Removes the loser from the Tournament
      * MAY RETURN NULL
      */
-    public Message registerLoss(String loser)
+    public Message registerLoss(TournamentParticipant loser)
     {
         for (TournamentParticipant participant : _matchedOpponents)
         {
-            if (participant.equals(new TournamentParticipant(loser)))
+            if (participant.equals(loser))
             {
                 _matchedOpponents.remove(participant);
             }

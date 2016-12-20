@@ -397,12 +397,12 @@ public class CommandHandler implements Observer
 
                 case "startPVote":
                     _pollService.startPPoll(getPollName(messageContent),
-                            event.getAuthor(), _event, getOptions(messageContent));
+                            event.getAuthor(), _event, getOptions(messageContent, 0));
                     break;
 
                 case "startAVote":
                     _pollService.startAPoll(getPollName(messageContent),
-                            event.getAuthor(), event, getOptions(messageContent));
+                            event.getAuthor(), event, getOptions(messageContent, 0));
                     break;
 
                 case "getStatus":
@@ -422,7 +422,7 @@ public class CommandHandler implements Observer
                 case "vote":
                     event.getChannel()
                             .sendMessage(_pollService.vote(getPollName(messageContent),
-                                    getOptions(messageContent), event.getAuthor(),
+                                    getOptions(messageContent, 0), event.getAuthor(),
                                     event))
                             .queue();
                     break;
@@ -452,7 +452,9 @@ public class CommandHandler implements Observer
 
                 case "startTournament":
                     TournamentMode mode = null;
-                    switch (getPollName(messageContent).toLowerCase())
+                    String name = getOptions(messageContent, 0).get(0);
+                    String tournamentMode = getOptions(messageContent, 1).get(0).toLowerCase();
+                    switch (tournamentMode)
                     {
                         case "single elimination":
                             mode = TournamentMode.SINGE_ELIMINATION;
@@ -474,8 +476,12 @@ public class CommandHandler implements Observer
 
                     event.getChannel()
                             .sendMessage(_tournamentService
-                                    .initializeTournament(mode , getOptions(messageContent)))
+                                    .initializeTournament(name, mode , getOptions(messageContent, 2)))
                             .queue();
+                    break;
+
+                case "registerLoss":
+
 
                 default:
                     event.getChannel()
@@ -537,9 +543,10 @@ public class CommandHandler implements Observer
     /**
      * Gives the desired poll options
      * @param messageContent the message content without white spaces
+     * @param startingPoint The amount of "_" after which the message content ist to be analyzed
      * @return A list with poll options
      */
-    private ArrayList<String> getOptions(String[] messageContent)
+    private ArrayList<String> getOptions(String[] messageContent, int startingPoint)
     {
         ArrayList<String> options = new ArrayList<>();
         String option = "";
@@ -549,8 +556,14 @@ public class CommandHandler implements Observer
         do
         {
             ++such;
+
+            if (messageContent[such].contains("_"))
+            {
+                //now we found the first "_" and we have to check, weather or not we should continue the search
+                --startingPoint;
+            }
         }
-        while (!messageContent[such].contains("_"));
+        while (!messageContent[such].contains("_") && startingPoint != 0);
 
         for (int i = such; i <= messageContent.length - 1; ++i)
         {

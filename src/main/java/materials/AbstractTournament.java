@@ -15,7 +15,13 @@ import values.TournamentParticipant;
  */
 public abstract class AbstractTournament
 {
-	/**
+
+    /**
+     * The name of the tournament
+     */
+    private String _name;
+
+    /**
 	 * The mode this Tournament is being played in
 	 */
     protected TournamentMode _mode;
@@ -45,8 +51,9 @@ public abstract class AbstractTournament
      * @param participants a list of participants
      * @param mode the tournament mode
      */
-    public AbstractTournament(ArrayList<TournamentParticipant> participants , TournamentMode mode)
+    public AbstractTournament(String name, ArrayList<TournamentParticipant> participants , TournamentMode mode)
     {
+        _name = name;
         _mode = mode;
         _round = 0;
         _amountOfPlayersAtRoundStart = 0;
@@ -68,7 +75,7 @@ public abstract class AbstractTournament
      * Gives all participants of the Tournament
      * @return a list with all participants of the tournament
      */
-    protected ArrayList<TournamentParticipant> getParticipants()
+    public ArrayList<TournamentParticipant> getParticipants()
     {
         return _participants;
     }
@@ -78,7 +85,7 @@ public abstract class AbstractTournament
      * Gives the mode of this tournament
      * @return the tournament mode
      */
-    protected TournamentMode getMode()
+    public TournamentMode getMode()
     {
         return _mode;
     }
@@ -102,6 +109,13 @@ public abstract class AbstractTournament
 
         return builder.append("The winner of this tournament is: " + _matchedOpponents.getFirst()).build();
     }
+
+    public String getName()
+    {
+        return _name;
+    }
+
+
 
 
     

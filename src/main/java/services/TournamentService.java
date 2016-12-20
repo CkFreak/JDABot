@@ -33,7 +33,7 @@ public class TournamentService
      * @param mode the mode the tournament is being played in
      * @return a message that the bot sends to the channel with all the opponents in it
      */
-    public Message initializeTournament(
+    public Message initializeTournament(String name,
             TournamentMode mode, ArrayList<String> participants)
     {
         AbstractTournament tournament;
@@ -43,7 +43,7 @@ public class TournamentService
         switch (mode)
         {
         case SINGE_ELIMINATION:
-            tournament = new SingleEliminationTournament(tournamentParticipants, mode);
+            tournament = new SingleEliminationTournament(name, tournamentParticipants, mode);
             _tournaments.add(tournament);
             break;
             case DOUBLE_ELIMINATION:
@@ -95,6 +95,33 @@ public class TournamentService
             participants2.add(new TournamentParticipant(string));
         }
         return participants2;
+    }
+
+    //TODO add remaining Tournament Types once implemented
+
+    /**
+     * Increments the losses on the player that was entered
+     * @param tournament The tournament the player is playing in
+     * @param player The player that has lost
+     */
+    public void registerLoss(String tournament, String player)
+    {
+        for (AbstractTournament tournament1 : _tournaments)
+        {
+            if (tournament1.getName().equals(tournament))
+            {
+                for (TournamentParticipant participant : tournament1.getParticipants())
+                {
+                    if (participant.getName().equals(player))
+                    {
+                        if (tournament1 instanceof SingleEliminationTournament)
+                        {
+                            ((SingleEliminationTournament) tournament1).registerLoss(participant);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }
