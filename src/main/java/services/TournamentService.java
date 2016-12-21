@@ -45,6 +45,7 @@ public class TournamentService
         case SINGE_ELIMINATION:
             tournament = new SingleEliminationTournament(name, tournamentParticipants, mode);
             _tournaments.add(tournament);
+            builder.append("A new Tournament with the name " + name + "was started" + "\n");
             break;
             case DOUBLE_ELIMINATION:
                 return builder.append(
@@ -104,7 +105,7 @@ public class TournamentService
      * @param tournament The tournament the player is playing in
      * @param player The player that has lost
      */
-    public void registerLoss(String tournament, String player)
+    public Message registerLoss(String tournament, String player)
     {
         for (AbstractTournament tournament1 : _tournaments)
         {
@@ -116,12 +117,13 @@ public class TournamentService
                     {
                         if (tournament1 instanceof SingleEliminationTournament)
                         {
-                            ((SingleEliminationTournament) tournament1).registerLoss(participant);
+                            return ((SingleEliminationTournament) tournament1).registerLoss(participant);
                         }
                     }
                 }
             }
         }
+        return null;
     }
 
 }

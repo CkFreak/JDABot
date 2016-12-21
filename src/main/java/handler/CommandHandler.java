@@ -481,7 +481,7 @@ public class CommandHandler implements Observer
                     break;
 
                 case "registerLoss":
-
+                    _tournamentService.registerLoss(getPollName(messageContent), getOptions(messageContent, 1).get(0));
 
                 default:
                     event.getChannel()
@@ -563,16 +563,15 @@ public class CommandHandler implements Observer
                 --startingPoint;
             }
         }
-        while (!messageContent[such].contains("_") && startingPoint != 0);
+        while (startingPoint != 0);
 
         for (int i = such; i <= messageContent.length - 1; ++i)
         {
-            System.out.println(messageContent[i]);
             option += " " + messageContent[i] + " ";
             if (messageContent[i].contains("_"))
             {
                 option = option.replaceAll("_", "");
-                options.add(such, option);
+                options.add(option);
                 option = "";
             }
 
