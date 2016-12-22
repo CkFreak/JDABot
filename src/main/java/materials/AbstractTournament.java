@@ -67,7 +67,7 @@ public abstract class AbstractTournament
      * @param participants a list of participants
      * @return an arrayList with the opponents
      */
-    protected abstract void matchOpponents(ArrayList<TournamentParticipant> participants);
+    public abstract void matchOpponents(ArrayList<TournamentParticipant> participants);
     
     
     

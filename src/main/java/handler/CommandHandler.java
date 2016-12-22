@@ -98,6 +98,7 @@ public class CommandHandler implements Observer
         _jda = jda;
         _commander = new CommandService(_event, jda);
         _pollService = new PollService();
+        _tournamentService = new TournamentService();
         _loseGameService = new IJustLostTheGameService();
         _loseGameService.addObserver(this);
         _musicControlManager = new MusicControlManager();
@@ -452,20 +453,20 @@ public class CommandHandler implements Observer
 
                 case "startTournament":
                     TournamentMode mode = null;
-                    String name = getOptions(messageContent, 0).get(0);
-                    String tournamentMode = getOptions(messageContent, 1).get(0).toLowerCase();
+                    String name = getPollName(messageContent);
+                    String tournamentMode = getOptions(messageContent, 0).get(0).toLowerCase().replaceAll(" ", "");
                     switch (tournamentMode)
                     {
-                        case "single elimination":
+                        case "singleelimination":
                             mode = TournamentMode.SINGE_ELIMINATION;
                             break;
-                        case "double elimination":
+                        case "doubleelimination":
                             mode = TournamentMode.DOUBLE_ELIMINATION;
                             break;
-                        case "tripple elimination":
+                        case "trippleelimination":
                             mode = TournamentMode.TRIPLE_ELIMINATION;
                             break;
-                        case "round robin":
+                        case "roundrobin":
                             mode = TournamentMode.ROUND_ROBIN;
                             break;
                         default:
@@ -482,6 +483,7 @@ public class CommandHandler implements Observer
 
                 case "registerLoss":
                     _tournamentService.registerLoss(getPollName(messageContent), getOptions(messageContent, 1).get(0));
+                    break;
 
                 default:
                     event.getChannel()

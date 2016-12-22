@@ -38,7 +38,7 @@ public class TournamentService
     {
         AbstractTournament tournament;
         MessageBuilder builder = new MessageBuilder();
-        ArrayList<TournamentParticipant> tournamentParticipants = getParticipants(participants);
+        ArrayList<TournamentParticipant> tournamentParticipants = createParticipants(participants);
 
         switch (mode)
         {
@@ -74,9 +74,10 @@ public class TournamentService
 
         for (TournamentParticipant parti : tournamentParticipants)
         {
-            tournament.addParticipant(parti);
             builder.append(parti.getName() + "\n");
         }
+
+        tournament.matchOpponents(tournamentParticipants);
 
         return builder.build();
     }
@@ -86,7 +87,7 @@ public class TournamentService
      * @param participants the participants as Strings
      * @return A new list with TournamentParticipants
      */
-    private ArrayList<TournamentParticipant> getParticipants(
+    private ArrayList<TournamentParticipant> createParticipants(
             ArrayList<String> participants)
     {
         ArrayList<TournamentParticipant> participants2 = new ArrayList<>();
