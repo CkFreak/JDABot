@@ -2,6 +2,7 @@ package materials;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import enums.TournamentMode;
 import net.dv8tion.jda.core.MessageBuilder;
@@ -101,12 +102,20 @@ public abstract class AbstractTournament
     {
         MessageBuilder builder = new MessageBuilder();
 
-        return builder.append("The winner of this tournament is: " + _matchedOpponents.getFirst().getName()).build();
+        return builder.append("The winner of this tournament is: ***" + _matchedOpponents.getFirst().getName() + "***").build();
     }
 
     public String getName()
     {
         return _name;
+    }
+
+    /**
+     * @return all matched opponents
+     */
+    public LinkedList<TournamentParticipant> getMatchedOpponents()
+    {
+        return _matchedOpponents;
     }
 
     /**
@@ -121,6 +130,23 @@ public abstract class AbstractTournament
             participants += parti.getName() + "\n";
         }
         return participants;
+    }
+
+    /**
+     * Takes an ArrayList of TournamentParticipants and turns it into a concurrentList that can be uses only by one Thread at a time
+     * @param participants A List of TournamentParticipants
+     * @return A Concurrent List with the Tournament Participants
+     */
+    protected CopyOnWriteArrayList<TournamentParticipant> makeConcurrentList(ArrayList<TournamentParticipant> participants)
+    {
+        CopyOnWriteArrayList<TournamentParticipant> safeList = new CopyOnWriteArrayList<TournamentParticipant>();
+
+        for (TournamentParticipant participant : participants)
+        {
+            safeList.add(participant);
+        }
+
+        return safeList;
     }
 
 

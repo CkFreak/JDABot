@@ -1,7 +1,9 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.sun.istack.internal.Nullable;
 import enums.TournamentMode;
@@ -84,6 +86,9 @@ public class TournamentService
         if (tournament != null)
         {
             tournament.matchOpponents(tournamentParticipants);
+            builder.append("Opponents are:\n");
+
+            builder.append(getMatchedOpponents(tournament.getMatchedOpponents()));
         }
 
         return builder.build();
@@ -134,4 +139,51 @@ public class TournamentService
         return null;
     }
 
+    /**
+     * Gives a String with all opponents in the order in which they shall play each other
+     * @param participants a list with the opponents matched
+     * @return a String with all opponents in matched order
+     */
+    private String getMatchedOpponents(LinkedList<TournamentParticipant> participants)
+    {
+        StringBuilder builder = new StringBuilder();
+        CopyOnWriteArrayList<TournamentParticipant> safeList = (CopyOnWriteArrayList<TournamentParticipant>) makeConcurrentList(participants);
+
+
+        for (TournamentParticipant parti : safeList)
+        {
+            if(!safeList.isEmpty())
+            {
+                if (safeList.size() % 2 == 0)
+                {
+                    builder.append(safeList.get(0).getName() + " vs " + safeList.get(1).getName() + "\n");
+                    safeList.remove(1);
+                    safeList.remove(0);
+                }
+                else
+                {
+                    builder.append(safeList.get(0).getName() + "Safe Round \n");
+                    safeList.remove(0);
+                }
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Makes a list that can be accessed by multiple threads at once without interfearence
+     * @param participants The List that has to be made concurrent
+     * @return a CopyOnWriteArrayList with the contents of the input list
+     */
+    private List<TournamentParticipant> makeConcurrentList(List<TournamentParticipant> participants)
+    {
+        CopyOnWriteArrayList<TournamentParticipant> safeList = new CopyOnWriteArrayList<TournamentParticipant>();
+
+        for (TournamentParticipant participant : participants)
+        {
+            safeList.add(participant);
+        }
+
+        return safeList;
+    }
 }

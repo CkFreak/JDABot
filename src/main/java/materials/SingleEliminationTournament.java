@@ -92,22 +92,6 @@ public class SingleEliminationTournament extends AbstractTournament
         }
     }
 
-    /**
-     * Takes an ArrayList of TournamentParticipants and turns it into a concurrentList that can be uses only by one Thread at a time
-     * @param participants A List of TournamentParticipants
-     * @return A Concurrent List with the Tournament Participants
-     */
-    private CopyOnWriteArrayList<TournamentParticipant> makeConcurrentList(ArrayList<TournamentParticipant> participants)
-    {
-        CopyOnWriteArrayList<TournamentParticipant> safeList = new CopyOnWriteArrayList<TournamentParticipant>();
-
-        for (TournamentParticipant participant : participants)
-        {
-            safeList.add(participant);
-        }
-
-        return safeList;
-    }
 
     /**
      * This method is called, when a Round ends and starts the next round
