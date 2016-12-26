@@ -3,6 +3,7 @@ package services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.istack.internal.Nullable;
 import enums.TournamentMode;
 import materials.AbstractTournament;
 import materials.SingleEliminationTournament;
@@ -36,38 +37,41 @@ public class TournamentService
     public Message initializeTournament(String name,
             TournamentMode mode, ArrayList<String> participants)
     {
-        AbstractTournament tournament;
+        AbstractTournament tournament = null;
         MessageBuilder builder = new MessageBuilder();
         ArrayList<TournamentParticipant> tournamentParticipants = createParticipants(participants);
 
-        switch (mode)
+        if(mode != null)
         {
-        case SINGE_ELIMINATION:
-            tournament = new SingleEliminationTournament(name, tournamentParticipants, mode);
-            _tournaments.add(tournament);
-            builder.append("A new Tournament with the name " + name + "was started" + "\n");
-            break;
-            case DOUBLE_ELIMINATION:
-                return builder.append(
-                        "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
-                                " match any of the existing")
-                        .build();
-            case TRIPLE_ELIMINATION:
-                return builder.append(
-                        "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
-                                " match any of the existing")
-                        .build();
-            case ROUND_ROBIN:
-                return builder.append(
-                        "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
-                                " match any of the existing")
-                        .build();
+            switch (mode)
+            {
+                case SINGE_ELIMINATION:
+                    tournament = new SingleEliminationTournament(name, tournamentParticipants, mode);
+                    _tournaments.add(tournament);
+                    builder.append("A new Tournament with the name " + name + "was started" + "\n");
+                    break;
+                case DOUBLE_ELIMINATION:
+                    return builder.append(
+                            "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
+                                    " match any of the existing")
+                            .build();
+                case TRIPLE_ELIMINATION:
+                    return builder.append(
+                            "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
+                                    " match any of the existing")
+                            .build();
+                case ROUND_ROBIN:
+                    return builder.append(
+                            "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
+                                    " match any of the existing")
+                            .build();
 
-            default:
-                return builder.append(
-                        "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
-                                " match any of the existing")
-                        .build();
+                default:
+                    return builder.append(
+                            "There was no tournament made! Contact a Dev please. Or maybe it was just your Mode that does not" +
+                                    " match any of the existing")
+                            .build();
+            }
         }
 
         builder.append("Participants of this Tournament are: \n");
@@ -77,7 +81,10 @@ public class TournamentService
             builder.append(parti.getName() + "\n");
         }
 
-        tournament.matchOpponents(tournamentParticipants);
+        if (tournament != null)
+        {
+            tournament.matchOpponents(tournamentParticipants);
+        }
 
         return builder.build();
     }

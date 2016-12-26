@@ -22,6 +22,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.managers.ChannelManager;
 import net.dv8tion.jda.core.managers.GuildController;
+import net.dv8tion.jda.core.managers.GuildManager;
 
 /**
  * A class that executes commands passed to it by the CommandHandler
@@ -135,31 +136,8 @@ public class CommandService
                 || isModerator(event.getMember(), event)
                 || isOwnerOfServer(event.getAuthor(), event.getGuild()))
         {
-            TextChannel channel = event.getTextChannel();
-            ChannelManager manager = channel.getManager();
-            Guild guild = event.getGuild();
-            String channelName = channel.getName();
-            List<PermissionOverride> permissionOverrides = channel
-                .getPermissionOverrides();
-
-            // manager.delete();
-            //guild.createTextChannel(channelName);
-            List<TextChannel> textChannels = guild.getTextChannels();
-            for (int i = 0; i < textChannels.size() - 1; ++i)
-            {
-                if (textChannels.get(i)
-                    .getName()
-                    .equals(channelName))
-                {
-                    for (PermissionOverride permissionOverride : permissionOverrides)
-                    {
-                        // PermissionOverrideManager permissionMananger = permissionOverride
-                        // .getManager();
-                        // permissionMananger.overwrite(permissionOverride);
-                        // permissionMananger.update();
-                    }
-                }
-            }
+            //Channel getten und dann alle Permissions nehmen und auf einen neuen Channel packen, der am besten an der selben
+            //Stelle ist wie der den man löscht
 
         }
         else
@@ -195,19 +173,6 @@ public class CommandService
                         "There has been a RateLimitedExeption during deletion. Please contact a Dev so he can fix it.");
             e.printStackTrace();
         }
-
-        //        for (Message message : recentMessages)
-        //        {
-        //            message.deleteMessage();
-        //            try
-        //            {
-        //                Thread.sleep(150);
-        //            }
-        //            catch (InterruptedException e)
-        //            {
-        //                e.printStackTrace();
-        //            }
-        //        }
 
     }
 

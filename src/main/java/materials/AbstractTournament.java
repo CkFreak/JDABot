@@ -27,11 +27,6 @@ public abstract class AbstractTournament
     protected TournamentMode _mode;
 
     /**
-     * The round the tournament is in
-     */
-    protected int _round;
-
-    /**
      * The amount of players at round start
      */
     protected int _amountOfPlayersAtRoundStart;
@@ -55,7 +50,6 @@ public abstract class AbstractTournament
     {
         _name = name;
         _mode = mode;
-        _round = 0;
         _amountOfPlayersAtRoundStart = 0;
         _participants = participants;
         _matchedOpponents = new LinkedList<>();
@@ -107,12 +101,26 @@ public abstract class AbstractTournament
     {
         MessageBuilder builder = new MessageBuilder();
 
-        return builder.append("The winner of this tournament is: " + _matchedOpponents.getFirst()).build();
+        return builder.append("The winner of this tournament is: " + _matchedOpponents.getFirst().getName()).build();
     }
 
     public String getName()
     {
         return _name;
+    }
+
+    /**
+     * Makes a String of all remaining participants in the Tournament
+     * @return a String with all participants in it.
+     */
+    public String listParticipants()
+    {
+        String participants = "\n";
+        for (TournamentParticipant parti : _matchedOpponents)
+        {
+            participants += parti.getName() + "\n";
+        }
+        return participants;
     }
 
 

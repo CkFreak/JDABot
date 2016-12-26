@@ -1,11 +1,11 @@
 package materials;
 
 import enums.TournamentMode;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import values.TournamentParticipant;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -27,11 +27,13 @@ public class SingleEliminationTournament extends AbstractTournament
      */
     public Message registerLoss(TournamentParticipant loser)
     {
+        MessageBuilder builder = new MessageBuilder();
         for (TournamentParticipant participant : _matchedOpponents)
         {
             if (participant.equals(loser))
             {
                 _matchedOpponents.remove(participant);
+                builder.append("Participants are: " + listParticipants());
             }
             if (_matchedOpponents.size() == 1)
             {
@@ -42,7 +44,7 @@ public class SingleEliminationTournament extends AbstractTournament
                 onRoundEnd();
             }
         }
-        return null;
+        return builder.build();
     }
 
 
@@ -52,15 +54,25 @@ public class SingleEliminationTournament extends AbstractTournament
         //TODO IlligalArgumentException: bound must be positive fixen
         CopyOnWriteArrayList safeList = makeConcurrentList(participants);
 
-        if (participants.size() % 2 == 0)
+
+        if (participants.size() == 2)
+        {
+            _matchedOpponents.add((TournamentParticipant) safeList.get(0));
+            _matchedOpponents.add((TournamentParticipant) safeList.get(1));
+            participants = null;
+            _amountOfPlayersAtRoundStart = _matchedOpponents.size();
+        }
+        else if (participants != null && participants.size() % 2 == 0)
         {
             Random random = new Random();
 
             for (Object participant : safeList)
             {
-                int index = random.nextInt(safeList.size() - 1);
+                int index;
+                index = random.nextInt(safeList.size() - 1);
                 _matchedOpponents.add((TournamentParticipant) safeList.get(index));
                 safeList.remove(index);
+                random = new Random();
                 index = random.nextInt(safeList.size() - 1);
                 _matchedOpponents.add((TournamentParticipant) safeList.get(index));
                 safeList.remove(index);
@@ -74,11 +86,17 @@ public class SingleEliminationTournament extends AbstractTournament
             _matchedOpponents.add(0, (TournamentParticipant) safeList.get(index));
             safeList.remove(index);
             participants.remove(index);
+            _amountOfPlayersAtRoundStart = _matchedOpponents.size();
             matchOpponents(participants);
 
         }
     }
 
+    /**
+     * Takes an ArrayList of TournamentParticipants and turns it into a concurrentList that can be uses only by one Thread at a time
+     * @param participants A List of TournamentParticipants
+     * @return A Concurrent List with the Tournament Participants
+     */
     private CopyOnWriteArrayList<TournamentParticipant> makeConcurrentList(ArrayList<TournamentParticipant> participants)
     {
         CopyOnWriteArrayList<TournamentParticipant> safeList = new CopyOnWriteArrayList<TournamentParticipant>();
@@ -97,7 +115,6 @@ public class SingleEliminationTournament extends AbstractTournament
     private void onRoundEnd()
     {
         ArrayList<TournamentParticipant> participants = new ArrayList<>();
-        ++_round;
         for (TournamentParticipant participant : _matchedOpponents)
         {
             participants.add(participant);

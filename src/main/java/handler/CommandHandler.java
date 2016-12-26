@@ -482,7 +482,9 @@ public class CommandHandler implements Observer
                     break;
 
                 case "registerLoss":
-                    _tournamentService.registerLoss(getPollName(messageContent), getOptions(messageContent, 1).get(0));
+                    event.getChannel().sendMessage(_tournamentService
+                            .registerLoss(getPollName(messageContent), getOptions(messageContent, 1).get(0)))
+                            .queue();
                     break;
 
                 default:
@@ -565,7 +567,7 @@ public class CommandHandler implements Observer
                 --startingPoint;
             }
         }
-        while (startingPoint != 0);
+        while (startingPoint > 0);
 
         for (int i = such; i <= messageContent.length - 1; ++i)
         {
