@@ -104,5 +104,6 @@ public class SingleEliminationTournament extends AbstractTournament
         }
 
         matchOpponents(participants);
+        listParticipants();
     }
 }
