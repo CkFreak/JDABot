@@ -5,6 +5,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import handler.AudioPlayerSendHandler;
 import handler.TrackScheduler;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.managers.AudioManager;
 
@@ -62,14 +63,27 @@ public class GuildMusicManager
      * @param channel The channel the bots needs to connect to
      * @param guild The guild the @channel belongs to
      */
-  public void connectToAudioChannel(String channel, Guild guild)
+  public void connectToAudioChannel(String channel, Guild guild, Member member)
   {
-      List<VoiceChannel> voiceChannels = guild.getVoiceChannels();
-      for (VoiceChannel voiceChannel : voiceChannels)
+      if (member != null)
       {
-          if (voiceChannel.getName().equalsIgnoreCase(channel))
+          if (member.getVoiceState().getChannel() != null)
           {
-              _audioManager.openAudioConnection(voiceChannel);
+              _audioManager.openAudioConnection(member.getVoiceState().getChannel());
+          }
+      }
+      else
+      {
+          if (channel != null && guild != null)
+          {
+              List<VoiceChannel> voiceChannels = guild.getVoiceChannels();
+              for (VoiceChannel voiceChannel : voiceChannels)
+              {
+                  if (voiceChannel.getName().equalsIgnoreCase(channel))
+                  {
+                      _audioManager.openAudioConnection(voiceChannel);
+                  }
+              }
           }
       }
   }

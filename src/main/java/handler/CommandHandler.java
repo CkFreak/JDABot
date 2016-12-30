@@ -240,6 +240,7 @@ public class CommandHandler implements Observer
                     else
                     {
                         GuildMusicManager guildMusicManager = getGuildMusicManager(event);
+                        guildMusicManager.connectToAudioChannel(null, null, event.getMember());
                         guildMusicManager.getScheduler().registerNewTrack(messageContent[1], _musicControlManager.getPlayerManager(), event);
                     }
                     break;
@@ -359,7 +360,8 @@ public class CommandHandler implements Observer
                 {
                     if (messageContent.length == 2)
                     {
-                        _musicControlManager.getGuildMusicManager(event.getGuild(), event).connectToAudioChannel(messageContent[1], event.getGuild());
+                        _musicControlManager.getGuildMusicManager(event.getGuild(), event).connectToAudioChannel(messageContent[1],
+                                event.getGuild(), event.getMember());
                     }
                 }
                 break;

@@ -43,7 +43,7 @@ public class TrackScheduler extends AudioEventAdapter
      *
      * @param track The track to play or add to _tracks.
      */
-    public void queue(AudioTrack track)
+    private void queue(AudioTrack track)
     {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
@@ -63,10 +63,9 @@ public class TrackScheduler extends AudioEventAdapter
      * Gets the next track in the list unless it is the last track then this gives the first
      * If Shuffleing is enabled a random track will be selected form the track list
      *
-     * @param currentTrack The track that is currently playing so we can indentify the one following it in the list
      * @return The next track or if the last one was last in the list the first list element
      */
-    public AudioTrack getNextTrack(AudioTrack currentTrack)
+    private AudioTrack getNextTrack()
     {
         if (_shuffle)
         {
@@ -85,7 +84,7 @@ public class TrackScheduler extends AudioEventAdapter
         // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext)
         {
-            _player.startTrack(getNextTrack(track), false);
+            _player.startTrack(getNextTrack(), false);
             _currentlyPlayingTrack = _player.getPlayingTrack();
         }
     }
@@ -126,7 +125,7 @@ public class TrackScheduler extends AudioEventAdapter
      *
      * @return the track list
      */
-    public ArrayList<AudioTrack> getTrackList()
+    private ArrayList<AudioTrack> getTrackList()
     {
         return _tracks;
     }
@@ -157,7 +156,7 @@ public class TrackScheduler extends AudioEventAdapter
      * @return The current playlist
      */
     //TODO sign limit beachten
-    public Message getPlaylist()
+     Message getPlaylist()
     {
         MessageBuilder builder = new MessageBuilder();
         ArrayList<AudioTrack> trackList = getTrackList();
@@ -185,21 +184,22 @@ public class TrackScheduler extends AudioEventAdapter
      *
      * @param enabled true to enable false to disable
      */
-    public void setShuffle(boolean enabled)
+    void setShuffle(boolean enabled)
     {
         _shuffle = enabled;
     }
 
-    public void restartSong()
+    void restartSong()
     {
         replaceTrack(_player.getPlayingTrack());
         _player.startTrack(_currentlyPlayingTrack, false);
     }
 
-    public void resetPlayer()
+    void resetPlayer()
     {
         _tracks = new ArrayList<>();
         _currentlyPlayingTrack = null;
+        _player.destroy();
     }
 
     public boolean isPaused()
@@ -218,7 +218,7 @@ public class TrackScheduler extends AudioEventAdapter
     /**
      * Pauses the _player
      */
-    public void pausePlayer()
+    void pausePlayer()
     {
         _player.setPaused(true);
     }
@@ -227,7 +227,7 @@ public class TrackScheduler extends AudioEventAdapter
      * Stops the playback of the current track.
      * After calling this method the _player will start at the first song from the playlist
      */
-    public void stopPlayer()
+    void stopPlayer()
     {
         _player.stopTrack();
         _currentlyPlayingTrack = null;
@@ -236,7 +236,7 @@ public class TrackScheduler extends AudioEventAdapter
     /**
      * Resumes the playler from pause otherwise just starts it with the next song in the list
      */
-    public void resumePlayer()
+    void resumePlayer()
     {
         if (_player.isPaused())
         {
@@ -248,9 +248,9 @@ public class TrackScheduler extends AudioEventAdapter
         }
     }
 
-    public void skip()
+    void skip()
     {
-        _player.startTrack(getNextTrack(_currentlyPlayingTrack), false);
+        _player.startTrack(getNextTrack(), false);
         replaceTrack(_currentlyPlayingTrack);
         _currentlyPlayingTrack = _player.getPlayingTrack();
     }
@@ -260,7 +260,7 @@ public class TrackScheduler extends AudioEventAdapter
      *
      * @param trackNumber the specified position of the track
      */
-    public void startSpecificTrack(int trackNumber)
+    void startSpecificTrack(int trackNumber)
     {
         _player.startTrack(getSpecificTrack(trackNumber), false);
         replaceTrack(_currentlyPlayingTrack);
@@ -271,7 +271,7 @@ public class TrackScheduler extends AudioEventAdapter
      * Sets the Volume of the player (Interval from 0 to 150)
      * @param volume The desired Volume
      */
-    public void setVolume(int volume)
+    void setVolume(int volume)
     {
         if (volume > 0 && volume <= 150)
         {
@@ -279,7 +279,7 @@ public class TrackScheduler extends AudioEventAdapter
         }
     }
 
-    public Message songInfo()
+    Message songInfo()
     {
         MessageBuilder builder = new MessageBuilder();
         int position = _tracks.indexOf(_currentlyPlayingTrack);
@@ -296,7 +296,7 @@ public class TrackScheduler extends AudioEventAdapter
      * @param src The URL to the track that should be played
      * @param event The MessageReceivedEvent that belongs to the message
      */
-     public void registerNewTrack(String src, AudioPlayerManager manager, MessageReceivedEvent event)
+     void registerNewTrack(String src, AudioPlayerManager manager, MessageReceivedEvent event)
      {
         event.getChannel().
 
@@ -314,7 +314,6 @@ public class TrackScheduler extends AudioEventAdapter
                      event.getChannel().sendMessage("Track was loaded").queue();
                      if (_player.isPaused())
                      {
-                         if (event.getAuthor().)
                          event.getChannel().sendMessage("And the player has started to play").queue();
                      }
                      queue(track);
