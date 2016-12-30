@@ -156,6 +156,7 @@ public class TrackScheduler extends AudioEventAdapter
      *
      * @return The current playlist
      */
+    //TODO sign limit beachten
     public Message getPlaylist()
     {
         MessageBuilder builder = new MessageBuilder();

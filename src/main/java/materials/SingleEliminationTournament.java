@@ -51,7 +51,6 @@ public class SingleEliminationTournament extends AbstractTournament
     @Override
     public void matchOpponents(ArrayList<TournamentParticipant> participants)
     {
-        //TODO IlligalArgumentException: bound must be positive fixen
         CopyOnWriteArrayList safeList = makeConcurrentList(participants);
 
 
