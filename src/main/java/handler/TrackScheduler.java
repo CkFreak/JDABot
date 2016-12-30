@@ -314,6 +314,7 @@ public class TrackScheduler extends AudioEventAdapter
                      event.getChannel().sendMessage("Track was loaded").queue();
                      if (_player.isPaused())
                      {
+                         if (event.getAuthor().)
                          event.getChannel().sendMessage("And the player has started to play").queue();
                      }
                      queue(track);
