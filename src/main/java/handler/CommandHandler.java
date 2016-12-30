@@ -128,7 +128,6 @@ public class CommandHandler implements Observer
             event.getChannel()
                     .sendTyping()
                     .queue();
-            ;
 
             switch (messageContent[0].substring(1))
             {
@@ -191,7 +190,7 @@ public class CommandHandler implements Observer
                     _commander.deleteChannelMessages(event, amount);
                     event.getChannel()
                             .sendMessage(
-                                    "Es wurden " + amount + " Nachrichten gelöscht.")
+                                     amount + " Messages have been deleted.")
                             .queue();
                     break;
 
@@ -388,20 +387,10 @@ public class CommandHandler implements Observer
                     break;
 
                 case "changeGame":
-                    try
-                    {
                         event.getMessage()
                                 .deleteMessage()
-                                .block();
-                    }
-                    catch (RateLimitedException e)
-                    {
-                        event.getChannel().sendMessage("A RateLimitedException occured. This should not have happened!").queue();
-                    }
-                    finally
-                    {
+                                .complete();
                         _commander.changeGame(_jda, getGameName(messageContent));
-                    }
                     break;
 
                 case "startPVote":
@@ -490,6 +479,11 @@ public class CommandHandler implements Observer
                     break;
 
                 case "registerLoss":
+                    if (messageContent.length < 3)
+                    {
+                        event.getChannel().sendMessage("Please enter the name of the tournament").queue();
+                        break;
+                    }
                     event.getChannel().sendMessage(_tournamentService
                             .registerLoss(getPollName(messageContent), getOptions(messageContent, 1).get(0)))
                             .queue();

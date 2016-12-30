@@ -156,13 +156,13 @@ public class TournamentService
             {
                 if (safeList.size() % 2 == 0)
                 {
-                    builder.append(safeList.get(0).getName() + " vs " + safeList.get(1).getName() + "\n");
+                    builder.append("***" + safeList.get(0).getName() + "***" + " vs " + "***" + safeList.get(1).getName() + "***" + "\n");
                     safeList.remove(1);
                     safeList.remove(0);
                 }
                 else
                 {
-                    builder.append(safeList.get(0).getName() + "Safe Round \n");
+                    builder.append("***" + safeList.get(0).getName() + "***" + "Safe Round \n");
                     safeList.remove(0);
                 }
             }
@@ -177,7 +177,7 @@ public class TournamentService
      */
     private List<TournamentParticipant> makeConcurrentList(List<TournamentParticipant> participants)
     {
-        CopyOnWriteArrayList<TournamentParticipant> safeList = new CopyOnWriteArrayList<TournamentParticipant>();
+        CopyOnWriteArrayList<TournamentParticipant> safeList = new CopyOnWriteArrayList<>();
 
         for (TournamentParticipant participant : participants)
         {

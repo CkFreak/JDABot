@@ -2,6 +2,7 @@ package materials;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import enums.TournamentMode;
@@ -25,22 +26,22 @@ public abstract class AbstractTournament
     /**
 	 * The mode this Tournament is being played in
 	 */
-    protected TournamentMode _mode;
+    TournamentMode _mode;
 
     /**
      * The amount of players at round start
      */
-    protected int _amountOfPlayersAtRoundStart;
+    int _amountOfPlayersAtRoundStart;
 
     /**
      * A list with all participants of this Tournament
      */
-    protected final ArrayList<TournamentParticipant> _participants;
+    final ArrayList<TournamentParticipant> _participants;
 
     /**
      * A list with all participants now in matched order. This list is only filled, when matchOpponents has been called
      */
-    protected LinkedList<TournamentParticipant> _matchedOpponents;
+    LinkedList<TournamentParticipant> _matchedOpponents;
     
     /**
      * Instatiates a new Abstract Tournament
@@ -74,25 +75,6 @@ public abstract class AbstractTournament
     {
         return _participants;
     }
-    
-    
-    /**
-     * Gives the mode of this tournament
-     * @return the tournament mode
-     */
-    public TournamentMode getMode()
-    {
-        return _mode;
-    }
-    
-    /**
-     * Adds the named user to the tournament
-     * @param participant the user that takes part in the tournament
-     */
-    public void addParticipant(TournamentParticipant participant)
-    {
-        _participants.add(participant);
-    }
 
     /**
      * Announces the winner of a tournament
@@ -102,7 +84,7 @@ public abstract class AbstractTournament
     {
         MessageBuilder builder = new MessageBuilder();
 
-        return builder.append("The winner of this tournament is: ***" + _matchedOpponents.getFirst().getName() + "***").build();
+        return builder.append("The winner of this tournament is: ***" + _matchedOpponents.poll().getName() + "***").build();
     }
 
     public String getName()
@@ -122,7 +104,7 @@ public abstract class AbstractTournament
      * Makes a String of all remaining participants in the Tournament
      * @return a String with all participants in it.
      */
-    public String listParticipants()
+    String listParticipants()
     {
         String participants = "\n";
         for (TournamentParticipant parti : _matchedOpponents)
@@ -137,7 +119,7 @@ public abstract class AbstractTournament
      * @param participants A List of TournamentParticipants
      * @return A Concurrent List with the Tournament Participants
      */
-    protected CopyOnWriteArrayList<TournamentParticipant> makeConcurrentList(ArrayList<TournamentParticipant> participants)
+    CopyOnWriteArrayList<TournamentParticipant> makeConcurrentList(List<TournamentParticipant> participants)
     {
         CopyOnWriteArrayList<TournamentParticipant> safeList = new CopyOnWriteArrayList<TournamentParticipant>();
 
@@ -147,6 +129,53 @@ public abstract class AbstractTournament
         }
 
         return safeList;
+    }
+
+    /**
+     * Gives a String with all opponents in the order in which they shall play each other
+     * @param participants a list with the opponents matched
+     * @return a String with all opponents in matched order
+     */
+    String getMatchedOpponents(LinkedList<TournamentParticipant> participants)
+    {
+        StringBuilder builder = new StringBuilder();
+        CopyOnWriteArrayList<TournamentParticipant> safeList = makeConcurrentList(participants);
+
+
+        for (TournamentParticipant parti : safeList)
+        {
+            if(!safeList.isEmpty())
+            {
+                if (safeList.size() % 2 == 0)
+                {
+                    builder.append("***" + safeList.get(0).getName() + "***" + " vs " + "***" + safeList.get(1).getName() + "***" + "\n");
+                    safeList.remove(1);
+                    safeList.remove(0);
+                }
+                else
+                {
+                    builder.append("***" + safeList.get(0).getName() + "***" + "Safe Round \n");
+                    safeList.remove(0);
+                }
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Makes a new LinkedList from a CopyOnWriteArrayList
+     * @param participants the CopyOnWriteArrayList that is to be converted
+     * @return a new LinkedList
+     */
+    LinkedList<TournamentParticipant> makeLinkedListFromCopyOnWriteList(CopyOnWriteArrayList<TournamentParticipant> participants)
+    {
+        LinkedList<TournamentParticipant> returnList = new LinkedList<>();
+
+        for (TournamentParticipant participant : participants)
+        {
+            returnList.add(participant);
+        }
+        return returnList;
     }
 
 

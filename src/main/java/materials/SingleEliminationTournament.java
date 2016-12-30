@@ -23,7 +23,6 @@ public class SingleEliminationTournament extends AbstractTournament
 
     /**
      * Removes the loser from the Tournament
-     * MAY RETURN NULL
      */
     public Message registerLoss(TournamentParticipant loser)
     {
@@ -33,17 +32,21 @@ public class SingleEliminationTournament extends AbstractTournament
             if (participant.equals(loser))
             {
                 _matchedOpponents.remove(participant);
-                builder.append("Participants are: " + listParticipants());
+                builder.append("Opponents are: " + getMatchedOpponents(_matchedOpponents));
             }
-            if (_matchedOpponents.size() == 1)
+        }
+        if (_matchedOpponents.size() == 1)
             {
                 return announceWinner();
             }
-            if (_matchedOpponents.size() <= _amountOfPlayersAtRoundStart/2)
+            if (_matchedOpponents.size() <= _amountOfPlayersAtRoundStart/2.0)
             {
-                onRoundEnd();
+                builder.append(onRoundEnd());
             }
-        }
+            if (_matchedOpponents.size() == 2)
+            {
+                builder.append(onRoundEnd());
+            }
         return builder.build();
     }
 
@@ -95,7 +98,7 @@ public class SingleEliminationTournament extends AbstractTournament
     /**
      * This method is called, when a Round ends and starts the next round
      */
-    private void onRoundEnd()
+    private String onRoundEnd()
     {
         ArrayList<TournamentParticipant> participants = new ArrayList<>();
         for (TournamentParticipant participant : _matchedOpponents)
@@ -104,6 +107,7 @@ public class SingleEliminationTournament extends AbstractTournament
         }
 
         matchOpponents(participants);
-        listParticipants();
+        _amountOfPlayersAtRoundStart = _matchedOpponents.size();
+        return getMatchedOpponents(_matchedOpponents);
     }
 }

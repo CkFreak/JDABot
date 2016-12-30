@@ -154,26 +154,14 @@ public class CommandService
      */
     public void deleteChannelMessages(MessageReceivedEvent event, int amount)
     {
-        try
-        {
             List<Message> recentMessages = event.getChannel()
                 .getHistory()
-                .retrievePast(amount)
-                .block();
+                .retrievePast(amount).complete();
 
             for (Message message : recentMessages)
             {
                 message.deleteMessage().queue();
             }
-        }
-        catch (RateLimitedException e)
-        {
-            event.getChannel()
-                .sendMessage(
-                        "There has been a RateLimitedExeption during deletion. Please contact a Dev so he can fix it.");
-            e.printStackTrace();
-        }
-
     }
 
     /**
