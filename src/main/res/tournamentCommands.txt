@@ -1,4 +1,5 @@
 Alle < und > sind Platzhalter und werden nicht mit eingegeben! Bei Commands mit "_" muss nach jedem Teilnehmer ein "_" eingefügt werden
 Turniermodi sind: Singe Elimination, Double Elimination, Tripple Elimination, Round Robin.
 Momentan funktionieren: Single Elimination
-**startTournament <name>_ <mode>_ <Beliebige Anzahl an Teilnehmern>_**: Startet ein neues Turnier in dem genannten Modus, sofern dieser existiert.
+**startTournament <Name des Turniers>_ <mode>_ <Beliebige Anzahl an Teilnehmern>_**: Startet ein neues Turnier in dem genannten Modus, sofern dieser existiert.
+**registerLoss <Name des Turniers>_ <Verlierer des Matches>_**: Fügt eine Niederlage auf den genannten Spieler hinzu. Je nach Turniermodus wird nun gehandelt.
