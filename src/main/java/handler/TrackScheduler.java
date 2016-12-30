@@ -13,9 +13,7 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * This class schedules tracks for the Audioplayer. It contains the list of tracks.
