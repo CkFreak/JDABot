@@ -1,4 +1,5 @@
 **helpMusic**
 **helpGeneral**
 **helpPoll**
+**helpTournament**
 **helpEmoji**

@@ -45,6 +45,8 @@ public class CommandHandler implements Observer
 
     private final static String MUSIC_HELP_COMMAND_FILE = "src/main/res/musicCommands.txt";
 
+    private final static String TOURNAMENT_HELP_COMMAND_FILE = "src/main/res/tournamentCommands.txt";
+
     private static final String THE_GAME_INITIALIZATION = "The Game has been initialized!";
 
     private static final String INSUFICENT_RIGHTS_MESSAGE = "You do not have sufficent permissions to do that";
@@ -152,6 +154,10 @@ public class CommandHandler implements Observer
 
                 case "helpEmoji":
                     event.getChannel().sendMessage(_commander.getCommands(EMOJI_HELP_COMMAND_FILE)).queue();
+                    break;
+
+                case "helpTournament":
+                    event.getChannel().sendMessage(_commander.getCommands(TOURNAMENT_HELP_COMMAND_FILE)).queue();
                     break;
 
                 case "admin":
