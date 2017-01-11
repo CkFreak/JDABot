@@ -124,7 +124,7 @@ public class TournamentService
         {
             if (tournament1.getName().equals(tournament))
             {
-                for (TournamentParticipant participant : tournament1.getParticipants())
+                for (TournamentParticipant participant : tournament1.getMatchedOpponents())
                 {
                     if (participant.getName().equals(player))
                     {

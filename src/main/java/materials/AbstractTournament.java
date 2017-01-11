@@ -84,7 +84,7 @@ public abstract class AbstractTournament
     {
         MessageBuilder builder = new MessageBuilder();
 
-        return builder.append("The winner of this tournament is: ***" + _matchedOpponents.poll().getName() + "***").build();
+        return builder.append("The winner of the tournament is: ***" + _matchedOpponents.poll().getName() + "***").build();
     }
 
     public String getName()
