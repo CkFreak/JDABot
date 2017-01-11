@@ -5,6 +5,7 @@ build/
 .classpath
 .project
 .idea
+tokens.txt
 
 # Ignore Gradle GUI config
 gradle-app.setting
