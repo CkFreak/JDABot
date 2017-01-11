@@ -70,7 +70,6 @@ public class PollService
 
     /**
      * Ends the Poll if the user that ends it is also the initiator
-     * @param polls a list with all running polls
      * @param name the name of the poll
      * @param user the requesting user
      * @return true if it suceeds false otherwise
@@ -87,7 +86,7 @@ public class PollService
                 return pollFachwert.calculateResults();
             }
         }
-        builder.appendString("Leider gibt es keine Poll mit dem Namen " + name
+        builder.append("Leider gibt es keine Poll mit dem Namen " + name
                 + " oder du hast diese nicht gestartet");
         Message msg = builder.build();
         removePoll(name);
@@ -121,7 +120,7 @@ public class PollService
 
         for (AbstractPoll abstractPoll : _polls)
         {
-            builder.appendString(abstractPoll.getName() + "\n");
+            builder.append(abstractPoll.getName() + "\n");
         }
         return builder.build();
     }
@@ -147,7 +146,7 @@ public class PollService
                 }
             }
         }
-        return builder.appendString(
+        return builder.append(
                 "The specified poll has not been found or is anonymous!")
             .build();
     }
@@ -156,8 +155,8 @@ public class PollService
     /**
      * Votes for one option
      * @param name The polls name
-     * @param option the choosen option
-     * @param polls a list with all running polls
+     * @param options the choosen option
+     * @param event The event to be passed on down to the polls themselves
      */
     public Message vote(String name, ArrayList<String> options, User user, MessageReceivedEvent event)
     {
@@ -180,7 +179,7 @@ public class PollService
             }
         }
         return new MessageBuilder()
-            .appendString("Something went wrong. Please try again!")
+            .append("Something went wrong. Please try again!")
             .build();
     }
 

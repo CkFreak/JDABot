@@ -83,7 +83,7 @@ public abstract class AbstractPoll
         if (totalVotes == 0)
         {
             builder
-                .appendString("Es wurden keine Votes für diese Poll abgegeben");
+                .append("Es wurden keine Votes für diese Poll abgegeben");
         }
 
         else
@@ -94,7 +94,7 @@ public abstract class AbstractPoll
                 result = ((_answers[i][0]) / totalVotes * 100);
                 if (_options.get(i) != null)
                 {
-                    builder.appendString("Das Ergebnis für Option " + (i + 1) + " : "
+                    builder.append("Das Ergebnis für Option " + (i + 1) + " : "
                             + _options.get(i).toString() + " ist: " + result + "%\n");
                     result = 0;
                 }

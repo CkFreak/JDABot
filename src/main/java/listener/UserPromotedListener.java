@@ -20,7 +20,7 @@ public class UserPromotedListener extends ListenerAdapter
     public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event)
     {
         MessageBuilder msg = new MessageBuilder();
-        msg.appendString(event.getMember()
+        msg.append(event.getMember()
             .getAsMention() + " now is: " + getRoleAsStringAdd(event));
 
         event.getGuild()
@@ -32,7 +32,7 @@ public class UserPromotedListener extends ListenerAdapter
     public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event)
     {
         MessageBuilder msg = new MessageBuilder();
-        msg.appendString(event.getMember()
+        msg.append(event.getMember()
             .getAsMention() + " was demoted and is no longer: "
                 + getRoleAsStringRemove(event));
 
@@ -44,7 +44,7 @@ public class UserPromotedListener extends ListenerAdapter
     /**
      * Gets a String of the Roles that have been removed without all the numbers in front of it
      * @param event A GuildMemberRoleEvent to get all the roles from 
-     * @return a strign with only the Role in it
+     * @return a string with only the Role in it
      */
     private String getRoleAsStringRemove(GuildMemberRoleRemoveEvent event)
     {

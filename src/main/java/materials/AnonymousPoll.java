@@ -44,12 +44,12 @@ public class AnonymousPoll extends AbstractPoll
                     _answers[i][0] += 1;
                     registerVote(name, user);
                     return builder
-                        .appendString("Der Vote wurde erfolgreich aufgenommen!")
+                        .append("Der Vote wurde erfolgreich aufgenommen!")
                         .build();
                 }
             }
         }
-        return builder.appendString("Du hast bereits abgestimmt!")
+        return builder.append("Du hast bereits abgestimmt!")
             .build();
 
     }
