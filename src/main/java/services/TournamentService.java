@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.sun.istack.internal.Nullable;
 import enums.TournamentMode;
 import materials.AbstractTournament;
 import materials.SingleEliminationTournament;
