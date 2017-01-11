@@ -6,6 +6,7 @@ import net.dv8tion.jda.core.entities.Message;
 import values.TournamentParticipant;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -32,7 +33,8 @@ public class SingleEliminationTournament extends AbstractTournament
             if (participant.equals(loser))
             {
                 _matchedOpponents.remove(participant);
-                builder.append("Opponents are: " + getMatchedOpponents(_matchedOpponents));
+                builder.append("Opponents are: \n");
+                break;
             }
         }
         if (_matchedOpponents.size() == 1)
@@ -46,6 +48,10 @@ public class SingleEliminationTournament extends AbstractTournament
             if (_matchedOpponents.size() == 2)
             {
                 builder.append(onRoundEnd());
+            }
+            if (_matchedOpponents.size() > _amountOfPlayersAtRoundStart/2.0 && _matchedOpponents.size() != 2)
+            {
+                builder.append(getMatchedOpponents(_matchedOpponents));
             }
         return builder.build();
     }
@@ -106,6 +112,7 @@ public class SingleEliminationTournament extends AbstractTournament
             participants.add(participant);
         }
 
+        _matchedOpponents = new LinkedList<>();
         matchOpponents(participants);
         _amountOfPlayersAtRoundStart = _matchedOpponents.size();
         return getMatchedOpponents(_matchedOpponents);

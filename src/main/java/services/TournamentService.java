@@ -162,7 +162,7 @@ public class TournamentService
                 }
                 else
                 {
-                    builder.append("***" + safeList.get(0).getName() + "***" + "Safe Round \n");
+                    builder.append("***" + safeList.get(0).getName() + "***" + " is in the Safe Round \n");
                     safeList.remove(0);
                 }
             }
