@@ -123,8 +123,6 @@ public class CommandHandler implements Observer
         {
             //splits the message at spaces
             String[] messageContent = message.split("\\s+");
-            event.getMessage()
-                    .deleteMessage().queue();
             event.getChannel()
                     .sendTyping()
                     .queue();
@@ -497,6 +495,8 @@ public class CommandHandler implements Observer
 
             }
         }
+        event.getMessage()
+                    .deleteMessage().queue();
     }
 
     /**

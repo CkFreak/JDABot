@@ -301,7 +301,7 @@ public class CommandService
 
     /**
      * Shuts the bot down and closes all open connections
-     * @param event The MessagereceivedEvent that is used to check admin priviliges
+     * @param event The MessageReceivedEvent that is used to check admin privileges
      */
     public void reagiereAufShutdown(MessageReceivedEvent event)
     {
@@ -320,7 +320,7 @@ public class CommandService
     }
 
     /**
-     * Checks the user for admin priviliges
+     * Checks the user for admin privileges
      * @param user the user to be checked
      * @param guild The Guild from which the message came
      * @return true, if the user is admin false otherwise
