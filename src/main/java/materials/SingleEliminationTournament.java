@@ -25,6 +25,7 @@ public class SingleEliminationTournament extends AbstractTournament
     /**
      * Removes the loser from the Tournament
      */
+    @Override
     public Message registerLoss(TournamentParticipant loser)
     {
         MessageBuilder builder = new MessageBuilder();

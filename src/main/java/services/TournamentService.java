@@ -127,10 +127,7 @@ public class TournamentService
                 {
                     if (participant.getName().equals(player))
                     {
-                        if (tournament1 instanceof SingleEliminationTournament)
-                        {
-                            return ((SingleEliminationTournament) tournament1).registerLoss(participant);
-                        }
+                            return tournament1.registerLoss(participant);
                     }
                 }
             }

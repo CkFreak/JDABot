@@ -64,7 +64,8 @@ public abstract class AbstractTournament
      * @return an arrayList with the opponents
      */
     public abstract void matchOpponents(ArrayList<TournamentParticipant> participants);
-    
+
+    public abstract Message registerLoss(TournamentParticipant participant);
     
     
     /**
