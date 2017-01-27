@@ -8,6 +8,7 @@ import java.util.List;
 import javax.security.auth.login.LoginException;
 
 import listener.CommandListener;
+import listener.MessageListener;
 import listener.ReadyListener;
 import listener.UserPromotedListener;
 import net.dv8tion.jda.core.AccountType;
@@ -34,6 +35,7 @@ public class StartUp
                 mciJda.addEventListener(new ReadyListener());
                 mciJda.addEventListener(new CommandListener(mciJda));
                 mciJda.addEventListener(new UserPromotedListener());
+                mciJda.addEventListener(new MessageListener());
                mciJda.getPresence().setGame(Game.of("Hello Kitty Online"));
             }
             catch (RateLimitedException e)
@@ -49,6 +51,7 @@ public class StartUp
                 mogeJda.addEventListener(new ReadyListener());
                 mogeJda.addEventListener(new CommandListener(mogeJda));
                 mogeJda.addEventListener(new UserPromotedListener());
+                mogeJda.addEventListener(new MessageListener());
                 mogeJda.getPresence().setGame(Game.of("DOTA 2"));
 
                 
@@ -65,6 +68,7 @@ public class StartUp
                 aquilaJda.addEventListener(new ReadyListener());
                 aquilaJda.addEventListener(new CommandListener(aquilaJda));
                 aquilaJda.addEventListener(new UserPromotedListener());
+                aquilaJda.addEventListener(new MessageListener());
                 aquilaJda.getPresence().setGame(Game.of("League of Legends"));
             }
             catch (RateLimitedException e)

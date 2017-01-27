@@ -35,6 +35,10 @@ dependencies {
     
 }
 
+test {
+  testLogging.showStandardStreams = true
+}
+
 // Change this to the name of your main class
 mainClassName = 'start.StartUp'
 
