@@ -172,7 +172,7 @@ public class CommandHandler implements Observer
                         event.getChannel().sendMessage("You have to specify a user and a role").queue();
                         break;
                     }
-                    if(_commander.isModerator(event.getMember(), event) || _commander.isAdmin(event.getMember(), event.getGuild()))
+                    if(_commander.isModerator() || _commander.isAdmin())
                     {
                         if (_commander.promoteUser(event, messageContent[1], messageContent[2]))
                         {
@@ -323,7 +323,7 @@ public class CommandHandler implements Observer
                 break;
 
                 case "reset":
-                    if (_commander.isAdmin(event.getMember(), event.getGuild()))
+                    if (_commander.isAdmin())
                     {
                         GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                         guildMusicManager.getScheduler().resetPlayer();

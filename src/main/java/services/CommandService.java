@@ -10,6 +10,7 @@ import java.util.List;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -132,8 +133,8 @@ public class CommandService
     public void deleteAllMessages(MessageReceivedEvent event)
     {
 
-        if (isAdmin(event.getMember(), event.getGuild())
-                || isModerator(event.getMember(), event)
+        if (isAdmin()
+                || isModerator()
                 || isOwnerOfServer(event.getAuthor(), event.getGuild()))
         {
             //Channel getten und dann alle Permissions nehmen und auf einen neuen Channel packen, der am besten an der selben
@@ -321,53 +322,39 @@ public class CommandService
 
     /**
      * Checks the user for admin privileges
-     * @param user the user to be checked
-     * @param guild The Guild from which the message came
      * @return true, if the user is admin false otherwise
      */
-    public boolean isAdmin(Member user, Guild guild)
+    public boolean isAdmin()
     {
-        Role admin = null;
-
         for (Role role : _roles)
         {
-            if (role.getName().equals("Admin"))
+            if (role.hasPermission(Permission.ADMINISTRATOR))
             {
-                admin = role;
-                break;
+                return true;
             }
         }
 
-        List<Member> admins = guild
-            .getMembersWithRoles(admin);
-
-        return admins.contains(user);
+        return false;
     }
 
     /**
      * Checks for moderator priviliges
-     * @param user The user that being checked
-     * @param event The MessagereceivedEvent
      * @return true if the user is moderator, false otherwise
      */
-    public boolean isModerator(Member user, MessageReceivedEvent event)
+    public boolean isModerator()
     {
-
-        Role moderator = null;
-
         for (Role role : _roles)
         {
-            if (role.getName().equals("Moderator"))
+            if (role.hasPermission(Permission.MANAGE_ROLES)
+                    || role.hasPermission(Permission.MESSAGE_MANAGE) || role.hasPermission(Permission.BAN_MEMBERS)
+                    || role.hasPermission(Permission.MANAGE_CHANNEL)
+                    || role.hasPermission(Permission.MESSAGE_HISTORY))
             {
-                moderator = role;
-                break;
+                return true;
             }
         }
 
-        List<Member> moderators = event.getGuild()
-            .getMembersWithRoles(moderator);
-
-        return moderators.contains(event.getAuthor());
+        return false;
     }
 
     /**
