@@ -8,6 +8,7 @@ import enums.TournamentMode;
 import managers.GuildMusicManager;
 import managers.MusicControlManager;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import services.CommandService;
@@ -125,7 +126,9 @@ public class CommandHandler implements Observer
             String[] messageContent = message.split("\\s+");
             event.getChannel()
                     .sendTyping()
-                    .queue();
+                    .queue(s -> {
+                        event.getMessage().deleteMessage().queue();
+                    });
 
             switch (messageContent[0].substring(1))
             {
@@ -385,9 +388,6 @@ public class CommandHandler implements Observer
                     break;
 
                 case "changeGame":
-                        event.getMessage()
-                                .deleteMessage()
-                                .complete();
                         _commander.changeGame(_jda, getGameName(messageContent));
                     break;
 
@@ -495,8 +495,6 @@ public class CommandHandler implements Observer
 
             }
         }
-        event.getMessage()
-                    .deleteMessage().queue();
     }
 
     /**
