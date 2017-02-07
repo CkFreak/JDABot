@@ -68,7 +68,6 @@ public class SingleEliminationTournament extends AbstractTournament
         {
             _matchedOpponents.add((TournamentParticipant) safeList.get(0));
             _matchedOpponents.add((TournamentParticipant) safeList.get(1));
-            participants = null;
             _amountOfPlayersAtRoundStart = _matchedOpponents.size();
         }
         else if (participants != null && participants.size() % 2 == 0)
@@ -78,11 +77,11 @@ public class SingleEliminationTournament extends AbstractTournament
             for (Object participant : safeList)
             {
                 int index;
-                index = random.nextInt(safeList.size() - 1);
+                index = random.nextInt(getSafeBound(safeList.size()));
                 _matchedOpponents.add((TournamentParticipant) safeList.get(index));
                 safeList.remove(index);
                 random = new Random();
-                index = random.nextInt(safeList.size() - 1);
+                index = random.nextInt(getSafeBound(safeList.size()));
                 _matchedOpponents.add((TournamentParticipant) safeList.get(index));
                 safeList.remove(index);
             }
@@ -91,7 +90,7 @@ public class SingleEliminationTournament extends AbstractTournament
         else
         {
             Random random = new Random();
-            int index = random.nextInt(safeList.size() - 1);
+            int index = random.nextInt(getSafeBound(safeList.size()));
             _matchedOpponents.add(0, (TournamentParticipant) safeList.get(index));
             safeList.remove(index);
             participants.remove(index);
@@ -117,5 +116,22 @@ public class SingleEliminationTournament extends AbstractTournament
         matchOpponents(participants);
         _amountOfPlayersAtRoundStart = _matchedOpponents.size();
         return getMatchedOpponents(_matchedOpponents);
+    }
+
+    /**
+     * Gives a safe index to access lists with the random function of the Math class
+     * @param index the index that has to be at least 0
+     * @return an index that is definetly positive
+     */
+    private int getSafeBound(int index)
+    {
+        if (index <= 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return index -1;
+        }
     }
 }
