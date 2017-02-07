@@ -8,9 +8,7 @@ import enums.TournamentMode;
 import managers.GuildMusicManager;
 import managers.MusicControlManager;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import services.CommandService;
 import services.IJustLostTheGameService;
 import services.PollService;
@@ -378,7 +376,7 @@ public class CommandHandler implements Observer
 
                 case "shutdown":
                     event.getChannel().sendMessage("Going down for maintenance").queue();
-                    _commander.reagiereAufShutdown(event);
+                    _commander.reactToShutdown(event);
                     break;
 
                 case "mods":

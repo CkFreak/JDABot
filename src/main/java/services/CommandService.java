@@ -304,7 +304,7 @@ public class CommandService
      * Shuts the bot down and closes all open connections
      * @param event The MessageReceivedEvent that is used to check admin privileges
      */
-    public void reagiereAufShutdown(MessageReceivedEvent event)
+    public void reactToShutdown(MessageReceivedEvent event)
     {
         if(event.getMember().getRoles().contains(_roles.get(0)) || event.getMember().isOwner())
         {
