@@ -66,31 +66,33 @@ public class SingleEliminationTournament extends AbstractTournament
 
         if (participants.size() == 2)
         {
-            _matchedOpponents.add((TournamentParticipant) safeList.get(0));
-            _matchedOpponents.add((TournamentParticipant) safeList.get(1));
-            _amountOfPlayersAtRoundStart = _matchedOpponents.size();
+            matchTwoOpponents(safeList);
         }
-        else if (participants != null && participants.size() % 2 == 0)
+        else if (participants.size() % 2 == 0)
         {
             Random random = new Random();
 
-            for (Object participant : safeList)
+            while (safeList.size() > 2)
             {
                 int index;
-                index = random.nextInt(getSafeBound(safeList.size()));
+                int searchIndex = safeList.size();
+                index = random.nextInt(getSafeBound(searchIndex));
                 _matchedOpponents.add((TournamentParticipant) safeList.get(index));
                 safeList.remove(index);
                 random = new Random();
-                index = random.nextInt(getSafeBound(safeList.size()));
+                searchIndex = safeList.size();
+                index = random.nextInt(getSafeBound(searchIndex));
                 _matchedOpponents.add((TournamentParticipant) safeList.get(index));
                 safeList.remove(index);
             }
+            matchTwoOpponents(safeList);
             _amountOfPlayersAtRoundStart = _matchedOpponents.size();
         }
         else
         {
             Random random = new Random();
-            int index = random.nextInt(getSafeBound(safeList.size()));
+            int searchIndex = safeList.size();
+            int index = random.nextInt(getSafeBound(searchIndex));
             _matchedOpponents.add(0, (TournamentParticipant) safeList.get(index));
             safeList.remove(index);
             participants.remove(index);
@@ -98,6 +100,17 @@ public class SingleEliminationTournament extends AbstractTournament
             matchOpponents(participants);
 
         }
+    }
+
+    /**
+     * Matches two opponents against each other
+     * @param safeList The list, that contains the two opponents
+     */
+    private void matchTwoOpponents(CopyOnWriteArrayList safeList)
+    {
+        _matchedOpponents.add((TournamentParticipant) safeList.get(0));
+        _matchedOpponents.add((TournamentParticipant) safeList.get(1));
+        _amountOfPlayersAtRoundStart = _matchedOpponents.size();
     }
 
 
@@ -131,7 +144,7 @@ public class SingleEliminationTournament extends AbstractTournament
         }
         else
         {
-            return index -1;
+            return index;
         }
     }
 }
