@@ -1,29 +1,22 @@
 package services;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
 
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.PermissionOverride;
 import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
-import net.dv8tion.jda.core.managers.ChannelManager;
 import net.dv8tion.jda.core.managers.GuildController;
-import net.dv8tion.jda.core.managers.GuildManager;
 
 /**
  * A class that executes commands passed to it by the CommandHandler
@@ -309,6 +302,25 @@ public class CommandService
         if(event.getMember().getRoles().contains(_roles.get(0)) || event.getMember().isOwner())
         {
             _jda.shutdown();
+            String command = "sudo reboot";
+            Runtime runtime = Runtime.getRuntime();
+
+            try
+            {
+                Process process = runtime.exec(command);
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                String line;
+                while ((line = reader.readLine()) != null)
+                {
+                    System.out.println(line);
+                }
+            }
+            catch (IOException ex)
+            {
+                System.out.println("Shutdown interrupted for IO reasons");
+            }
         }
     }
 
