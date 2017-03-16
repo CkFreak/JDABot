@@ -45,7 +45,7 @@ public class Note
                 System.out.println(IOErrorMessage + _author.getId() + " the file for this user was not created");
             }
         }
-        _noteFile = getFile();
+        _noteFile = getFileForInit();
     }
 
     /**
@@ -73,6 +73,16 @@ public class Note
             System.out.println(IOErrorMessage + _author.getId());
         }
     }
+
+    /**
+     * Gets the NoteFile for the user
+     * @return The User's NoteFile
+     */
+    private File getFileForInit()
+    {
+        return new File(BASE_PATH + _author.getId());
+    }
+
 
     /**
      * Retrieves the users Note File and packs the content in a String
@@ -116,14 +126,5 @@ public class Note
     private  String getContent()
     {
         return _noteContent;
-    }
-
-    /**
-     * Gets the NoteFile for the user
-     * @return The User's NoteFile
-     */
-    private File getFile()
-    {
-        return _noteFile;
     }
 }
