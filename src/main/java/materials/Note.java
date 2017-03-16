@@ -30,7 +30,21 @@ public class Note
     public Note(User author)
     {
         _author = author;
-        _noteContent = getNoteFile();
+        try
+        {
+            _noteContent = getNoteFile();
+        }
+        catch (FileNotFoundException e)
+        {
+            try
+            {
+                new File(BASE_PATH + _author.getId()).createNewFile();
+            }
+            catch (IOException e1)
+            {
+                System.out.println(IOErrorMessage + _author.getId() + " the file for this user was not created");
+            }
+        }
         _noteFile = getFile();
     }
 
@@ -56,25 +70,15 @@ public class Note
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            System.out.println(IOErrorMessage + _author.getId());
         }
     }
-
-    /**
-     * Gets the NoteFile for the user
-     * @return The User's NoteFile
-     */
-    private File getFile()
-    {
-        return new File(BASE_PATH + _author.getId());
-    }
-
 
     /**
      * Retrieves the users Note File and packs the content in a String
      * @return the content of the Note File as String
      */
-    private String getNoteFile()
+    private String getNoteFile() throws FileNotFoundException
     {
         String content = ERROR;
         try
@@ -85,12 +89,15 @@ public class Note
             {
                 content += line + "\n";
             }
-            return content;
         }
         catch (IOException e)
         {
             System.out.println
                     (IOErrorMessage + _author.getId());
+        }
+        if (content.equals(ERROR))
+        {
+            throw new FileNotFoundException("The user does not have a file yet... \n creating user note file");
         }
         return content;
     }
@@ -109,5 +116,14 @@ public class Note
     private  String getContent()
     {
         return _noteContent;
+    }
+
+    /**
+     * Gets the NoteFile for the user
+     * @return The User's NoteFile
+     */
+    private File getFile()
+    {
+        return _noteFile;
     }
 }
