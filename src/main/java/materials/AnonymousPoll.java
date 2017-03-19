@@ -30,7 +30,7 @@ public class AnonymousPoll extends AbstractPoll
     @Override
     public Message votePrivately(String name, String option, User user, MessageReceivedEvent event)
     {
-        event.getMessage().deleteMessage();
+        event.getMessage().delete();
         
         MessageBuilder builder = new MessageBuilder();
 
