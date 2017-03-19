@@ -154,7 +154,7 @@ public class CommandService
 
             for (Message message : recentMessages)
             {
-                message.deleteMessage().queue();
+                message.delete().queue();
             }
     }
 
