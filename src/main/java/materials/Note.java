@@ -60,14 +60,17 @@ public class Note
         _noteContent += note;
         try
         {
-            _noteFile.createNewFile();
-            Writer writer = new BufferedWriter(
-                new OutputStreamWriter(new FileOutputStream(path), "utf-8"));
-        {
-            writer.write(_noteContent);
-            System.out.println("The File was created at: " + path);
-}
+            if (_noteFile.createNewFile())
+            {
+                Writer writer = new BufferedWriter(
+                        new OutputStreamWriter(new FileOutputStream(path), "utf-8"));
 
+                {
+                    writer.write(_noteContent);
+                    System.out.println("The File was created at: " + path);
+                }
+
+            }
         }
         catch (IOException e)
         {
@@ -78,11 +81,11 @@ public class Note
     /**
      * Deletes the note from the invoking user.
      */
-    public void deleteNote()
+    public boolean deleteNote()
     {
         Path pathToNote = Paths.get(BASE_PATH + _author.getId());
         File note = pathToNote.toFile();
-        note.delete();
+        return note.delete();
     }
 
     /**
@@ -126,7 +129,7 @@ public class Note
     /**
      * @return The Author of the note
      */
-    private User getAuthor()
+    public User getAuthor()
     {
         return _author;
     }
@@ -134,7 +137,7 @@ public class Note
     /**
      * @return The Content of the note
      */
-    private  String getContent()
+    public String getContent()
     {
         return _noteContent;
     }
