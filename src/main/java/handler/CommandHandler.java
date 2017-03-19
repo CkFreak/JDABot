@@ -486,7 +486,7 @@ public class CommandHandler implements Observer
                 case "addNote":
                     if (_noteService.addNote(event.getAuthor(), getGameName(messageContent)))
                     {
-                        event.getChannel().sendMessage("Note succesfully created").queue();
+                        event.getChannel().sendMessage("Note successfully created").queue();
                     }
                     else
                     {
