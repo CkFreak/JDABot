@@ -4,6 +4,7 @@ import net.dv8tion.jda.core.entities.User;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -72,6 +73,16 @@ public class Note
         {
             System.out.println(IOErrorMessage + _author.getId());
         }
+    }
+
+    /**
+     * Deletes the note from the invoking user.
+     */
+    public void deleteNote()
+    {
+        Path pathToNote = Paths.get(BASE_PATH + _author.getId());
+        File note = pathToNote.toFile();
+        note.delete();
     }
 
     /**
