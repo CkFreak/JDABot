@@ -28,7 +28,11 @@ public class Note
 
     private File _noteFile;
 
-    public Note(User author)
+    /**
+     * Constructor for the Note class
+     * @param author the author of the note
+     */
+    private Note(User author)
     {
         _author = author;
         try
@@ -47,6 +51,16 @@ public class Note
             }
         }
         _noteFile = getFileForInit();
+    }
+
+    /**
+     * The factory method for this Material class
+     * @param author the author of the note
+     * @return The note object collected from the constructor
+     */
+    public static Note getNoteForUser(User author)
+    {
+        return new Note(author);
     }
 
     /**
@@ -140,5 +154,18 @@ public class Note
     public String getContent()
     {
         return _noteContent;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (other instanceof Note)
+        {
+            if (this._author.equals(((Note) other)._author) && this._noteFile.equals(((Note) other)._noteFile))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
