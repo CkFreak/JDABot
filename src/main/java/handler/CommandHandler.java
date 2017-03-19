@@ -9,10 +9,7 @@ import managers.GuildMusicManager;
 import managers.MusicControlManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import services.CommandService;
-import services.IJustLostTheGameService;
-import services.PollService;
-import services.TournamentService;
+import services.*;
 
 /**
  * This class takes all user input and processes it. It holds all commands but no knowledge about them.
@@ -86,9 +83,9 @@ public class CommandHandler implements Observer
     private TournamentService _tournamentService;
 
     /**
-     * The only Instance of this CLass in the JVM
+     * The NoteService of the system ceeping track of all notes by users
      */
-    private static CommandHandler _instance;
+    private NoteService _noteService;
 
     /**
      * Initializes a CommandHandler and all its services
@@ -103,6 +100,7 @@ public class CommandHandler implements Observer
         _loseGameService = new IJustLostTheGameService();
         _loseGameService.addObserver(this);
         _musicControlManager = new MusicControlManager();
+        _noteService = new NoteService(_jda.getUsers());
     }
 
     /**
@@ -125,7 +123,7 @@ public class CommandHandler implements Observer
             event.getChannel()
                     .sendTyping()
                     .queue(s -> {
-                        event.getMessage().deleteMessage().queue();
+                        event.getMessage().delete().queue();
                     });
 
             switch (messageContent[0].substring(1))
@@ -484,6 +482,23 @@ public class CommandHandler implements Observer
                             .registerLoss(getPollName(messageContent), getOptions(messageContent, 1).get(0)))
                             .queue();
                     break;
+
+                case "addNote":
+                    if (_noteService.addNote(event.getAuthor(), getGameName(messageContent)))
+                    {
+                        event.getChannel().sendMessage("Note succesfully created").queue();
+                    }
+                    else
+                    {
+                        event.getChannel().sendMessage("The note could not be created please contact a dev").queue();
+                    }
+                    break;
+
+                case "showNote":
+                    event.getChannel().sendMessage(_noteService.getNoteforUser(event.getAuthor()).getContent()).queue();
+                    break;
+
+
 
                 default:
                     event.getChannel()
