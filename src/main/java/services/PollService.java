@@ -169,11 +169,11 @@ public class PollService
             {
                 if (pollFachwert instanceof PublicPoll)
                 {
-                    return ((PublicPoll) pollFachwert).vote(name, option, user);
+                    return pollFachwert.vote(name, option, user);
                 }
                 else if (pollFachwert instanceof AnonymousPoll)
                 {
-                    return ((AnonymousPoll) pollFachwert).votePrivately(name,
+                    return pollFachwert.votePrivately(name,
                             option, user, event);
                 }
             }
