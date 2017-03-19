@@ -43,9 +43,11 @@ public class CommandHandler implements Observer
 
     private final static String TOURNAMENT_HELP_COMMAND_FILE = "src/main/res/tournamentCommands.txt";
 
+    private final static String NOTE_HELP_COMMAND_FILE = "src/main/res/noteCommands.txt";
+
     private static final String THE_GAME_INITIALIZATION = "The Game has been initialized!";
 
-    private static final String INSUFICENT_RIGHTS_MESSAGE = "You do not have sufficent permissions to do that";
+    private static final String INEFFICIENT_RIGHTS_MESSAGE = "You do not have sufficient permissions to do that";
 
     /**
      * The Service that executes the commands
@@ -122,9 +124,7 @@ public class CommandHandler implements Observer
             String[] messageContent = message.split("\\s+");
             event.getChannel()
                     .sendTyping()
-                    .queue(s -> {
-                        event.getMessage().delete().queue();
-                    });
+                    .queue(s -> event.getMessage().delete().queue());
 
             switch (messageContent[0].substring(1))
             {
@@ -156,10 +156,13 @@ public class CommandHandler implements Observer
                     event.getChannel().sendMessage(_commander.getCommands(TOURNAMENT_HELP_COMMAND_FILE)).queue();
                     break;
 
+                case "helpNote":
+                    event.getChannel().sendMessage(_commander.getCommands(NOTE_HELP_COMMAND_FILE)).queue();
+                    break;
+
                 case "admin":
                     event.getChannel()
-                            .sendMessage(_commander.getAdmin(event)
-                                    .toString()).queue();
+                            .sendMessage(_commander.getAdmin(event)).queue();
                     break;
 
                 case "promote":
@@ -178,7 +181,7 @@ public class CommandHandler implements Observer
                     }
                     else
                     {
-                        event.getChannel().sendMessage(INSUFICENT_RIGHTS_MESSAGE).queue();
+                        event.getChannel().sendMessage(INEFFICIENT_RIGHTS_MESSAGE).queue();
                     }
                     break;
 
@@ -328,7 +331,7 @@ public class CommandHandler implements Observer
                     else
                     {
                         event.getChannel()
-                                .sendMessage(INSUFICENT_RIGHTS_MESSAGE)
+                                .sendMessage(INEFFICIENT_RIGHTS_MESSAGE)
                                 .queue();
                     }
                     break;
