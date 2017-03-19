@@ -540,7 +540,7 @@ public class CommandHandler implements Observer
     }
 
     /**
-     * Returns the choosens poll's name
+     * Returns the chosen poll's name
      * @param messageContent the message contents without white spaces
      * @return the poll's name
      */
