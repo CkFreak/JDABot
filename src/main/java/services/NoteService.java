@@ -21,6 +21,12 @@ public class NoteService
         initNoteList(serverUsers);
     }
 
+    /**
+     * Adds a note the the users note file
+     * @param author the author whoms note is to be edited
+     * @param note the note that the user wants to add
+     * @return true, if the note was created successfully, false otherwise
+     */
     public boolean addNote(User author, String note)
     {
         for (Note remark : _notes)
@@ -32,6 +38,23 @@ public class NoteService
             }
         }
         return false;
+    }
+
+    /**
+     * Gives the note for a user if it exist. If the note cannot be found, an empty note will be returned
+     * @param author The authors whoms note is being searched
+     * @return the authors note either with content if there is any an empty note otherwise
+     */
+    public Note getNoteforUser(User author)
+    {
+        for (Note note : _notes)
+        {
+            if (note.getAuthor().equals(author))
+            {
+                return note;
+            }
+        }
+        return Note.getNoteForUser(author);
     }
 
     /**
