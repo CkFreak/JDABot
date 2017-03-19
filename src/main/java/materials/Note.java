@@ -43,11 +43,12 @@ public class Note
         {
             try
             {
-                new File(BASE_PATH + _author.getId()).createNewFile();
+                new File(BASE_PATH + _author.getId() + ".txt").createNewFile();
             }
             catch (IOException e1)
             {
                 System.out.println(IOErrorMessage + _author.getId() + " the file for this user was not created");
+                e1.printStackTrace();
             }
         }
         _noteFile = getFileForInit();
@@ -97,7 +98,7 @@ public class Note
      */
     public boolean deleteNote()
     {
-        Path pathToNote = Paths.get(BASE_PATH + _author.getId());
+        Path pathToNote = Paths.get(BASE_PATH + _author.getId() + ".txt");
         File note = pathToNote.toFile();
         return note.delete();
     }
@@ -108,7 +109,7 @@ public class Note
      */
     private File getFileForInit()
     {
-        return new File(BASE_PATH + _author.getId());
+        return new File(BASE_PATH + _author.getId() + ".txt");
     }
 
 
@@ -121,7 +122,7 @@ public class Note
         String content = ERROR;
         try
         {
-            List<String> allLines = Files.readAllLines(Paths.get(BASE_PATH + _author.getId()));
+            List<String> allLines = Files.readAllLines(Paths.get(BASE_PATH + _author.getId() + ".txt"));
 
             for (String line : allLines)
             {
