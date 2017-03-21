@@ -41,6 +41,7 @@ public class Note
         }
         catch (FileNotFoundException e)
         {
+            System.out.println("There will be a new Textfile for user: " + _author.getName());
             try
             {
                 new File(BASE_PATH + _author.getId() + ".txt").createNewFile();
@@ -72,7 +73,7 @@ public class Note
     {
         String path = _noteFile.getAbsolutePath();
         _noteFile.delete();
-        _noteContent += note;
+        _noteContent += "\n" + note;
         try
         {
             if (_noteFile.createNewFile())
@@ -123,6 +124,8 @@ public class Note
         try
         {
             List<String> allLines = Files.readAllLines(Paths.get(BASE_PATH + _author.getId() + ".txt"));
+
+            content = "";
 
             for (String line : allLines)
             {
