@@ -71,6 +71,7 @@ public class Note
      */
     public void addNote(String note)
     {
+        //TODO The new File that is created is actually empty! Fix that
         String path = _noteFile.getAbsolutePath();
         _noteFile.delete();
         _noteContent += "\n" + note;
