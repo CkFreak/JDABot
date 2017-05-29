@@ -6,19 +6,18 @@ import java.util.Date;
 /**
  * This class starts a new Thread to refresh the time constantly
  * @author Timbo
- * @version 11.2016
+ * @version 05.2017
  */
 public class TimeRefresher implements Runnable 
 {
-    private Calendar _now;
+    private int _sleepTime;
     
     /**
      * Initializes a new TimeRefresher
      */
-    public TimeRefresher()
+    public TimeRefresher(int sleepTime)
     {
-        _now = Calendar.getInstance();
-        _now.setTime(new Date());
+        _sleepTime = sleepTime;
     }
 
     @Override
@@ -26,35 +25,12 @@ public class TimeRefresher implements Runnable
     {
         try
         {
-            while (!Thread.currentThread().isInterrupted())
-            {
-            Thread.sleep(1000);
-            _now.setTime(new Date());
-            }
+            Thread.sleep(_sleepTime);
         }
         catch (InterruptedException e)
         {
-            System.out.println(Thread.currentThread().getName() + " was interrupted");
+            System.out.println("The game has ended");
         }
-        
-    }
-    
-    /**
-     * Gets the calender instance from this instance of TimeRefresher
-     * @return a refenrence to this instances calender object
-     */
-    public Calendar getCalenderInstace()
-    {
-        return _now;
-    }
-    
-    /**
-     * Gets a date instance from this instance of TimeRefresher
-     * @return a date instance to this instances date object
-     */
-    public Date getDateInstance()
-    {
-        return _now.getTime();
     }
 
 }
