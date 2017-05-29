@@ -77,8 +77,7 @@ public class Note
         _noteContent += "\n" + note;
         try
         {
-            if (_noteFile.createNewFile())
-            {
+            //_noteFile.createNewFile();
                 Writer writer = new BufferedWriter(
                         new OutputStreamWriter(new FileOutputStream(path), "utf-8"));
 
@@ -86,8 +85,6 @@ public class Note
                     writer.write(_noteContent);
                     System.out.println("The File was created at: " + path);
                 }
-
-            }
         }
         catch (IOException e)
         {
