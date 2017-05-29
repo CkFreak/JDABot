@@ -96,7 +96,7 @@ public class CommandHandler implements Observer
     {
         _event = null;
         _jda = jda;
-        _commander = new CommandService(_event, jda);
+        _commander = new CommandService(jda);
         _pollService = new PollService();
         _tournamentService = new TournamentService();
         _loseGameService = new IJustLostTheGameService();
@@ -428,23 +428,6 @@ public class CommandHandler implements Observer
                             .queue();
                     break;
 
-                case "startGame":
-                    _loseGameService.executeGameLoss(event);
-                    event.getChannel()
-                            .sendMessage(THE_GAME_INITIALIZATION)
-                            .queue();
-                    break;
-
-                case "gameData":
-                    event.getChannel()
-                            .sendMessage("Next Game Loss:" + "\n"
-                                    + _loseGameService.getNextGameLoss()
-                                    .toString()
-                                    + "\n Now: \n" + _loseGameService.getNow()
-                                    .toString())
-                            .queue();
-                    break;
-
                 case "startTournament":
                     TournamentMode mode = null;
                     String name = getPollName(messageContent);
@@ -603,7 +586,9 @@ public class CommandHandler implements Observer
     @Override
     public void update(Observable o, Object arg)
     {
-        _loseGameService.executeGameLoss(_event);
+
+        //THIS WILL THROW A NULLPOINTER!!!! if there has not been an event that has triggered a command before the call
+        _event.getGuild().getPublicChannel().sendMessage((String) arg).queue();
     }
 
 }

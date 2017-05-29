@@ -43,10 +43,9 @@ public class CommandService
 
     /**
      * Initializes a CommandService
-     * @param event A MessageReceivedEvent
      * @param jda The bots JDA instance
      */
-    public CommandService(MessageReceivedEvent event, JDA jda)
+    public CommandService(JDA jda)
     {
         _jda = jda;
     }
