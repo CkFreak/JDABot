@@ -36,7 +36,7 @@ public class StartUp
                 mciJda.addEventListener(new CommandListener(mciJda));
                 mciJda.addEventListener(new UserPromotedListener());
                 mciJda.addEventListener(new MessageListener());
-               mciJda.getPresence().setGame(Game.of("Hello Kitty Online"));
+                mciJda.getPresence().setGame(Game.of("Hello Kitty Online"));
             }
             catch (RateLimitedException e)
             {
