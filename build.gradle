@@ -19,12 +19,12 @@ repositories {
 
 // Add your dependencies here
 dependencies {
-    compile "net.dv8tion:JDA:3.0.0_155"
+    compile "net.dv8tion:JDA:3.1.0_206"
     //compile 'org.slf4j:slf4j-api:2.1'
     //compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.1'
     //compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.1'
     //compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.1'
-    compile 'com.sedmelluq:lavaplayer:1.2.30'
+    compile 'com.sedmelluq:lavaplayer:1.2.39'
 
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
     compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
