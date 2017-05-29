@@ -8,6 +8,7 @@ import enums.TournamentMode;
 import managers.GuildMusicManager;
 import managers.MusicControlManager;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import services.*;
 
@@ -79,6 +80,8 @@ public class CommandHandler implements Observer
      */
     private MessageReceivedEvent _event;
 
+    private Guild _guild;
+
     /**
      * A Tournament Service that starts Tournaments
      */
@@ -92,10 +95,11 @@ public class CommandHandler implements Observer
     /**
      * Initializes a CommandHandler and all its services
      */
-    public CommandHandler(JDA jda)
+    public CommandHandler(JDA jda, Guild guild)
     {
         _event = null;
         _jda = jda;
+        _guild = guild;
         _commander = new CommandService(jda);
         _pollService = new PollService();
         _tournamentService = new TournamentService();
@@ -586,9 +590,7 @@ public class CommandHandler implements Observer
     @Override
     public void update(Observable o, Object arg)
     {
-
-        //THIS WILL THROW A NULLPOINTER!!!! if there has not been an event that has triggered a command before the call
-        _event.getGuild().getPublicChannel().sendMessage((String) arg).queue();
+        _guild.getPublicChannel().sendMessage((String) arg).queue();
     }
 
 }

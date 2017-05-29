@@ -20,6 +20,7 @@ public class TimeRefresher extends Observable implements Runnable
     public TimeRefresher(int sleepTime)
     {
         _sleepTime = sleepTime;
+        System.out.println(sleepTime/3600000);
     }
 
     @Override

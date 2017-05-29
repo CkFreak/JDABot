@@ -13,7 +13,7 @@ import runnables.TimeRefresher;
 public class IJustLostTheGameService extends Observable implements Observer
 {
     private static final String DAMMIT_I_JUST_LOST_THE_GAME = "Dammit I just lost the Game!";
-    private static final int[] RANDOM_TIMES = {48, 72, 96, 168};
+    private static final int[] RANDOM_TIMES = {8, 14, 19, 26, 31, 42};
 
 
     /**
@@ -30,7 +30,7 @@ public class IJustLostTheGameService extends Observable implements Observer
     private void init()
     {
          Random random = new Random();
-        TimeRefresher timeRefresher = new TimeRefresher(3600000 * random.nextInt(RANDOM_TIMES.length -1 ));
+        TimeRefresher timeRefresher = new TimeRefresher(3600000 * RANDOM_TIMES[random.nextInt(RANDOM_TIMES.length -1 )]);
         timeRefresher.addObserver(this);
         Thread gameThread = new Thread(timeRefresher, "GAME_THREAD");
         gameThread.start();

@@ -33,7 +33,7 @@ public class StartUp
             {
                 mciJda = new JDABuilder(AccountType.BOT).setToken(MCI_SERVER_TOKEN).buildBlocking();
                 mciJda.addEventListener(new ReadyListener());
-                mciJda.addEventListener(new CommandListener(mciJda));
+                mciJda.addEventListener(new CommandListener(mciJda, mciJda.getGuilds().get(0)));
                 mciJda.addEventListener(new UserPromotedListener());
                 mciJda.addEventListener(new MessageListener());
                 mciJda.getPresence().setGame(Game.of("Hello Kitty Online"));
@@ -49,7 +49,7 @@ public class StartUp
                 mogeJda = new JDABuilder(AccountType.BOT).setToken(
                         MOGE_SERVER_TOKEN).buildBlocking();
                 mogeJda.addEventListener(new ReadyListener());
-                mogeJda.addEventListener(new CommandListener(mogeJda));
+                mogeJda.addEventListener(new CommandListener(mogeJda, mogeJda.getGuilds().get(0)));
                 mogeJda.addEventListener(new UserPromotedListener());
                 mogeJda.addEventListener(new MessageListener());
                 mogeJda.getPresence().setGame(Game.of("DOTA 2"));
@@ -66,7 +66,7 @@ public class StartUp
             {
                 aquilaJda = new JDABuilder(AccountType.BOT).setToken(AQUILA_SERVER).buildBlocking();
                 aquilaJda.addEventListener(new ReadyListener());
-                aquilaJda.addEventListener(new CommandListener(aquilaJda));
+                aquilaJda.addEventListener(new CommandListener(aquilaJda, aquilaJda.getGuilds().get(0)));
                 aquilaJda.addEventListener(new UserPromotedListener());
                 aquilaJda.addEventListener(new MessageListener());
                 aquilaJda.getPresence().setGame(Game.of("League of Legends"));

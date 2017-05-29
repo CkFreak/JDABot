@@ -2,6 +2,7 @@ package listener;
 
 import handler.CommandHandler;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -18,9 +19,9 @@ public class CommandListener extends ListenerAdapter
      * Initializes a new CommandListener
      * @param jda The JDA instance that represents this bot
      */
-    public CommandListener(JDA jda)
+    public CommandListener(JDA jda, Guild guild)
     {
-         _handler = new CommandHandler(jda);
+         _handler = new CommandHandler(jda, guild);
     }
 
     @Override
