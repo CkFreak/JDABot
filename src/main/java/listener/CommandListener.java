@@ -19,9 +19,9 @@ public class CommandListener extends ListenerAdapter
      * Initializes a new CommandListener
      * @param jda The JDA instance that represents this bot
      */
-    public CommandListener(JDA jda, Guild guild)
+    public CommandListener(JDA jda)
     {
-         _handler = new CommandHandler(jda, guild);
+         _handler = new CommandHandler(jda);
     }
 
     @Override

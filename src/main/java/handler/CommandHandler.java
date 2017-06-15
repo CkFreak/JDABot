@@ -80,8 +80,6 @@ public class CommandHandler implements Observer
      */
     private MessageReceivedEvent _event;
 
-    private Guild _guild;
-
     /**
      * A Tournament Service that starts Tournaments
      */
@@ -95,11 +93,10 @@ public class CommandHandler implements Observer
     /**
      * Initializes a CommandHandler and all its services
      */
-    public CommandHandler(JDA jda, Guild guild)
+    public CommandHandler(JDA jda)
     {
         _event = null;
         _jda = jda;
-        _guild = guild;
         _commander = new CommandService(jda);
         _pollService = new PollService();
         _tournamentService = new TournamentService();
@@ -590,7 +587,7 @@ public class CommandHandler implements Observer
     @Override
     public void update(Observable o, Object arg)
     {
-        _guild.getPublicChannel().sendMessage((String) arg).queue();
+        _jda.getGuilds().get(0).getPublicChannel().sendMessage((String) arg).queue();
     }
 
 }
