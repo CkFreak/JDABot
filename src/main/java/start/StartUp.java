@@ -62,6 +62,9 @@ public class StartUp
             unicornJda = new JDABuilder(AccountType.BOT).setToken(UNICORNPORN_SERVER).buildBlocking();
             unicornJda.addEventListener(new ReadyListener());
             unicornJda.addEventListener(new CommandListener(unicornJda));
+            unicornJda.addEventListener(new UserPromotedListener());
+            unicornJda.addEventListener(new MessageListener());
+            unicornJda.getPresence().setGame(Game.of("Ben and Ed Bloodparty"));
 
 
 
