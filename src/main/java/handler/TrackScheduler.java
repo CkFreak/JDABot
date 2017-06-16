@@ -46,14 +46,18 @@ public class TrackScheduler extends AudioEventAdapter
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
-        if (_player.getPlayingTrack() == null) {
-            _player.playTrack(track);
-            _tracks.add(track);
-            _currentlyPlayingTrack = track;
-        }
-        else
+        if (!_tracks.contains(track))
         {
-            _tracks.add(track);
+            if (_player.getPlayingTrack() == null)
+            {
+                _player.playTrack(track);
+                _tracks.add(track);
+                _currentlyPlayingTrack = track;
+            }
+            else
+            {
+                _tracks.add(track);
+            }
         }
     }
 
@@ -68,11 +72,17 @@ public class TrackScheduler extends AudioEventAdapter
         if (_shuffle)
         {
             Random random = new Random();
-            return _tracks.get(random.nextInt(_tracks.size() - 1 ));
+            replaceTrack(_currentlyPlayingTrack);
+            int i = random.nextInt(_tracks.size() - 1);
+            _currentlyPlayingTrack = _tracks.get(i);
+            return _tracks.get(i);
         }
         else
         {
-            return _tracks.get(_tracks.indexOf(_currentlyPlayingTrack) + 1 );
+            int i = _tracks.indexOf(_currentlyPlayingTrack) + 1;
+            replaceTrack(_currentlyPlayingTrack);
+            _currentlyPlayingTrack = _tracks.get(i);
+            return _tracks.get(i);
         }
     }
 
@@ -141,7 +151,8 @@ public class TrackScheduler extends AudioEventAdapter
         if (trackNumber <= _tracks.size() - 1)
         {
             return _tracks.get(trackNumber);
-        } else
+        }
+        else
         {
             throw new IllegalArgumentException(
                     "The Index of the track is out of range of the Playlist");
@@ -189,7 +200,7 @@ public class TrackScheduler extends AudioEventAdapter
 
     void restartSong()
     {
-        replaceTrack(_player.getPlayingTrack());
+        replaceTrack(_currentlyPlayingTrack);
         _player.startTrack(_currentlyPlayingTrack, false);
     }
 
@@ -228,7 +239,7 @@ public class TrackScheduler extends AudioEventAdapter
     void stopPlayer()
     {
         _player.stopTrack();
-        _currentlyPlayingTrack = null;
+        _currentlyPlayingTrack = getFirstTrack();
     }
 
     /**
@@ -284,7 +295,7 @@ public class TrackScheduler extends AudioEventAdapter
 
         builder.append("Position: " + position + "*** " + _currentlyPlayingTrack.getInfo().title + "***"
                 + "˜\n" +_currentlyPlayingTrack.getPosition()
-                + " / " + _currentlyPlayingTrack.getDuration() + " minutes" +  "\n");
+                + " / " + _currentlyPlayingTrack.getDuration() / 360000 + " minutes" +  "\n");
 
         return builder.build();
     }
