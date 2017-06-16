@@ -13,7 +13,7 @@ import runnables.TimeRefresher;
 public class IJustLostTheGameService extends Observable implements Observer
 {
     private static final String DAMMIT_I_JUST_LOST_THE_GAME = "Dammit I just lost the Game!";
-    private static final int[] RANDOM_TIMES = {8, 14, 19, 26, 31, 42};
+    private static final int[] RANDOM_TIMES = {168, 250, 380, 500, 750, 1000};
 
 
     /**

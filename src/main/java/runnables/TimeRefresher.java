@@ -19,7 +19,7 @@ public class TimeRefresher extends Observable implements Runnable
      */
     public TimeRefresher(int sleepTime)
     {
-        _sleepTime = sleepTime;
+        _sleepTime = Math.abs(sleepTime);
         System.out.println(sleepTime/3600000);
     }
 
@@ -28,7 +28,7 @@ public class TimeRefresher extends Observable implements Runnable
     {
         try
         {
-            Thread.sleep(_sleepTime);
+            Thread.sleep(Math.abs(_sleepTime));
             setChanged();
             notifyObservers();
         }
