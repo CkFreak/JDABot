@@ -11,6 +11,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import services.*;
+import utils.Log;
 
 /**
  * This class takes all user input and processes it. It holds all commands but no knowledge about them.
@@ -261,13 +262,14 @@ public class CommandHandler implements Observer
                 }
                 break;
 
-                case "volume":
+                /*case "volume":
                 {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                     guildMusicManager.getScheduler().setVolume(Integer.parseInt(messageContent[1]));
                     event.getChannel().sendMessage("Volume has been set to " + messageContent[1]).queue();
                 }
                 break;
+                */
 
                 case "stop":
                 {
