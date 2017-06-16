@@ -17,6 +17,7 @@ import java.util.Random;
 
 /**
  * This class schedules tracks for the Audioplayer. It contains the list of tracks.
+ * @version 06.2017
  */
 public class TrackScheduler extends AudioEventAdapter
 {
