@@ -7,6 +7,7 @@ build/
 .idea
 tokens.txt
 /log
+src/main/res/notes
 
 # Ignore Gradle GUI config
 gradle-app.setting
