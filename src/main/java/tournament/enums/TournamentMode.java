@@ -1,4 +1,4 @@
-package enums;
+package tournament.enums;
 
 public enum TournamentMode
 {

@@ -1,10 +1,10 @@
-package services;
+package poll;
 
 import java.util.ArrayList;
 
-import materials.AbstractPoll;
-import materials.AnonymousPoll;
-import materials.PublicPoll;
+import poll.pollTypes.AbstractPoll;
+import poll.pollTypes.AnonymousPoll;
+import poll.pollTypes.PublicPoll;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.User;

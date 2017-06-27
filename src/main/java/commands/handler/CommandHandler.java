@@ -1,17 +1,19 @@
-package handler;
+package commands.handler;
 
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import enums.TournamentMode;
-import managers.GuildMusicManager;
-import managers.MusicControlManager;
+import commands.CommandService;
+import notes.NoteService;
+import poll.PollService;
+import theGame.IJustLostTheGameService;
+import tournament.enums.TournamentMode;
+import music.managers.GuildMusicManager;
+import music.managers.MusicControlManager;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import services.*;
-import utils.Log;
+import tournament.services.TournamentService;
 
 /**
  * This class takes all user input and processes it. It holds all commands but no knowledge about them.

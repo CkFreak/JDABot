@@ -1,14 +1,14 @@
-package materials;
+package tournament.tournamentModes;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import enums.TournamentMode;
+import tournament.enums.TournamentMode;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
-import values.TournamentParticipant;
+import tournament.values.TournamentParticipant;
 
 /**
  * An abstract class that describes a tournament in general

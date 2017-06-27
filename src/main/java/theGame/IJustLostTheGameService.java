@@ -1,8 +1,8 @@
-package services;
+package theGame;
 
 import java.util.*;
 
-import runnables.TimeRefresher;
+import theGame.runnables.TimeRefresher;
 
 /**
  * A class that abstracts the Game so it can be played by a computer. In Random intervals of at most 4 days 

@@ -1,16 +1,16 @@
-package services;
+package tournament.services;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import enums.TournamentMode;
-import materials.AbstractTournament;
-import materials.SingleEliminationTournament;
+import tournament.tournamentModes.AbstractTournament;
+import tournament.tournamentModes.SingleEliminationTournament;
+import tournament.enums.TournamentMode;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
-import values.TournamentParticipant;
+import tournament.values.TournamentParticipant;
 
 /**
  * a class that starts tournaments and manages them as well
@@ -36,7 +36,7 @@ public class TournamentService
      * @return a message that the bot sends to the channel with all the opponents in it
      */
     public Message initializeTournament(String name,
-            TournamentMode mode, ArrayList<String> participants)
+                                        TournamentMode mode, ArrayList<String> participants)
     {
         AbstractTournament tournament = null;
         MessageBuilder builder = new MessageBuilder();

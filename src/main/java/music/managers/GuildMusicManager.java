@@ -1,9 +1,9 @@
-package managers;
+package music.managers;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import handler.AudioPlayerSendHandler;
-import handler.TrackScheduler;
+import music.AudioPlayerSendHandler;
+import music.TrackScheduler;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.VoiceChannel;

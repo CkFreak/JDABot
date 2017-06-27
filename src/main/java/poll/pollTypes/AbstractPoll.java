@@ -1,4 +1,4 @@
-package materials;
+package poll.pollTypes;
 
 import java.util.ArrayList;
 import java.util.HashMap;

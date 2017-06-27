@@ -1,4 +1,4 @@
-package handler;
+package music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -166,7 +166,7 @@ public class TrackScheduler extends AudioEventAdapter
      * @return The current playlist
      */
     //TODO sign limit beachten
-     Message getPlaylist()
+    public Message getPlaylist()
     {
         MessageBuilder builder = new MessageBuilder();
         ArrayList<AudioTrack> trackList = getTrackList();
@@ -194,18 +194,18 @@ public class TrackScheduler extends AudioEventAdapter
      *
      * @param enabled true to enable false to disable
      */
-    void setShuffle(boolean enabled)
+    public void setShuffle(boolean enabled)
     {
         _shuffle = enabled;
     }
 
-    void restartSong()
+    public void restartSong()
     {
         replaceTrack(_currentlyPlayingTrack);
         _player.startTrack(_currentlyPlayingTrack, false);
     }
 
-    void resetPlayer()
+    public void resetPlayer()
     {
         _tracks = new ArrayList<>();
         _currentlyPlayingTrack = null;
@@ -228,7 +228,7 @@ public class TrackScheduler extends AudioEventAdapter
     /**
      * Pauses the _player
      */
-    void pausePlayer()
+    public void pausePlayer()
     {
         _player.setPaused(true);
     }
@@ -237,7 +237,7 @@ public class TrackScheduler extends AudioEventAdapter
      * Stops the playback of the current track.
      * After calling this method the _player will start at the first song from the playlist
      */
-    void stopPlayer()
+    public void stopPlayer()
     {
         _player.stopTrack();
         _currentlyPlayingTrack = getFirstTrack();
@@ -246,7 +246,7 @@ public class TrackScheduler extends AudioEventAdapter
     /**
      * Resumes the playler from pause otherwise just starts it with the next song in the list
      */
-    void resumePlayer()
+    public void resumePlayer()
     {
         if (_player.isPaused())
         {
@@ -258,7 +258,7 @@ public class TrackScheduler extends AudioEventAdapter
         }
     }
 
-    void skip()
+    public void skip()
     {
         _player.startTrack(getNextTrack(), false);
         replaceTrack(_currentlyPlayingTrack);
@@ -270,7 +270,7 @@ public class TrackScheduler extends AudioEventAdapter
      *
      * @param trackNumber the specified position of the track
      */
-    void startSpecificTrack(int trackNumber)
+    public void startSpecificTrack(int trackNumber)
     {
         _player.startTrack(getSpecificTrack(trackNumber), false);
         replaceTrack(_currentlyPlayingTrack);
@@ -289,7 +289,7 @@ public class TrackScheduler extends AudioEventAdapter
         }
     }
 
-    Message songInfo()
+    public Message songInfo()
     {
         MessageBuilder builder = new MessageBuilder();
         int position = _tracks.indexOf(_currentlyPlayingTrack);
@@ -306,7 +306,7 @@ public class TrackScheduler extends AudioEventAdapter
      * @param src The URL to the track that should be played
      * @param event The MessageReceivedEvent that belongs to the message
      */
-     void registerNewTrack(String src, AudioPlayerManager manager, MessageReceivedEvent event)
+     public void registerNewTrack(String src, AudioPlayerManager manager, MessageReceivedEvent event)
      {
         event.getChannel().
 

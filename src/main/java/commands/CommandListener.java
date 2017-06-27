@@ -1,8 +1,7 @@
-package listener;
+package commands;
 
-import handler.CommandHandler;
+import commands.handler.CommandHandler;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 

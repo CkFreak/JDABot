@@ -1,6 +1,6 @@
-package services;
+package notes;
 
-import materials.Note;
+import notes.materials.Note;
 import net.dv8tion.jda.core.entities.User;
 
 import java.util.ArrayList;

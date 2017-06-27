@@ -1,4 +1,4 @@
-package values;
+package tournament.values;
 
 /**
  * This class represents a Participant in a tournament from type AbstractTournament

@@ -1,9 +1,9 @@
-package materials;
+package tournament.tournamentModes;
 
-import enums.TournamentMode;
+import tournament.enums.TournamentMode;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
-import values.TournamentParticipant;
+import tournament.values.TournamentParticipant;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -1,9 +1,6 @@
-package runnables;
+package theGame.runnables;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Observable;
-import java.util.Observer;
 
 /**
  * This class starts a new Thread to refresh the time constantly

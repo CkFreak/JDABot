@@ -1,4 +1,4 @@
-package materials;
+package notes.materials;
 
 import net.dv8tion.jda.core.entities.User;
 

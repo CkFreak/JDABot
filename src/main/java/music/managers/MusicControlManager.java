@@ -1,15 +1,12 @@
-package managers;
+package music.managers;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.AudioManager;
-import net.dv8tion.jda.core.managers.impl.AudioManagerImpl;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers.*;
