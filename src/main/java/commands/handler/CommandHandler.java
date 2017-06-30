@@ -52,8 +52,6 @@ public class CommandHandler implements Observer
 
     private final static String NOTE_HELP_COMMAND_FILE = "src/main/res/noteCommands.txt";
 
-    private static final String THE_GAME_INITIALIZATION = "The Game has been initialized!";
-
     private static final String INEFFICIENT_RIGHTS_MESSAGE = "You do not have sufficient permissions to do that";
 
     /**
