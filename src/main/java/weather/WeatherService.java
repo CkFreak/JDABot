@@ -42,6 +42,7 @@ public class WeatherService
      */
     public Message getCompleteWeatherData(String location) throws IOException, ParseException
     {
+        location = location.toLowerCase();
         if (_queryTimes.containsKey(location + COMPLETE))
         {
             if (_queryTimes.get(location + COMPLETE) == new Date().getHours())
@@ -70,6 +71,7 @@ public class WeatherService
      */
     public Message getTemperatureData(String location) throws IOException, ParseException
     {
+        location = location.toLowerCase();
         if (_queryTimes.containsKey(location + TEMPERATURE))
         {
             if (_queryTimes.get(location + TEMPERATURE) == new Date().getHours())
@@ -98,6 +100,7 @@ public class WeatherService
      */
     public Message getWindData(String location) throws IOException, ParseException
     {
+        location = location.toLowerCase();
         if (_queryTimes.containsKey(location + WIND))
         {
             if (_queryTimes.get(location + WIND) == new Date().getHours())
