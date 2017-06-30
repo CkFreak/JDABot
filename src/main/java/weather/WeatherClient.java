@@ -38,6 +38,36 @@ public class WeatherClient
     private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
 
     /**
+     * A constant to access the Condtition information
+     */
+    private static final int CONDITION = 0;
+
+    /**
+     * A constant to access the temperature
+     */
+    private static final int TEMPERATURE = 1;
+
+    /**
+     * A constant to access the minimum temperature
+     */
+    private static final int MIN_TEMPERATURE = 2;
+
+    /**
+     * A constant to access the maximum weather information
+     */
+    private static final int MAX_TEMPERATURE = 3;
+
+    /**
+     * A constant to access the wind speed
+     */
+    private static final int WIND_SPEED = 4;
+
+    /**
+     * A constant to access the wind direction
+     */
+    private static final int WIND_DIRECTION = 5;
+
+    /**
      * Gives back a nicely formatted Message Object
      * @param location The city the weather is being asked for
      * @return A Message Object holding all the relevant weather information
@@ -50,17 +80,17 @@ public class WeatherClient
         String[] data = getWeatherData(location);
 
         builder.append("The weather in " + location + "is currently:\n");
-        builder.append(data[0]);
+        builder.append(data[CONDITION]);
         builder.append("\nThe Temperature right now is at: ");
-        builder.append(data[1]);
+        builder.append(data[TEMPERATURE]);
         builder.append(" °C\nToday you can expect at least: ");
-        builder.append(data[2]);
+        builder.append(data[MIN_TEMPERATURE]);
         builder.append(" °C\nThe highest Temperatures today will be around: ");
-        builder.append(data[3]);
+        builder.append(data[MAX_TEMPERATURE]);
         builder.append(" °C\nCurrent Windspeeds can be observed at about: ");
-        builder.append(data[4]);
+        builder.append(data[WIND_SPEED]);
         builder.append(" km/h\n The direction of the Wind is at: ");
-        builder.append(data[5]);
+        builder.append(data[WIND_DIRECTION]);
         builder.append(" degrees\n");
 
 
@@ -80,11 +110,11 @@ public class WeatherClient
         String[] data = getWeatherData(location);
 
         builder.append("The Temperature right now is at: ");
-        builder.append(data[1]);
+        builder.append(data[TEMPERATURE]);
         builder.append(" °C\nToday you can expect at least: ");
-        builder.append(data[2]);
+        builder.append(data[MIN_TEMPERATURE]);
         builder.append(" °C\n and at most: ");
-        builder.append(data[3]);
+        builder.append(data[MAX_TEMPERATURE]);
         builder.append(" °C");
 
         return builder.build();
@@ -136,17 +166,17 @@ public class WeatherClient
     {
         String[] data = new String[6];
 
-        data[0] = getJSONKeyValue("weather", location).get("main").toString();
+        data[CONDITION] = getJSONKeyValue("weather", location).get("main").toString();
 
-        data[1] = getJSONKeyValue("main", location).get("temp").toString(); //Geht
+        data[TEMPERATURE] = getJSONKeyValue("main", location).get("temp").toString(); //Geht
 
-        data[2] = getJSONKeyValue("main", location).get("temp_min").toString();
+        data[MIN_TEMPERATURE] = getJSONKeyValue("main", location).get("temp_min").toString();
 
-        data[3] = getJSONKeyValue("main", location).get("temp_max").toString();
+        data[MAX_TEMPERATURE] = getJSONKeyValue("main", location).get("temp_max").toString();
 
-        data[4] = getJSONKeyValue("wind", location).get("speed").toString();
+        data[WIND_SPEED] = getJSONKeyValue("wind", location).get("speed").toString();
 
-        data[5] = getJSONKeyValue("wind", location).get("deg").toString();
+        data[WIND_DIRECTION] = getJSONKeyValue("wind", location).get("deg").toString();
 
         return data;
     }
