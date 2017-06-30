@@ -1,5 +1,11 @@
 package weather;
 
+import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.entities.Message;
+import org.json.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import utils.Log;
 
 import java.io.BufferedReader;
@@ -38,9 +44,15 @@ public class WeatherClient
     {
     }
 
-    public String getWeatherDataFor(String location) throws IOException
+    /**
+     * Queries OpenWeatherMap for the location's weather
+     * @param location The location the weather is being queried for
+     * @return A JSON Object in String format with the weather data in it
+     * @throws IOException The Connection to the Website cannot be established
+     */
+    private String getWeatherDataFor(String location) throws IOException
     {
-        URL weatherUrl = new URL(BASE_URL + "weather?q=" + location + "&APPID=" + API_KEY);
+        URL weatherUrl = new URL(BASE_URL + "weather?q=" + location + "&APPID=" + API_KEY + "&units=metric");
 
         HttpURLConnection connection = (HttpURLConnection) weatherUrl.openConnection();
 
@@ -62,14 +74,80 @@ public class WeatherClient
 		}
 		in.close();
 
-		//print result
-		Log.info("Response from the Server was: " + response.toString());
-
-		return null;
 
 
+        return response.toString();
     }
 
+    /**
+     * Gives an Array with all the important weather information
+     * @param location The city the weather is being queried for
+     * @return An Array with weather condition (rain etc), temperature, min_temperature, max_temperature, wind speed and wind direction
+     * @throws IOException When OpenWeatherMap returns an error
+     * @throws ParseException When the JSON Object could not be parsed correctly
+     */
+    private String[] getWeatherData(String location) throws IOException, ParseException
+    {
+        String[] data = new String[6];
+
+        data[0] = getJSONKeyValue("weather", location).get("main").toString();
+
+        data[1] = getJSONKeyValue("main", location).get("temp").toString(); //Geht
+
+        data[2] = getJSONKeyValue("main", location).get("temp_min").toString();
+
+        data[3] = getJSONKeyValue("main", location).get("temp_max").toString();
+
+        data[4] = getJSONKeyValue("wind", location).get("speed").toString();
+
+        data[5] = getJSONKeyValue("wind", location).get("deg").toString();
+
+        return data;
+    }
+
+    /**
+     * Gives back a nicely formatted Message Object
+     * @param location The city the weather is being asked for
+     * @return A Message Object holding all the relevant weather information
+     * @throws IOException When OpenWeatherMap returns an error
+     * @throws ParseException When the JSON Object cannot be parsed correctly
+     */
+    public Message getFormattedWeatherFor(String location) throws IOException, ParseException
+    {
+        MessageBuilder builder = new MessageBuilder();
+        String[] data = getWeatherData(location);
+
+        builder.append("The weather in " + location + "is currently:\n");
+        builder.append(data[0]);
+        builder.append("\nThe Temperature right now is at: ");
+        builder.append(data[1]);
+        builder.append(" °C\nToday you can expect at least: ");
+        builder.append(data[2]);
+        builder.append(" °C\nThe highest Temperatures today will be around: ");
+        builder.append(data[3]);
+        builder.append(" °C\nCurrent Windspeeds can be observed at about: ");
+        builder.append(data[4]);
+        builder.append(" km/h\n The direction of the Wind is at: ");
+        builder.append(data[5]);
+        builder.append(" degrees\n");
+
+
+        return builder.build();
+    }
+
+    private JSONObject getJSONKeyValue(String key, String location) throws IOException, ParseException
+    {
+        JSONParser parser = new JSONParser();
+
+        String json = getWeatherDataFor(location);
+        Object array = parser.parse(json);
+
+        JSONObject decodeArray = (JSONObject) array;
+
+        Log.info(decodeArray.toString());
+
+        return (JSONObject) decodeArray.get(key);
+    }
 
     /**
      * Returns the API Key form the File specified in the field of this class
