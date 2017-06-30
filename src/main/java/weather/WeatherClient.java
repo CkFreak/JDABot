@@ -2,6 +2,7 @@ package weather;
 
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -79,7 +80,7 @@ public class WeatherClient
         MessageBuilder builder = new MessageBuilder();
         String[] data = getWeatherData(location);
 
-        builder.append("The weather in " + location + "is currently:\n");
+        builder.append("The weather in " + location + " is currently:\n");
         builder.append(data[CONDITION]);
         builder.append("\nThe Temperature right now is at: ");
         builder.append(data[TEMPERATURE]);
@@ -89,7 +90,7 @@ public class WeatherClient
         builder.append(data[MAX_TEMPERATURE]);
         builder.append(" °C\nCurrent Windspeeds can be observed at about: ");
         builder.append(data[WIND_SPEED]);
-        builder.append(" km/h\n The direction of the Wind is at: ");
+        builder.append(" km/h\nThe direction of the Wind is at: ");
         builder.append(data[WIND_DIRECTION]);
         builder.append(" degrees\n");
 
@@ -187,17 +188,23 @@ public class WeatherClient
     {
         String[] data = new String[6];
 
-        data[CONDITION] = getJSONKeyValue("weather", location).get("main").toString();
+        String condition = ((JSONArray) getJSONKeyValue("weather", location)).get(0).toString();
 
-        data[TEMPERATURE] = getJSONKeyValue("main", location).get("temp").toString(); //Geht
+        String[] splitCondition = condition.split("main");
 
-        data[MIN_TEMPERATURE] = getJSONKeyValue("main", location).get("temp_min").toString();
+        condition = splitCondition[1].substring(3, 7);
 
-        data[MAX_TEMPERATURE] = getJSONKeyValue("main", location).get("temp_max").toString();
+        data[CONDITION] = condition;
 
-        data[WIND_SPEED] = getJSONKeyValue("wind", location).get("speed").toString();
+        data[TEMPERATURE] = ((JSONObject)getJSONKeyValue("main", location)).get("temp").toString(); //Geht
 
-        data[WIND_DIRECTION] = getJSONKeyValue("wind", location).get("deg").toString();
+        data[MIN_TEMPERATURE] = ((JSONObject)getJSONKeyValue("main", location)).get("temp_min").toString();
+
+        data[MAX_TEMPERATURE] = ((JSONObject)getJSONKeyValue("main", location)).get("temp_max").toString();
+
+        data[WIND_SPEED] = ((JSONObject)getJSONKeyValue("wind", location)).get("speed").toString();
+
+        data[WIND_DIRECTION] = ((JSONObject)getJSONKeyValue("wind", location)).get("deg").toString();
 
         return data;
     }
@@ -211,7 +218,7 @@ public class WeatherClient
      * @throws IOException When OpenWeatherMap returns an error
      * @throws ParseException When the JSON Object cannot be parsed correctly
      */
-    private JSONObject getJSONKeyValue(String key, String location) throws IOException, ParseException
+    private Object getJSONKeyValue(String key, String location) throws IOException, ParseException
     {
         JSONParser parser = new JSONParser();
 
@@ -222,7 +229,7 @@ public class WeatherClient
 
         Log.info(decodeArray.toString());
 
-        return (JSONObject) decodeArray.get(key);
+        return decodeArray.get(key);
     }
 
     /**
