@@ -42,7 +42,6 @@ public class StartUp
         JDA aquilaJDA;
         JDA unicornJDA;
         Random random = new Random();
-        WeatherService weather = new WeatherService();
 
         try
         {
