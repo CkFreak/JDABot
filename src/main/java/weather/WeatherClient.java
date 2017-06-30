@@ -2,9 +2,7 @@ package weather;
 
 import utils.Log;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -27,7 +25,7 @@ public class WeatherClient
     /**
      * The Path to the key file
      */
-    private static final String PATH_TO_KEY = "/src/main/res/apikey.txt";
+    private static final String PATH_TO_KEY = "src/main/res/apikey.txt";
 
     /**
      * The Base URL to query OpenWeatherMap's API
@@ -36,8 +34,7 @@ public class WeatherClient
 
     /**
      * Constructs a new WeatherClient
-     */
-    public WeatherClient()
+     */public WeatherClient()
     {
     }
 
@@ -75,7 +72,7 @@ public class WeatherClient
 
 
     /**
-     * Returns the API Key form the File specified in the fild of this class
+     * Returns the API Key form the File specified in the field of this class
      * @param position The position in the list that contains the key you are looking for
      * @return A String with the API Key in it
      */
