@@ -121,6 +121,27 @@ public class WeatherClient
     }
 
     /**
+     * Gives the Wind data for a city
+     * @param location The city the wind data is being requested for
+     * @return A Message Object with the wind information
+     * @throws IOException When OpenWeatherMap returns an error
+     * @throws ParseException When the JSON Object cannot be parsed correctly
+     */
+    public Message getWindDataFor(String location) throws IOException, ParseException
+    {
+        MessageBuilder builder = new MessageBuilder();
+        String[] data = getWeatherData(location);
+
+        builder.append("The Wind speed is currently at: ");
+        builder.append(data[WIND_SPEED]);
+        builder.append(" km/h\n It comes from ");
+        builder.append(data[WIND_DIRECTION]);
+        builder.append(" degrees");
+
+        return builder.build();
+    }
+
+    /**
      * Queries OpenWeatherMap for the location's weather
      * @param location The location the weather is being queried for
      * @return A JSON Object in String format with the weather data in it
@@ -222,5 +243,4 @@ public class WeatherClient
         }
         return null;
     }
-
 }
