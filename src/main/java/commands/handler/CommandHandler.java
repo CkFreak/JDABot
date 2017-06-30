@@ -556,6 +556,7 @@ public class CommandHandler implements Observer
                         event.getChannel().sendMessage("The JSON passed by OpenWeatherMap had an unexpected format. Please consult a Dev").queue();
 
                     }
+                    break;
 
 
                 default:
