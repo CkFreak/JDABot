@@ -2,7 +2,13 @@ package weather;
 
 import utils.Log;
 
+import javax.net.ssl.HttpsURLConnection;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -13,24 +19,66 @@ import java.util.List;
  */
 public class WeatherClient
 {
+    /**
+     * The API Key for OpenWeatherMap
+     */
     private static final String API_KEY = getApiKey(0);
-    private static final String PATH_TO_KEY = "/src/main/res/weatherKey.txt";
 
     /**
-     * The city that is to be queried at OpenWeatherMap
+     * The Path to the key file
      */
-    private String _city;
+    private static final String PATH_TO_KEY = "/src/main/res/apikey.txt";
+
+    /**
+     * The Base URL to query OpenWeatherMap's API
+     */
+    private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
 
     /**
      * Constructs a new WeatherClient
-     * @param location The Location that weather data is to be aquired for.
      */
-    public WeatherClient(String location)
+    public WeatherClient()
     {
-        _city = location;
+    }
+
+    public String getWeatherDataFor(String location) throws IOException
+    {
+        URL weatherUrl = new URL(BASE_URL + "weather?q=" + location + "&APPID=" + API_KEY);
+
+        HttpURLConnection connection = (HttpURLConnection) weatherUrl.openConnection();
+
+        connection.setRequestMethod("POST");
+
+        connection.setDoOutput(true);
+
+        int responseCode = connection.getResponseCode();
+
+        Log.info("Response Code from OpenWeatherMap: " + responseCode);
+
+        BufferedReader in = new BufferedReader(
+		        new InputStreamReader(connection.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		//print result
+		Log.info("Response from the Server was: " + response.toString());
+
+		return null;
+
+
     }
 
 
+    /**
+     * Returns the API Key form the File specified in the fild of this class
+     * @param position The position in the list that contains the key you are looking for
+     * @return A String with the API Key in it
+     */
     private static String getApiKey(int position)
     {
         try
@@ -40,6 +88,7 @@ public class WeatherClient
         }
         catch (IOException e)
         {
+            e.printStackTrace();
             Log.warning("The API Key for OpenWeatherMap could not be loaded!");
         }
         return null;

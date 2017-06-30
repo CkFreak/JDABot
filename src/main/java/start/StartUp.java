@@ -18,6 +18,8 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import utils.Log;
+import weather.WeatherClient;
+import weather.WeatherService;
 
 /**
  * Starts the bot and all its instances up
@@ -40,6 +42,7 @@ public class StartUp
         JDA aquilaJDA;
         JDA unicornJDA;
         Random random = new Random();
+        WeatherService weather = new WeatherService();
 
         try
         {
