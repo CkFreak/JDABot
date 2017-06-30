@@ -1,11 +1,13 @@
 package commands.handler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 import commands.CommandService;
 import notes.NoteService;
+import org.json.simple.parser.ParseException;
 import poll.PollService;
 import theGame.IJustLostTheGameService;
 import tournament.enums.TournamentMode;
@@ -14,6 +16,7 @@ import music.managers.MusicControlManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import tournament.services.TournamentService;
+import weather.WeatherService;
 
 /**
  * This class takes all user input and processes it. It holds all commands but no knowledge about them.
@@ -94,6 +97,11 @@ public class CommandHandler implements Observer
     private NoteService _noteService;
 
     /**
+     * The WeatherService of the system, offering current weather information
+     */
+    private WeatherService _weatherService;
+
+    /**
      * Initializes a CommandHandler and all its services
      */
     public CommandHandler(JDA jda)
@@ -107,6 +115,7 @@ public class CommandHandler implements Observer
         _loseGameService.addObserver(this);
         _musicControlManager = new MusicControlManager();
         _noteService = new NoteService(_jda.getUsers());
+        _weatherService = new WeatherService();
     }
 
     /**
@@ -194,7 +203,7 @@ public class CommandHandler implements Observer
                     _commander.deleteChannelMessages(event, amount);
                     event.getChannel()
                             .sendMessage(
-                                     amount + " Messages have been deleted.")
+                                    amount + " Messages have been deleted.")
                             .queue();
                     break;
 
@@ -392,7 +401,7 @@ public class CommandHandler implements Observer
                     break;
 
                 case "changeGame":
-                        _commander.changeGame(_jda, getGameName(messageContent));
+                    _commander.changeGame(_jda, getGameName(messageContent));
                     break;
 
                 case "startPVote":
@@ -489,6 +498,66 @@ public class CommandHandler implements Observer
                     event.getChannel().sendMessage(_noteService.getNoteforUser(event.getAuthor()).getContent()).queue();
                     break;
 
+                case "weather":
+                    if (messageContent.length > 2)
+                    {
+                        event.getChannel().sendMessage("Please enter a city you want the weather data for").queue();
+                        break;
+                    }
+                    try
+                    {
+                        event.getChannel().sendMessage(_weatherService.getCompleteWeatherData(messageContent[1])).queue();
+                    }
+                    catch (IOException e)
+                    {
+                        event.getChannel().sendMessage("OpenWeatherMap returned an error. Please consult a Dev for fixing this").queue();
+                    }
+                    catch (ParseException e)
+                    {
+                        event.getChannel().sendMessage("The JSON passed by OpenWeatherMap had an unexpected format. Please consult a Dev").queue();
+                    }
+                    break;
+
+                case "temperature":
+                    if (messageContent.length > 2)
+                    {
+                        event.getChannel().sendMessage("Please enter a city you want the temperature data for").queue();
+                        break;
+                    }
+                    try
+                    {
+                        event.getChannel().sendMessage(_weatherService.getTemperatureData(messageContent[1])).queue();
+                    }
+                    catch (IOException e)
+                    {
+                        event.getChannel().sendMessage("OpenWeatherMap returned an error. Please consult a Dev for fixing this").queue();
+                    }
+                    catch (ParseException e)
+                    {
+                        event.getChannel().sendMessage("The JSON passed by OpenWeatherMap had an unexpected format. Please consult a Dev").queue();
+
+                    }
+                    break;
+
+                case "wind":
+                    if (messageContent.length > 2)
+                    {
+                        event.getChannel().sendMessage("Please enter a city you want the wind data for").queue();
+                        break;
+                    }
+                    try
+                    {
+                        event.getChannel().sendMessage(_weatherService.getWindData(messageContent[1])).queue();
+                    }
+                    catch (IOException e)
+                    {
+                        event.getChannel().sendMessage("OpenWeatherMap returned an error. Please consult a Dev for fixing this").queue();
+                    }
+                    catch (ParseException e)
+                    {
+                        event.getChannel().sendMessage("The JSON passed by OpenWeatherMap had an unexpected format. Please consult a Dev").queue();
+
+                    }
 
 
                 default:
