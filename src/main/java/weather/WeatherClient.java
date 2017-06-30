@@ -182,6 +182,14 @@ public class WeatherClient
     }
 
 
+    /**
+     * Gives the value associated with a certain key within a JSON Object
+     * @param key The key one wants the value for
+     * @param location The city that the information is being queried for
+     * @return The value associated with the key
+     * @throws IOException When OpenWeatherMap returns an error
+     * @throws ParseException When the JSON Object cannot be parsed correctly
+     */
     private JSONObject getJSONKeyValue(String key, String location) throws IOException, ParseException
     {
         JSONParser parser = new JSONParser();
