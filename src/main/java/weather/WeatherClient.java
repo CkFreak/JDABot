@@ -37,6 +37,58 @@ public class WeatherClient
      */
     private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
 
+    /**
+     * Gives back a nicely formatted Message Object
+     * @param location The city the weather is being asked for
+     * @return A Message Object holding all the relevant weather information
+     * @throws IOException When OpenWeatherMap returns an error
+     * @throws ParseException When the JSON Object cannot be parsed correctly
+     */
+    public Message getCompleteFormattedWeatherFor(String location) throws IOException, ParseException
+    {
+        MessageBuilder builder = new MessageBuilder();
+        String[] data = getWeatherData(location);
+
+        builder.append("The weather in " + location + "is currently:\n");
+        builder.append(data[0]);
+        builder.append("\nThe Temperature right now is at: ");
+        builder.append(data[1]);
+        builder.append(" °C\nToday you can expect at least: ");
+        builder.append(data[2]);
+        builder.append(" °C\nThe highest Temperatures today will be around: ");
+        builder.append(data[3]);
+        builder.append(" °C\nCurrent Windspeeds can be observed at about: ");
+        builder.append(data[4]);
+        builder.append(" km/h\n The direction of the Wind is at: ");
+        builder.append(data[5]);
+        builder.append(" degrees\n");
+
+
+        return builder.build();
+    }
+
+    /**
+     * Gives a nicely formatted Message Object with the Temperature information
+     * @param location The city the temperature is being queried for
+     * @return A Message Object with all the Temperature information in it
+     * @throws IOException When OpenWeatherMap returns an error
+     * @throws ParseException When the JSON Object cannot be parsed correctly
+     */
+    public Message getTemperatureDataFor(String location) throws IOException, ParseException
+    {
+        MessageBuilder builder = new MessageBuilder();
+        String[] data = getWeatherData(location);
+
+        builder.append("The Temperature right now is at: ");
+        builder.append(data[1]);
+        builder.append(" °C\nToday you can expect at least: ");
+        builder.append(data[2]);
+        builder.append(" °C\n and at most: ");
+        builder.append(data[3]);
+        builder.append(" °C");
+
+        return builder.build();
+    }
 
     /**
      * Queries OpenWeatherMap for the location's weather
@@ -99,35 +151,6 @@ public class WeatherClient
         return data;
     }
 
-    /**
-     * Gives back a nicely formatted Message Object
-     * @param location The city the weather is being asked for
-     * @return A Message Object holding all the relevant weather information
-     * @throws IOException When OpenWeatherMap returns an error
-     * @throws ParseException When the JSON Object cannot be parsed correctly
-     */
-    public Message getFormattedWeatherFor(String location) throws IOException, ParseException
-    {
-        MessageBuilder builder = new MessageBuilder();
-        String[] data = getWeatherData(location);
-
-        builder.append("The weather in " + location + "is currently:\n");
-        builder.append(data[0]);
-        builder.append("\nThe Temperature right now is at: ");
-        builder.append(data[1]);
-        builder.append(" °C\nToday you can expect at least: ");
-        builder.append(data[2]);
-        builder.append(" °C\nThe highest Temperatures today will be around: ");
-        builder.append(data[3]);
-        builder.append(" °C\nCurrent Windspeeds can be observed at about: ");
-        builder.append(data[4]);
-        builder.append(" km/h\n The direction of the Wind is at: ");
-        builder.append(data[5]);
-        builder.append(" degrees\n");
-
-
-        return builder.build();
-    }
 
     private JSONObject getJSONKeyValue(String key, String location) throws IOException, ParseException
     {
@@ -161,4 +184,5 @@ public class WeatherClient
         }
         return null;
     }
+
 }
