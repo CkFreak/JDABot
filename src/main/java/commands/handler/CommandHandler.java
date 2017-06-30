@@ -52,6 +52,8 @@ public class CommandHandler implements Observer
 
     private final static String NOTE_HELP_COMMAND_FILE = "src/main/res/noteCommands.txt";
 
+    private final static String WEATHER_HELP_FILE = "src/main/res/weatherCommands.txt";
+
     private static final String INEFFICIENT_RIGHTS_MESSAGE = "You do not have sufficient permissions to do that";
 
     /**
@@ -169,6 +171,10 @@ public class CommandHandler implements Observer
 
                 case "helpNote":
                     event.getChannel().sendMessage(_commander.getCommands(NOTE_HELP_COMMAND_FILE)).queue();
+                    break;
+
+                case "helpWeather":
+                    event.getChannel().sendMessage((_commander.getCommands(WEATHER_HELP_FILE))).queue();
                     break;
 
                 case "admin":
