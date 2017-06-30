@@ -2,7 +2,6 @@ package weather;
 
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
-import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,7 +25,7 @@ public class WeatherClient
     /**
      * The API Key for OpenWeatherMap
      */
-    private static final String API_KEY = getApiKey(0);
+    private static final String API_KEY = getApiKey();
 
     /**
      * The Path to the key file
@@ -38,11 +37,6 @@ public class WeatherClient
      */
     private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
 
-    /**
-     * Constructs a new WeatherClient
-     */public WeatherClient()
-    {
-    }
 
     /**
      * Queries OpenWeatherMap for the location's weather
@@ -151,15 +145,14 @@ public class WeatherClient
 
     /**
      * Returns the API Key form the File specified in the field of this class
-     * @param position The position in the list that contains the key you are looking for
      * @return A String with the API Key in it
      */
-    private static String getApiKey(int position)
+    private static String getApiKey()
     {
         try
         {
             List<String> readAllLines = Files.readAllLines(Paths.get(PATH_TO_KEY));
-            return readAllLines.get(position);
+            return readAllLines.get(0);
         }
         catch (IOException e)
         {
