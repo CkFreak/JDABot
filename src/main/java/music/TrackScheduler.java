@@ -359,7 +359,7 @@ public class TrackScheduler extends AudioEventAdapter
      }
 
     /**
-     * Replaces the playing cloneTrack with a copy of it, so that it can be played again to a later point in time
+     * Replaces the playing cloneTrack with a copy of it, so that it can be played again later
      * @param track The track that needs to be replaced
      */
     private void replaceTrack(AudioTrack track)

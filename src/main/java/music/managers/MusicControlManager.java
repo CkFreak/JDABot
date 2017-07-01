@@ -2,15 +2,13 @@ package music.managers;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.AudioManager;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers.*;
-import static com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers.registerLocalSource;
 
 /**
  * Created by Timbo on 07/12/2016.
@@ -27,8 +25,8 @@ public class MusicControlManager
         _playerManager = new DefaultAudioPlayerManager();
         _musicManagers = new HashMap<>();
 
-        registerRemoteSources(_playerManager);
-        registerLocalSource(_playerManager);
+        AudioSourceManagers.registerRemoteSources(_playerManager);
+        AudioSourceManagers.registerLocalSource(_playerManager);
     }
 
     public synchronized GuildMusicManager getGuildMusicManager(Guild guild, MessageReceivedEvent event)
