@@ -196,7 +196,7 @@ public class WeatherClient
 
         data[CONDITION] = condition;
 
-        data[TEMPERATURE] = ((JSONObject)getJSONKeyValue("main", location)).get("temp").toString(); //Geht
+        data[TEMPERATURE] = ((JSONObject)getJSONKeyValue("main", location)).get("temp").toString();
 
         data[MIN_TEMPERATURE] = ((JSONObject)getJSONKeyValue("main", location)).get("temp_min").toString();
 

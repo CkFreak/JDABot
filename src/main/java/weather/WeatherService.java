@@ -84,7 +84,7 @@ public class WeatherService
             }
         }
 
-        Message msg= _client.getTemperatureDataFor(location + TEMPERATURE);
+        Message msg= _client.getTemperatureDataFor(location);
         _weatherData.put(location + TEMPERATURE, msg);
         _queryTimes.put(location + TEMPERATURE, new Date().getHours());
 
@@ -113,7 +113,7 @@ public class WeatherService
             }
         }
 
-        Message msg= _client.getWindDataFor(location + WIND);
+        Message msg= _client.getWindDataFor(location);
         _weatherData.put(location + WIND, msg);
         _queryTimes.put(location + WIND, new Date().getHours());
 
