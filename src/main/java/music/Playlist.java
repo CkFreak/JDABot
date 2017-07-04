@@ -1,11 +1,11 @@
 package music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.entities.Message;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A Playlist that holds all the information about the songs contained in it.
@@ -138,6 +138,53 @@ public class Playlist
         {
             return _activePlaylist.get(0);
         }
+    }
+
+    public List<Message> getPlaylistInfo()
+    {
+        ArrayList<Message> messages = new ArrayList<>();
+        MessageBuilder builder = new MessageBuilder();
+        for (int i = 0; i < _activePlaylist.size();)
+        {
+            for (int e = 0; e <= 24; ++i, ++e)
+            {
+                builder.append("```");
+                builder.append(i);
+                builder.append(" " + _activePlaylist.get(i).getInfo().title);
+                builder.append("```");
+            }
+
+            messages.add(builder.build());
+            builder = new MessageBuilder();
+        }
+        return messages;
+    }
+
+    public Message getSongInfo()
+    {
+        MessageBuilder builder = new MessageBuilder();
+
+        builder.append("Position: " + _activePlaylist.indexOf(_playingSong) + "*** " + _playingSong.getInfo().title + "***"
+                + "˜\n" + TimeUnit.MILLISECONDS.toMinutes(_playingSong.getPosition())
+                + " / " + TimeUnit.MILLISECONDS.toMinutes(_playingSong.getDuration()) + " minutes" +  "\n");
+
+        return builder.build();
+    }
+
+
+    public AudioTrack getPlayingSong()
+    {
+        return _playingSong;
+    }
+
+    public void setPlayingTrack(AudioTrack track)
+    {
+        _playingSong = track;
+    }
+
+    public List<AudioTrack> getTrackList()
+    {
+        return _activePlaylist;
     }
 
     /**

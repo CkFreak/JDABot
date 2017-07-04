@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import commands.CommandService;
+import net.dv8tion.jda.core.entities.Message;
 import notes.NoteService;
 import org.json.simple.parser.ParseException;
 import poll.PollService;
@@ -312,11 +313,17 @@ public class CommandHandler implements Observer
                 case "playlist":
                 {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
-                    event.getChannel()
-                            .sendMessage(guildMusicManager.getScheduler().getPlaylist())
-                            .queue();
+                    ArrayList<Message> playlist = guildMusicManager.getScheduler().getPlaylist();
+
+                    for (int i = 0; i < playlist.size(); ++i)
+                    {
+                        event.getChannel()
+                                .sendMessage(playlist.get(i))
+                                .queue();
+                    }
                 }
                 break;
+
                 case "songInfo":
                 {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
@@ -503,14 +510,14 @@ public class CommandHandler implements Observer
                     break;
 
                 case "weather":
-                    if (messageContent.length > 2)
+                    if (messageContent.length < 2)
                     {
                         event.getChannel().sendMessage("Please enter a city you want the weather data for").queue();
                         break;
                     }
                     try
                     {
-                        event.getChannel().sendMessage(_weatherService.getCompleteWeatherData(messageContent[1])).queue();
+                        event.getChannel().sendMessage(_weatherService.getCompleteWeatherData(getGameName(messageContent))).queue();
                     }
                     catch (IOException e)
                     {
@@ -523,14 +530,14 @@ public class CommandHandler implements Observer
                     break;
 
                 case "temperature":
-                    if (messageContent.length > 2)
+                    if (messageContent.length < 2)
                     {
                         event.getChannel().sendMessage("Please enter a city you want the temperature data for").queue();
                         break;
                     }
                     try
                     {
-                        event.getChannel().sendMessage(_weatherService.getTemperatureData(messageContent[1])).queue();
+                        event.getChannel().sendMessage(_weatherService.getTemperatureData(getGameName(messageContent))).queue();
                     }
                     catch (IOException e)
                     {
@@ -544,14 +551,14 @@ public class CommandHandler implements Observer
                     break;
 
                 case "wind":
-                    if (messageContent.length > 2)
+                    if (messageContent.length < 2)
                     {
                         event.getChannel().sendMessage("Please enter a city you want the wind data for").queue();
                         break;
                     }
                     try
                     {
-                        event.getChannel().sendMessage(_weatherService.getWindData(messageContent[1])).queue();
+                        event.getChannel().sendMessage(_weatherService.getWindData(getGameName(messageContent))).queue();
                     }
                     catch (IOException e)
                     {

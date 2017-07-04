@@ -11,7 +11,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import utils.Log;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,68 +22,36 @@ import java.util.Random;
 public class TrackScheduler extends AudioEventAdapter
 {
     private final AudioPlayer _player;
-    private ArrayList<AudioTrack> _tracks;
-    private boolean _shuffle;
-    private AudioTrack _currentlyPlayingTrack;
+    private Playlist playlist;
 
     /**
      * @param player The audio _player this _scheduler uses
      */
     public TrackScheduler(AudioPlayer player)
     {
-        _shuffle = false;
         _player = player;
-        _tracks = new ArrayList<>();
-        _currentlyPlayingTrack = null;
+        playlist = new Playlist(new ArrayList<AudioTrack>(), false);
     }
 
     /**
-     * Add the next track to _tracks or play right away if nothing is in the queue.
+     * Add the next track to playlist or play right away if nothing is in the queue.
      *
-     * @param track The track to play or add to _tracks.
+     * @param track The track to play or add to playlist.
      */
     private void queue(AudioTrack track)
     {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
-        if (!_tracks.contains(track))
+        if (playlist.getPlayingSong() == null)
         {
-            if (_player.getPlayingTrack() == null)
-            {
-                _player.playTrack(track);
-                _tracks.add(track);
-                _currentlyPlayingTrack = track;
-            }
-            else
-            {
-                _tracks.add(track);
-            }
-        }
-    }
-
-    /**
-     * Gets the next track in the list unless it is the last track then this gives the first
-     * If Shuffleing is enabled a random track will be selected form the track list
-     *
-     * @return The next track or if the last one was last in the list the first list element
-     */
-    private AudioTrack getNextTrack()
-    {
-        if (_shuffle)
-        {
-            Random random = new Random();
-            replaceTrack(_currentlyPlayingTrack);
-            int i = random.nextInt(_tracks.size() - 1);
-            _currentlyPlayingTrack = _tracks.get(i);
-            return _tracks.get(i);
+            _player.playTrack(track);
+            playlist.addSong(track);
+            playlist.setPlayingTrack(track);
         }
         else
         {
-            int i = _tracks.indexOf(_currentlyPlayingTrack) + 1;
-            replaceTrack(_currentlyPlayingTrack);
-            _currentlyPlayingTrack = _tracks.get(i);
-            return _tracks.get(i);
+            playlist.addSong(track);
         }
     }
 
@@ -94,70 +61,7 @@ public class TrackScheduler extends AudioEventAdapter
         // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext)
         {
-            _player.startTrack(getNextTrack(), false);
-            _currentlyPlayingTrack = _player.getPlayingTrack();
-        }
-    }
-
-    /**
-     * Gets a specified AudioTrack as long as it exists in the TrackList of this class
-     *
-     * @param trackName The name of the track that is wished to be returned
-     * @return The Track from the Playlist if it was found
-     * @throws IllegalArgumentException When The Track has not been found
-     */
-    public AudioTrack getTrack(String trackName) throws IllegalArgumentException
-    {
-        for (AudioTrack audioTrack : _tracks)
-        {
-            if (audioTrack.getIdentifier()
-                    .equals(trackName))
-            {
-                return audioTrack;
-            }
-        }
-
-        throw new IllegalArgumentException("The Track has not been found");
-    }
-
-    /**
-     * Gets the first track from the track list
-     *
-     * @return The first element of the list of tracks
-     */
-    public AudioTrack getFirstTrack()
-    {
-        return _tracks.get(0);
-    }
-
-    /**
-     * Returns the track list in this instance of the class
-     *
-     * @return the track list
-     */
-    private ArrayList<AudioTrack> getTrackList()
-    {
-        return _tracks;
-    }
-
-    /**
-     * Gets the track from the list at a certain specified location
-     *
-     * @param trackNumber The number of the track that is being looked for
-     * @return The track at the index of the trackNumber
-     * @throws IllegalArgumentException When the track number exceeds the size of the track list
-     */
-    private AudioTrack getSpecificTrack(int trackNumber)
-            throws IllegalArgumentException
-    {
-        if (trackNumber <= _tracks.size() - 1)
-        {
-            return _tracks.get(trackNumber);
-        }
-        else
-        {
-            throw new IllegalArgumentException(
-                    "The Index of the track is out of range of the Playlist");
+            _player.startTrack(playlist.getNext(), false);
         }
     }
 
@@ -166,28 +70,9 @@ public class TrackScheduler extends AudioEventAdapter
      *
      * @return The current playlist
      */
-    //TODO sign limit beachten
-    public Message getPlaylist()
+    public ArrayList<Message> getPlaylist()
     {
-        MessageBuilder builder = new MessageBuilder();
-        ArrayList<AudioTrack> trackList = getTrackList();
-        int counter = 0;
-        if (getTrackList()
-                .isEmpty())
-        {
-            return builder.append("Currently the playlist is empty").build();
-        } else
-        {
-
-            for (AudioTrack audioTrack : trackList)
-            {
-                builder.append(
-                        "```" + counter + " " + audioTrack.getInfo().title + "```");
-                ++counter;
-            }
-
-            return builder.build();
-        }
+        return (ArrayList<Message>) playlist.getPlaylistInfo();
     }
 
     /**
@@ -197,33 +82,19 @@ public class TrackScheduler extends AudioEventAdapter
      */
     public void setShuffle(boolean enabled)
     {
-        _shuffle = enabled;
+        playlist.setShuffle(enabled);
     }
 
     public void restartSong()
     {
-        replaceTrack(_currentlyPlayingTrack);
-        _player.startTrack(_currentlyPlayingTrack, false);
+
+        _player.startTrack(playlist.restartTrack(), false);
     }
 
     public void resetPlayer()
     {
-        _tracks = new ArrayList<>();
-        _currentlyPlayingTrack = null;
+        playlist = new Playlist(new ArrayList<AudioTrack>(), false);
         _player.destroy();
-    }
-
-    public boolean isPaused()
-    {
-        return _player.isPaused();
-    }
-
-    /**
-     * Sets the playing track
-     */
-    private void setCurrentTrack(AudioTrack track)
-    {
-        _currentlyPlayingTrack = track;
     }
 
     /**
@@ -241,7 +112,8 @@ public class TrackScheduler extends AudioEventAdapter
     public void stopPlayer()
     {
         _player.stopTrack();
-        _currentlyPlayingTrack = getFirstTrack();
+        _player.playTrack(playlist.getSpecificTrack(0));
+        _player.setPaused(true);
     }
 
     /**
@@ -255,15 +127,13 @@ public class TrackScheduler extends AudioEventAdapter
         }
         else
         {
-            _player.playTrack(_currentlyPlayingTrack);
+            _player.playTrack(playlist.getPlayingSong());
         }
     }
 
     public void skip()
     {
-        _player.startTrack(getNextTrack(), false);
-        replaceTrack(_currentlyPlayingTrack);
-        _currentlyPlayingTrack = _player.getPlayingTrack();
+        _player.startTrack(playlist.getNext(), false);
     }
 
     /**
@@ -273,9 +143,7 @@ public class TrackScheduler extends AudioEventAdapter
      */
     public void startSpecificTrack(int trackNumber)
     {
-        _player.startTrack(getSpecificTrack(trackNumber), false);
-        replaceTrack(_currentlyPlayingTrack);
-        _currentlyPlayingTrack = _player.getPlayingTrack();
+        _player.startTrack(playlist.getSpecificTrack(trackNumber), false);
     }
 
     /**
@@ -292,81 +160,65 @@ public class TrackScheduler extends AudioEventAdapter
 
     public Message songInfo()
     {
-        MessageBuilder builder = new MessageBuilder();
-        int position = _tracks.indexOf(_currentlyPlayingTrack);
-
-        builder.append("Position: " + position + "*** " + _currentlyPlayingTrack.getInfo().title + "***"
-                + "˜\n" +_currentlyPlayingTrack.getPosition()
-                + " / " + _currentlyPlayingTrack.getDuration() / 360000 + " minutes" +  "\n");
-
-        return builder.build();
+        return playlist.getSongInfo();
     }
 
-     /**
+    /**
      * Registers a track from many sources including youtube, soundcloud and vimeo
      * @param src The URL to the track that should be played
      * @param event The MessageReceivedEvent that belongs to the message
      */
-     public void registerNewTrack(String src, AudioPlayerManager manager, MessageReceivedEvent event)
-     {
+    public void registerNewTrack(String src, AudioPlayerManager manager, MessageReceivedEvent event)
+    {
         event.getChannel().
 
-             sendMessage("Starting to process the URL please wait.").
+                sendMessage("Starting to process the URL please wait.").
 
-             queue();
+                queue();
         manager.loadItem(src,new
 
-             AudioLoadResultHandler()
-             {
+                AudioLoadResultHandler()
+                {
 
-                 @Override
-                 public void trackLoaded (AudioTrack track)
-                 {
-                     event.getChannel().sendMessage("Track was loaded").queue();
-                     if (_player.isPaused())
-                     {
-                         event.getChannel().sendMessage("And the player has started to play").queue();
-                     }
-                     queue(track);
-                 }
+                    @Override
+                    public void trackLoaded (AudioTrack track)
+                    {
+                        event.getChannel().sendMessage("Track was loaded").queue();
+                        if (_player.isPaused())
+                        {
+                            event.getChannel().sendMessage("And the player has started to play").queue();
+                        }
+                        queue(track);
+                    }
 
-                 @Override
-                 public void playlistLoaded (AudioPlaylist playlist)
-                 {
-                     for (AudioTrack track : playlist.getTracks())
-                     {
-                         queue(track);
-                     }
-                 }
+                    @Override
+                    public void playlistLoaded (AudioPlaylist playlist)
+                    {
+                        for (AudioTrack track : playlist.getTracks())
+                        {
+                            queue(track);
+                        }
 
-                 @Override
-                 public void noMatches ()
-                 {
-                     event.getChannel()
-                             .sendMessage("I am sorry but I could not find anything.")
-                             .queue();
-                 }
+                        event.getChannel().sendMessage("Playlist was loaded");
+                    }
 
-                 @Override
-                 public void loadFailed (FriendlyException exception)
-                 {
-                     event.getChannel()
-                             .sendMessage(
-                                     "Everything just blew up! Go find a bunker! NOW!")
-                             .queue();
+                    @Override
+                    public void noMatches ()
+                    {
+                        event.getChannel()
+                                .sendMessage("I am sorry but I could not find anything.")
+                                .queue();
+                    }
 
-                 }
-             });
-     }
+                    @Override
+                    public void loadFailed (FriendlyException exception)
+                    {
+                        event.getChannel()
+                                .sendMessage(
+                                        "Everything just blew up! Go find a bunker! NOW!")
+                                .queue();
 
-    /**
-     * Replaces the playing cloneTrack with a copy of it, so that it can be played again later
-     * @param track The track that needs to be replaced
-     */
-    private void replaceTrack(AudioTrack track)
-    {
-        int i = _tracks.indexOf(track);
-        _tracks.set(i, track.makeClone());
-        _currentlyPlayingTrack = _tracks.get(i);
+                    }
+                });
     }
 }
