@@ -6,7 +6,7 @@ build/
 .project
 .idea
 tokens.txt
-weatherKey.txt
+apiKey.txt
 /log
 src/main/res/notes
 
