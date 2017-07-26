@@ -71,6 +71,7 @@ public class Playlist
     {
         if (_playingSong == null)
         {
+            replacePlayingSong();
             _playingSong = _activePlaylist.get(0);
             return _playingSong;
         }
@@ -119,7 +120,8 @@ public class Playlist
         replacePlayingSong();
         if (index <= _activePlaylist.size())
         {
-            return _activePlaylist.get(index);
+            _playingSong = _activePlaylist.get(index);
+            return _playingSong;
         }
         else
         {
@@ -132,11 +134,13 @@ public class Playlist
         replacePlayingSong();
         if (_activePlaylist.indexOf(_playingSong) < _activePlaylist.size())
         {
-            return _activePlaylist.get(_activePlaylist.indexOf(_playingSong) + 1);
+            _playingSong = _activePlaylist.get(_activePlaylist.indexOf(_playingSong) + 1);
+            return _playingSong;
         }
         else
         {
-            return _activePlaylist.get(0);
+            _playingSong = _activePlaylist.get(0);
+            return _playingSong;
         }
     }
 
@@ -148,14 +152,24 @@ public class Playlist
         {
             for (int e = 0; e <= 24; ++i, ++e)
             {
-                builder.append("```");
-                builder.append(i);
-                builder.append(" " + _activePlaylist.get(i).getInfo().title);
-                builder.append("```");
+                if (_activePlaylist.size() > i)
+                {
+                    builder.append("```");
+                    builder.append(i);
+                    builder.append(" " + _activePlaylist.get(i).getInfo().title);
+                    builder.append("```");
+                }
+                else
+                {
+                    break;
+                }
             }
 
-            messages.add(builder.build());
-            builder = new MessageBuilder();
+            if (!builder.isEmpty())
+            {
+                messages.add(builder.build());
+                builder = new MessageBuilder();
+            }
         }
         return messages;
     }
@@ -192,7 +206,11 @@ public class Playlist
      */
     private void replacePlayingSong()
     {
-        _activePlaylist.add(_activePlaylist.indexOf(_playingSong), _playingSong.makeClone());
+        int index = _activePlaylist.indexOf(_playingSong);
+
+        _activePlaylist.add(index, _playingSong.makeClone());
+
+        _activePlaylist.remove(index);
     }
 
     /**

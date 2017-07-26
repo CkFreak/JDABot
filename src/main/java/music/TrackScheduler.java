@@ -133,7 +133,7 @@ public class TrackScheduler extends AudioEventAdapter
 
     public void skip()
     {
-        _player.startTrack(playlist.getNext(), false);
+        _player.startTrack(playlist.skipTrack(), false);
     }
 
     /**
