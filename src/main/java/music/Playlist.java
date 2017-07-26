@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
  * A Playlist that holds all the information about the songs contained in it.
  * This Playlist Object can be restored from a database.
  * Created by Timbo on 01.07.17.
+ *
+ * @version 07.2017
  */
 public class Playlist
 {
