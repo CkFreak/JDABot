@@ -20,12 +20,11 @@ public class UserPromotedListener extends ListenerAdapter
     public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event)
     {
         MessageBuilder msg = new MessageBuilder();
-        msg.append(event.getMember()
-            .getAsMention() + " now is: " + getRoleAsStringAdd(event));
+        msg.append(event.getMember().getNickname() + " now is: " + getRoleAsStringAdd(event));
 
         event.getGuild()
             .getPublicChannel()
-            .sendMessage(msg.build());
+            .sendMessage(msg.build()).queue();
     }
 
     @Override
@@ -33,12 +32,12 @@ public class UserPromotedListener extends ListenerAdapter
     {
         MessageBuilder msg = new MessageBuilder();
         msg.append(event.getMember()
-            .getAsMention() + " was demoted and is no longer: "
-                + getRoleAsStringRemove(event));
+            .getNickname() + " was demoted and is no longer: "
+                + getRoleAsString(event));
 
         event.getGuild()
             .getPublicChannel()
-            .sendMessage(msg.build());
+            .sendMessage(msg.build()).queue();
     }
 
     /**
@@ -46,19 +45,19 @@ public class UserPromotedListener extends ListenerAdapter
      * @param event A GuildMemberRoleEvent to get all the roles from 
      * @return a string with only the Role in it
      */
-    private String getRoleAsStringRemove(GuildMemberRoleRemoveEvent event)
+    private String getRoleAsString(GuildMemberRoleRemoveEvent event)
     {
         List<Role> roles = event.getRoles();
         String role = "";
 
         role = roles.get(0)
-            .getAsMention();
+            .getName();
         role.replaceAll("[[//d]]*", "");
         return role;
     }
 
     /**
-     * Gets a String of the Roles that have been added without the numbers 
+     * Gets a String of the Roles that have been added without the numbers
      * @param event a GuildMemmberRoleAddEvent to get all the roles from
      * @return A String with only the roles in it
      */
@@ -68,7 +67,7 @@ public class UserPromotedListener extends ListenerAdapter
         String role = "";
 
         role = roles.get(0)
-            .getAsMention();
+            .getName();
         role.replaceAll("[[//d]]*", "");
 
         return role;

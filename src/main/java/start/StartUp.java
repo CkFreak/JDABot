@@ -17,9 +17,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
-import utils.Log;
-import weather.WeatherClient;
-import weather.WeatherService;
+import log.Log;
 
 /**
  * Starts the bot and all its instances up
