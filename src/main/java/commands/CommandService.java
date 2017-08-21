@@ -321,6 +321,10 @@ public class CommandService
                 System.out.println("Shutdown interrupted for IO reasons");
             }
         }
+        else
+        {
+            event.getChannel().sendMessage("You do not have permission to do that!");
+        }
     }
 
     /**
