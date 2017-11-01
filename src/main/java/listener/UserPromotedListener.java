@@ -20,7 +20,7 @@ public class UserPromotedListener extends ListenerAdapter
     public void onGuildMemberRoleAdd(GuildMemberRoleAddEvent event)
     {
         MessageBuilder msg = new MessageBuilder();
-        msg.append(event.getMember().getNickname() + " now is: " + getRoleAsStringAdd(event));
+        msg.append(event.getMember().getEffectiveName() + " now is: " + getRoleAsStringAdd(event));
 
         event.getGuild()
             .getPublicChannel()
@@ -31,8 +31,7 @@ public class UserPromotedListener extends ListenerAdapter
     public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event)
     {
         MessageBuilder msg = new MessageBuilder();
-        msg.append(event.getMember()
-            .getNickname() + " was demoted and is no longer: "
+        msg.append(event.getMember().getEffectiveName() + " was demoted and is no longer: "
                 + getRoleAsString(event));
 
         event.getGuild()
