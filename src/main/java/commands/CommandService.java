@@ -64,18 +64,8 @@ public class CommandService
             MessageBuilder builder = new MessageBuilder();
             builder
                 .append(event.getAuthor().getAsMention() + " sends: " + TAKE_MY_ENERGY);
-            try
-            {
                 event.getChannel()
                     .sendFile(file, builder.build()).queue();
-            }
-            catch (IOException e)
-            {
-                event.getChannel()
-                    .sendMessage(
-                            "There has been an error while sending the Image. Please contact a Dev. IO-Exception!").queue();
-                e.printStackTrace();
-            }
         }
         catch (IllegalArgumentException e)
         {
