@@ -2,6 +2,7 @@ package commands.handler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -103,6 +104,11 @@ public class CommandHandler implements Observer
     private WeatherService _weatherService;
 
     /**
+     * The command hash map
+     */
+    private HashMap<String, Runnable> _commands;
+
+    /**
      * Initializes a CommandHandler and all its services
      */
     public CommandHandler(JDA jda)
@@ -117,6 +123,7 @@ public class CommandHandler implements Observer
         _musicControlManager = new MusicControlManager();
         _noteService = new NoteService(_jda.getUsers());
         _weatherService = new WeatherService();
+        _commands = new HashMap<>();
     }
 
     /**
@@ -582,6 +589,11 @@ public class CommandHandler implements Observer
         }
     }
 
+    private void populateCommandMap()
+    {
+        _commands.put("hello", (e) -> _commander.replyToHello(e));
+    }
+
     /**
      * @param event A MessageReceivedEvent
      * @return A GuildMusicManager for a specific Guild
@@ -672,7 +684,7 @@ public class CommandHandler implements Observer
     @Override
     public void update(Observable o, Object arg)
     {
-        _jda.getGuilds().get(0).getPublicChannel().sendMessage((String) arg).queue();
+        _jda.getGuilds().get(0).getDefaultChannel().sendMessage((String) arg).queue();
     }
 
 }
