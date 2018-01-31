@@ -22,6 +22,7 @@ import weather.WeatherService;
 
 /**
  * This class takes all user input and processes it. It holds all commands but no knowledge about them.
+ *
  * @author CkFreak
  * @version 1.12.2016
  */
@@ -56,7 +57,7 @@ public class CommandHandler implements Observer
 
     private final static String WEATHER_HELP_FILE = "src/main/res/weatherCommands.txt";
 
-    private static final String INEFFICIENT_RIGHTS_MESSAGE = "You do not have sufficient permissions to do that";
+    private static final String INSUFFICIENT_RIGHTS_MESSAGE = "You do not have sufficient permissions to do that";
 
     /**
      * The Service that executes the commands
@@ -64,7 +65,7 @@ public class CommandHandler implements Observer
     private CommandService _commander;
 
     /**
-     * The JDA instance of this bot 
+     * The JDA instance of this bot
      */
     private JDA _jda;
 
@@ -108,6 +109,8 @@ public class CommandHandler implements Observer
      */
     private HashMap<String, Runnable> _commands;
 
+    private String[] messageContent;
+
     /**
      * Initializes a CommandHandler and all its services
      */
@@ -136,67 +139,25 @@ public class CommandHandler implements Observer
         _event = event;
         _commander.initializeRoles(event);
 
-        String message = event.getMessage()
-                .getContent();
+        String message = event.getMessage().getContentRaw();
 
         if (message.startsWith("#"))
         {
             //splits the message at spaces
-            String[] messageContent = message.split("\\s+");
+            messageContent = message.split("\\s+");
             event.getChannel()
                     .sendTyping()
                     .queue(s -> event.getMessage().delete().queue());
 
             switch (messageContent[0].substring(1))
             {
-                case "hello":
-                    _commander.replyToHello(event);
-                    break;
-
-                case "help":
-                    event.getChannel().sendMessage(_commander.getCommands(COMMANDS_HELP_COMMAND_FILE)).queue();
-                    break;
-
-                case "helpMusic":
-                    event.getChannel().sendMessage(_commander.getCommands(MUSIC_HELP_COMMAND_FILE)).queue();
-                    break;
-
-                case "helpGeneral":
-                    event.getChannel().sendMessage(_commander.getCommands(GENERAL_HELP_COMMAND_FILE)).queue();
-                    break;
-
-                case "helpPoll":
-                    event.getChannel().sendMessage(_commander.getCommands(POLL_HELP_COMMAND_FILE)).queue();
-                    break;
-
-                case "helpEmoji":
-                    event.getChannel().sendMessage(_commander.getCommands(EMOJI_HELP_COMMAND_FILE)).queue();
-                    break;
-
-                case "helpTournament":
-                    event.getChannel().sendMessage(_commander.getCommands(TOURNAMENT_HELP_COMMAND_FILE)).queue();
-                    break;
-
-                case "helpNote":
-                    event.getChannel().sendMessage(_commander.getCommands(NOTE_HELP_COMMAND_FILE)).queue();
-                    break;
-
-                case "helpWeather":
-                    event.getChannel().sendMessage((_commander.getCommands(WEATHER_HELP_FILE))).queue();
-                    break;
-
-                case "admin":
-                    event.getChannel()
-                            .sendMessage(_commander.getAdmin(event)).queue();
-                    break;
-
                 case "promote":
                     if (messageContent.length < 3)
                     {
                         event.getChannel().sendMessage("You have to specify a user and a role").queue();
                         break;
                     }
-                    if(_commander.isModerator() || _commander.isAdmin())
+                    if (_commander.isModerator() || _commander.isAdmin())
                     {
                         if (_commander.promoteUser(event, messageContent[1], messageContent[2]))
                         {
@@ -206,7 +167,7 @@ public class CommandHandler implements Observer
                     }
                     else
                     {
-                        event.getChannel().sendMessage(INEFFICIENT_RIGHTS_MESSAGE).queue();
+                        event.getChannel().sendMessage(INSUFFICIENT_RIGHTS_MESSAGE).queue();
                     }
                     break;
 
@@ -363,7 +324,7 @@ public class CommandHandler implements Observer
                     else
                     {
                         event.getChannel()
-                                .sendMessage(INEFFICIENT_RIGHTS_MESSAGE)
+                                .sendMessage(INSUFFICIENT_RIGHTS_MESSAGE)
                                 .queue();
                     }
                     break;
@@ -486,7 +447,7 @@ public class CommandHandler implements Observer
 
                     event.getChannel()
                             .sendMessage(_tournamentService
-                                    .initializeTournament(name, mode , getOptions(messageContent, 2)))
+                                    .initializeTournament(name, mode, getOptions(messageContent, 2)))
                             .queue();
                     break;
 
@@ -591,7 +552,36 @@ public class CommandHandler implements Observer
 
     private void populateCommandMap()
     {
-        _commands.put("hello", (e) -> _commander.replyToHello(e));
+
+        _commands.put("hello", () -> _commander.replyToHello(_event));
+        _commands.put("help", () -> _event.getChannel().sendMessage(_commander.getCommands(COMMANDS_HELP_COMMAND_FILE)).queue());
+        _commands.put("helpMusic", () -> _event.getChannel().sendMessage(_commander.getCommands(MUSIC_HELP_COMMAND_FILE)).queue());
+        _commands.put("helpGeneral", () -> _event.getChannel().sendMessage(_commander.getCommands(GENERAL_HELP_COMMAND_FILE)).queue());
+        _commands.put("helpPoll", () -> _event.getChannel().sendMessage(_commander.getCommands(POLL_HELP_COMMAND_FILE)).queue());
+        _commands.put("helpEmoji", () -> _event.getChannel().sendMessage(_commander.getCommands(EMOJI_HELP_COMMAND_FILE)).queue());
+        _commands.put("helpTournament", () -> _event.getChannel().sendMessage(_commander.getCommands(TOURNAMENT_HELP_COMMAND_FILE)).queue());
+        _commands.put("helpNote", () -> _event.getChannel().sendMessage(_commander.getCommands(NOTE_HELP_COMMAND_FILE)).queue());
+        _commands.put("helpWeather", () -> _event.getChannel().sendMessage((_commander.getCommands(WEATHER_HELP_FILE))).queue());
+        _commands.put("admin", () -> _event.getChannel().sendMessage(_commander.getAdmin(_event)).queue());
+        _commands.put("promote", () ->
+        {
+            if (messageContent.length < 3)
+            {
+                _event.getChannel().sendMessage("You have to specify a user and a role").queue();
+            }
+            else if (_commander.isModerator() || _commander.isAdmin())
+            {
+                if (_commander.promoteUser(_event, messageContent[1], messageContent[2]))
+                {
+                    _event.getChannel().sendMessage("User " + messageContent[1] + " has been promoted to "
+                            + messageContent[2]).queue();
+                }
+            }
+            else
+            {
+                _event.getChannel().sendMessage(INSUFFICIENT_RIGHTS_MESSAGE).queue();
+            }
+        });
     }
 
     /**
@@ -606,6 +596,7 @@ public class CommandHandler implements Observer
 
     /**
      * Returns the Game the Bot wants to play next
+     *
      * @param messageContent The message contents without white spaces
      * @return The name of the next game as String
      */
@@ -622,6 +613,7 @@ public class CommandHandler implements Observer
 
     /**
      * Returns the chosen poll's name
+     *
      * @param messageContent the message contents without white spaces
      * @return the poll's name
      */
@@ -643,8 +635,9 @@ public class CommandHandler implements Observer
 
     /**
      * Gives the desired poll options
+     *
      * @param messageContent the message content without white spaces
-     * @param startingPoint The amount of "_" after which the message content ist to be analyzed
+     * @param startingPoint  The amount of "_" after which the message content ist to be analyzed
      * @return A list with poll options
      */
     private ArrayList<String> getOptions(String[] messageContent, int startingPoint)
