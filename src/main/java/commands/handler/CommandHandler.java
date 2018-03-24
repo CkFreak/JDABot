@@ -582,6 +582,25 @@ public class CommandHandler implements Observer
                 _event.getChannel().sendMessage(INSUFFICIENT_RIGHTS_MESSAGE).queue();
             }
         });
+        _commands.put("delete", () -> {
+            int amount = Integer.valueOf(messageContent[1]);
+                    _commander.deleteChannelMessages(_event, amount);
+                    _event.getChannel()
+                            .sendMessage(
+                                    amount + " Messages have been deleted.")
+                            .queue();
+        });
+        _commands.put("userInfo", () -> {
+            if (messageContent.length < 2)
+                    {
+                        _event.getChannel().sendMessage("A User has to be specified").queue();
+                        return;
+                    }
+                    String messageForUser = _commander.getUserInfo(messageContent[1], _event.getGuild());
+                    _event.getChannel()
+                            .sendMessage(messageForUser)
+                            .queue();
+        });
     }
 
     /**
