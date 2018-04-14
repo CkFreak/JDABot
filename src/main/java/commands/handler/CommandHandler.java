@@ -21,11 +21,11 @@ import weather.WeatherService;
 
 /**
  * This class takes all user input and processes it. It holds all commands but no knowledge about them.
+ *
  * @author CkFreak
  * @version 1.12.2016
  */
-public class CommandHandler implements Observer
-{
+public class CommandHandler implements Observer {
 
     private final static String SALT_EMOJI = "src/main/res/saltEmoji.jpg";
 
@@ -63,7 +63,7 @@ public class CommandHandler implements Observer
     private CommandService _commander;
 
     /**
-     * The JDA instance of this bot 
+     * The JDA instance of this bot
      */
     private JDA _jda;
 
@@ -105,8 +105,7 @@ public class CommandHandler implements Observer
     /**
      * Initializes a CommandHandler and all its services
      */
-    public CommandHandler(JDA jda)
-    {
+    public CommandHandler(JDA jda) {
         _event = null;
         _jda = jda;
         _commander = new CommandService(jda);
@@ -124,24 +123,21 @@ public class CommandHandler implements Observer
      *
      * @param event The MessageReceivedEvent with the message inside
      */
-    public void handleIncomingMessages(MessageReceivedEvent event)
-    {
+    public void handleIncomingMessages(MessageReceivedEvent event) {
         _event = event;
         _commander.initializeRoles(event);
 
         String message = event.getMessage()
                 .getContent();
 
-        if (message.startsWith("#"))
-        {
+        if (message.startsWith("#")) {
             //splits the message at spaces
             String[] messageContent = message.split("\\s+");
             event.getChannel()
                     .sendTyping()
                     .queue(s -> event.getMessage().delete().queue());
 
-            switch (messageContent[0].substring(1))
-            {
+            switch (messageContent[0].substring(1)) {
                 case "hello":
                     _commander.replyToHello(event);
                     break;
@@ -184,21 +180,17 @@ public class CommandHandler implements Observer
                     break;
 
                 case "promote":
-                    if (messageContent.length < 3)
-                    {
+                    if (messageContent.length < 3) {
                         event.getChannel().sendMessage("You have to specify a user and a role").queue();
                         break;
                     }
-                    if(_commander.isModerator() || _commander.isAdmin())
-                    {
-                        if (_commander.promoteUser(event, messageContent[1], messageContent[2]))
-                        {
+                    if (_commander.isModerator() || _commander.isAdmin()) {
+                        if (_commander.promoteUser(event, messageContent[1], messageContent[2])) {
                             event.getChannel().sendMessage("User " + messageContent[1] + " has been promoted to "
                                     + messageContent[2]).queue();
                         }
                     }
-                    else
-                    {
+                    else {
                         event.getChannel().sendMessage(INEFFICIENT_RIGHTS_MESSAGE).queue();
                     }
                     break;
@@ -214,8 +206,7 @@ public class CommandHandler implements Observer
 
                 case "userInfo":
 
-                    if (messageContent.length < 2)
-                    {
+                    if (messageContent.length < 2) {
                         event.getChannel().sendMessage("A User has to be specified").queue();
                         break;
                     }
@@ -256,20 +247,17 @@ public class CommandHandler implements Observer
                 //                _commander.deleteAllMessages(event);
                 //                break;
                 case "play":
-                    if (messageContent.length < 2)
-                    {
+                    if (messageContent.length < 2) {
                         event.getChannel().sendMessage("You have to enter a URL with that command").queue();
                     }
-                    else
-                    {
+                    else {
                         GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                         guildMusicManager.connectToAudioChannel(null, null, event.getMember());
                         guildMusicManager.getScheduler().registerNewTrack(messageContent[1], _musicControlManager.getPlayerManager(), event);
                     }
                     break;
 
-                case "pause":
-                {
+                case "pause": {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                     guildMusicManager.getScheduler().pausePlayer();
                     event.getChannel()
@@ -287,36 +275,31 @@ public class CommandHandler implements Observer
                 break;
                 */
 
-                case "stop":
-                {
+                case "stop": {
                     GuildMusicManager gMM = getGuildMusicManager(event);
                     gMM.getScheduler().stopPlayer();
                     event.getChannel().sendMessage("Playback has been stopped").queue();
                 }
                 break;
 
-                case "resume":
-                {
+                case "resume": {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                     guildMusicManager.getScheduler().resumePlayer();
                 }
                 break;
 
-                case "skip":
-                {
+                case "skip": {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                     guildMusicManager.getScheduler().skip();
                 }
                 event.getChannel().sendMessage("The playing track has been skipped");
                 break;
 
-                case "playlist":
-                {
+                case "playlist": {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                     ArrayList<Message> playlist = guildMusicManager.getScheduler().getPlaylist();
 
-                    for (int i = 0; i < playlist.size(); ++i)
-                    {
+                    for (int i = 0; i < playlist.size(); ++i) {
                         event.getChannel()
                                 .sendMessage(playlist.get(i))
                                 .queue();
@@ -324,22 +307,19 @@ public class CommandHandler implements Observer
                 }
                 break;
 
-                case "songInfo":
-                {
+                case "songInfo": {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                     event.getChannel().sendMessage(guildMusicManager.getScheduler().songInfo()).queue();
                 }
 
-                case "jump":
-                {
+                case "jump": {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                     guildMusicManager.getScheduler().startSpecificTrack(Integer.valueOf(messageContent[1]));
                     event.getChannel().sendMessage("Track " + messageContent[1] + " is now playing").queue();
                     break;
                 }
 
-                case "restart":
-                {
+                case "restart": {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                     guildMusicManager.getScheduler().restartSong();
                     event.getChannel().sendMessage("The Song has been restarted").queue();
@@ -347,14 +327,12 @@ public class CommandHandler implements Observer
                 break;
 
                 case "reset":
-                    if (_commander.isAdmin())
-                    {
+                    if (_commander.isAdmin()) {
                         GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                         guildMusicManager.getScheduler().resetPlayer();
                         event.getChannel().sendMessage("The Player has been reset").queue();
                     }
-                    else
-                    {
+                    else {
                         event.getChannel()
                                 .sendMessage(INEFFICIENT_RIGHTS_MESSAGE)
                                 .queue();
@@ -363,33 +341,27 @@ public class CommandHandler implements Observer
 
                 case "shuffle":
                     boolean enable = false;
-                    if (messageContent[1].equals("1"))
-                    {
+                    if (messageContent[1].equals("1")) {
                         enable = true;
                     }
-                    else if (messageContent[1].equals("0"))
-                    {
+                    else if (messageContent[1].equals("0")) {
                         enable = false;
                     }
 
                 {
                     GuildMusicManager guildMusicManager = getGuildMusicManager(event);
                     guildMusicManager.getScheduler().setShuffle(enable);
-                    if (enable)
-                    {
+                    if (enable) {
                         event.getChannel().sendMessage("The Player will shuffle").queue();
                     }
-                    else
-                    {
+                    else {
                         event.getChannel().sendMessage("The player will not shuffle").queue();
                     }
                 }
                 break;
 
-                case "join":
-                {
-                    if (messageContent.length == 2)
-                    {
+                case "join": {
+                    if (messageContent.length == 2) {
                         _musicControlManager.getGuildMusicManager(event.getGuild(), event).connectToAudioChannel(messageContent[1],
                                 event.getGuild(), event.getMember());
                     }
@@ -457,8 +429,7 @@ public class CommandHandler implements Observer
                     TournamentMode mode = null;
                     String name = getPollName(messageContent);
                     String tournamentMode = getOptions(messageContent, 0).get(0).toLowerCase().replaceAll(" ", "");
-                    switch (tournamentMode)
-                    {
+                    switch (tournamentMode) {
                         case "singleelimination":
                             mode = TournamentMode.SINGE_ELIMINATION;
                             break;
@@ -479,13 +450,12 @@ public class CommandHandler implements Observer
 
                     event.getChannel()
                             .sendMessage(_tournamentService
-                                    .initializeTournament(name, mode , getOptions(messageContent, 2)))
+                                    .initializeTournament(name, mode, getOptions(messageContent, 2)))
                             .queue();
                     break;
 
                 case "registerLoss":
-                    if (messageContent.length < 3)
-                    {
+                    if (messageContent.length < 3) {
                         event.getChannel().sendMessage("Please enter the name of the tournament").queue();
                         break;
                     }
@@ -495,12 +465,10 @@ public class CommandHandler implements Observer
                     break;
 
                 case "addNote":
-                    if (_noteService.addNote(event.getAuthor(), getGameName(messageContent)))
-                    {
+                    if (_noteService.addNote(event.getAuthor(), getGameName(messageContent))) {
                         event.getChannel().sendMessage("Note successfully created").queue();
                     }
-                    else
-                    {
+                    else {
                         event.getChannel().sendMessage("The note could not be created please contact a dev").queue();
                     }
                     break;
@@ -510,66 +478,58 @@ public class CommandHandler implements Observer
                     break;
 
                 case "weather":
-                    if (messageContent.length < 2)
-                    {
+                    if (messageContent.length < 2) {
                         event.getChannel().sendMessage("Please enter a city you want the weather data for").queue();
                         break;
                     }
-                    try
-                    {
+                    try {
                         event.getChannel().sendMessage(_weatherService.getCompleteWeatherData(getGameName(messageContent))).queue();
                     }
-                    catch (IOException e)
-                    {
+                    catch (IOException e) {
                         event.getChannel().sendMessage("OpenWeatherMap returned an error. Please consult a Dev for fixing this").queue();
                     }
-                    catch (ParseException e)
-                    {
+                    catch (ParseException e) {
                         event.getChannel().sendMessage("The JSON passed by OpenWeatherMap had an unexpected format. Please consult a Dev").queue();
                     }
                     break;
 
                 case "temperature":
-                    if (messageContent.length < 2)
-                    {
+                    if (messageContent.length < 2) {
                         event.getChannel().sendMessage("Please enter a city you want the temperature data for").queue();
                         break;
                     }
-                    try
-                    {
+                    try {
                         event.getChannel().sendMessage(_weatherService.getTemperatureData(getGameName(messageContent))).queue();
                     }
-                    catch (IOException e)
-                    {
+                    catch (IOException e) {
                         event.getChannel().sendMessage("OpenWeatherMap returned an error. Please consult a Dev for fixing this").queue();
                     }
-                    catch (ParseException e)
-                    {
+                    catch (ParseException e) {
                         event.getChannel().sendMessage("The JSON passed by OpenWeatherMap had an unexpected format. Please consult a Dev").queue();
 
                     }
                     break;
 
                 case "wind":
-                    if (messageContent.length < 2)
-                    {
+                    if (messageContent.length < 2) {
                         event.getChannel().sendMessage("Please enter a city you want the wind data for").queue();
                         break;
                     }
-                    try
-                    {
+                    try {
                         event.getChannel().sendMessage(_weatherService.getWindData(getGameName(messageContent))).queue();
                     }
-                    catch (IOException e)
-                    {
+                    catch (IOException e) {
                         event.getChannel().sendMessage("OpenWeatherMap returned an error. Please consult a Dev for fixing this").queue();
                     }
-                    catch (ParseException e)
-                    {
+                    catch (ParseException e) {
                         event.getChannel().sendMessage("The JSON passed by OpenWeatherMap had an unexpected format. Please consult a Dev").queue();
 
                     }
                     break;
+
+                case "roll": {
+                    
+                }
 
 
                 default:
@@ -586,23 +546,21 @@ public class CommandHandler implements Observer
      * @param event A MessageReceivedEvent
      * @return A GuildMusicManager for a specific Guild
      */
-    private GuildMusicManager getGuildMusicManager(MessageReceivedEvent event)
-    {
+    private GuildMusicManager getGuildMusicManager(MessageReceivedEvent event) {
         return _musicControlManager.getGuildMusicManager(event.getGuild(), event);
     }
 
 
     /**
      * Returns the Game the Bot wants to play next
+     *
      * @param messageContent The message contents without white spaces
      * @return The name of the next game as String
      */
-    private String getGameName(String[] messageContent)
-    {
+    private String getGameName(String[] messageContent) {
         String game = "";
         int length = messageContent.length;
-        for (int i = 1; i <= length - 1; ++i)
-        {
+        for (int i = 1; i <= length - 1; ++i) {
             game += " " + messageContent[i];
         }
         return game;
@@ -610,16 +568,15 @@ public class CommandHandler implements Observer
 
     /**
      * Returns the chosen poll's name
+     *
      * @param messageContent the message contents without white spaces
      * @return the poll's name
      */
-    private String getPollName(String[] messageContent)
-    {
+    private String getPollName(String[] messageContent) {
         String name = "";
         int index = 1;
         int i = 1;
-        do
-        {
+        do {
             name += " " + messageContent[i] + " ";
             name = name.replaceAll("_", "");
             ++index;
@@ -631,34 +588,30 @@ public class CommandHandler implements Observer
 
     /**
      * Gives the desired poll options
+     *
      * @param messageContent the message content without white spaces
-     * @param startingPoint The amount of "_" after which the message content ist to be analyzed
+     * @param startingPoint  The amount of "_" after which the message content ist to be analyzed
      * @return A list with poll options
      */
-    private ArrayList<String> getOptions(String[] messageContent, int startingPoint)
-    {
+    private ArrayList<String> getOptions(String[] messageContent, int startingPoint) {
         ArrayList<String> options = new ArrayList<>();
         String option = "";
         int such = 1;
 
         //searching for the first "_" so it's definitely not in the options list.
-        do
-        {
+        do {
             ++such;
 
-            if (messageContent[such].contains("_"))
-            {
+            if (messageContent[such].contains("_")) {
                 //now we found the first "_" and we have to check, weather or not we should continue the search
                 --startingPoint;
             }
         }
         while (startingPoint > 0);
 
-        for (int i = such; i <= messageContent.length - 1; ++i)
-        {
+        for (int i = such; i <= messageContent.length - 1; ++i) {
             option += " " + messageContent[i] + " ";
-            if (messageContent[i].contains("_"))
-            {
+            if (messageContent[i].contains("_")) {
                 option = option.replaceAll("_", "");
                 options.add(option);
                 option = "";
@@ -670,8 +623,7 @@ public class CommandHandler implements Observer
 
 
     @Override
-    public void update(Observable o, Object arg)
-    {
+    public void update(Observable o, Object arg) {
         _jda.getGuilds().get(0).getPublicChannel().sendMessage((String) arg).queue();
     }
 
