@@ -69,7 +69,7 @@ public class CommandService
                 event.getChannel()
                     .sendFile(file, builder.build()).queue();
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 event.getChannel()
                     .sendMessage(

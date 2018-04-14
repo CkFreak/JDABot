@@ -23,7 +23,7 @@ public class UserPromotedListener extends ListenerAdapter
         msg.append(event.getMember().getEffectiveName() + " now is: " + getRoleAsStringAdd(event));
 
         event.getGuild()
-            .getPublicChannel()
+            .getDefaultChannel()
             .sendMessage(msg.build()).queue();
     }
 
@@ -35,7 +35,7 @@ public class UserPromotedListener extends ListenerAdapter
                 + getRoleAsString(event));
 
         event.getGuild()
-            .getPublicChannel()
+            .getDefaultChannel()
             .sendMessage(msg.build()).queue();
     }
 
