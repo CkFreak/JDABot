@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.ThreadLocalRandom;
 
 import commands.CommandService;
 import net.dv8tion.jda.core.entities.Message;
@@ -528,7 +529,25 @@ public class CommandHandler implements Observer {
                     break;
 
                 case "roll": {
-                    
+                    if (messageContent.length < 3) {
+                        event.getChannel().sendMessage("You need to enter the number of dice you want to roll as well as the kind of dice\n" +
+                                "For instance: roll 2 d6 would roll 2 six sided dice").queue();
+                        break;
+                    }
+                    int amountOfDice = Integer.parseInt(messageContent[1]);
+                    int maxNumber = Integer.parseInt(messageContent[2].split("d")[1]);
+                    int[] faces = new int[amountOfDice];
+                    for (int i = 0; i < amountOfDice; ++i) {
+                        faces[i] = ThreadLocalRandom.current().nextInt(1, maxNumber + 1);
+                    }
+                    int faceSum = 0;
+                    for (int i = 0; i < faces.length; ++i) {
+                        faceSum += faces[i];
+                    }
+                    String answer = amountOfDice == 1 ? "I have rolled a d" + maxNumber + ". The face I see is: " + faceSum :
+                            "I have rolled " + amountOfDice + " d" + maxNumber + " dice. The sum of the faces I see is: " + faceSum;
+                    event.getChannel().sendMessage(answer).queue();
+                    break;
                 }
 
 
@@ -624,7 +643,7 @@ public class CommandHandler implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        _jda.getGuilds().get(0).getPublicChannel().sendMessage((String) arg).queue();
+        _jda.getGuilds().get(0).getDefaultChannel().sendMessage((String) arg).queue();
     }
 
 }
