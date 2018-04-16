@@ -1,10 +1,7 @@
 package commands.handler;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import commands.CommandService;
@@ -530,23 +527,27 @@ public class CommandHandler implements Observer {
                     break;
 
                 case "roll": {
-                    if (messageContent.length < 3) {
+                    if (messageContent.length < 3 && (messageContent.length - 1 % 2) != 0) {
                         event.getChannel().sendMessage("You need to enter the number of dice you want to roll as well as the kind of dice\n" +
-                                "For instance: roll 2 d6 would roll 2 six sided dice").queue();
+                                "For instance: roll 2 d6 would roll 2 six sided dice; Then roll 2 d6 4 d8 would roll 2 six sided dice and 4 eight sided dice").queue();
                         break;
                     }
-                    int amountOfDice = Integer.parseInt(messageContent[1]);
-                    int maxNumber = Integer.parseInt(messageContent[2].split("d")[1]);
-                    int[] faces = new int[amountOfDice];
-                    for (int i = 0; i < amountOfDice; ++i) {
-                        faces[i] = ThreadLocalRandom.current().nextInt(1, maxNumber + 1);
+                    List<Integer> numbersOfDice = new ArrayList<>();
+                    List<Integer> maxFaceCounts = new ArrayList<>();
+                    for (int i = 1; i < messageContent.length; ++i) {
+                        if (i % 2 == 1) {
+                        numbersOfDice.add(Integer.parseInt(messageContent[i]));
+                        } else {
+                            maxFaceCounts.add(Integer.parseInt(messageContent[i].split("d")[1]));
+                        }
                     }
-                    int faceSum = 0;
-                    for (int i = 0; i < faces.length; ++i) {
-                        faceSum += faces[i];
+                    int faceCount = 0;
+                    for (int j = 0; j < numbersOfDice.size(); ++j) {
+                        for (int i = 0; i < numbersOfDice.get(j); ++i) {
+                            faceCount += ThreadLocalRandom.current().nextInt(1, maxFaceCounts.get(j));
+                        }
                     }
-                    String answer = event.getAuthor().getName() + " has rolled: " + faceSum;
-                    event.getChannel().sendMessage(answer).queue();
+                    event.getChannel().sendMessage(event.getAuthor().getName() + " has rolled: " + faceCount).queue();
                     break;
                 } case "rollsingle": {
                     if (messageContent.length < 3) {
