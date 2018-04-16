@@ -2,6 +2,7 @@ package commands.handler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ThreadLocalRandom;
@@ -544,8 +545,22 @@ public class CommandHandler implements Observer {
                     for (int i = 0; i < faces.length; ++i) {
                         faceSum += faces[i];
                     }
-                    String answer = amountOfDice == 1 ? "I have rolled a d" + maxNumber + ". The face I see is: " + faceSum :
-                            "I have rolled " + amountOfDice + " d" + maxNumber + " dice. The sum of the faces I see is: " + faceSum;
+                    String answer = event.getAuthor().getName() + " has rolled: " + faceSum;
+                    event.getChannel().sendMessage(answer).queue();
+                    break;
+                } case "rollsingle": {
+                    if (messageContent.length < 3) {
+                        event.getChannel().sendMessage("You need to enter the number of dice you want to roll as well as the kind of dice\n" +
+                                "For instance: roll 2 d6 would roll 2 six sided dice.").queue();
+                        break;
+                    }
+                    int amountOfDice = Integer.parseInt(messageContent[1]);
+                    int maxNumber = Integer.parseInt(messageContent[2].split("d")[1]);
+                    int[] faces = new int[amountOfDice];
+                    for (int i = 0; i < faces.length; ++i) {
+                        faces[i] = ThreadLocalRandom.current().nextInt(1, maxNumber + 1);
+                    }
+                    String answer = event.getAuthor().getName() + " has rolled: " + Arrays.toString(faces);
                     event.getChannel().sendMessage(answer).queue();
                     break;
                 }
